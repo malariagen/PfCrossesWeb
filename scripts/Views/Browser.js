@@ -1,15 +1,4 @@
 ﻿
-function translateChromoId(id) {// !!! this is a temperay hack to deal with the fact that we have inconsistent chromosome naming in the 2 data sets
-    for (var i = 1; i <= 14; i++)
-        if (id == 'MAL' + i) {
-            var rs = "Pf3D7_" + ('0' + i).slice(-2) + "_v3";
-            return rs;
-        }
-    throw "Invalid chromosome id"
-}
-
-
-
 define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile")],
     function (require, Framework, Controls, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile) {
 
@@ -21,9 +10,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                 that.myFrame = iFrame;
                 that.registerView();
                 that.refVersion = 3;
-
                 that.dataLocation = "SnpDataCross";
-
 
                 that.createFramework = function () {
                     this.frameLeft = thePage.frameBody.addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
@@ -52,10 +39,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
 
-                    SeqChannel = ChannelSequence.Channel(serverUrl, 'PfCross/Sequence', 'Summ01');
-                    this.panelBrowser.addChannel(SeqChannel, true);
-                    //SeqChannel.myfetcher.translateChromoId = translateChromoId;
-
                     if (this.refVersion == 2)
                         this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'exon');
                     if (this.refVersion == 3)
@@ -65,7 +48,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                     this.panelBrowser.MaxZoomFactX = 1.0 / 0.2;
                     this.panelBrowser.getNavigator().setMinScrollSize(0.0001);
-
 
                     //Create snp view channel
                     this.SnpChannel = ChannelSnps.Channel('snps1', serverUrl);
@@ -86,7 +68,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     Msg.listen('', { type: 'SelectItem', id: this.panelDataSource.getID() }, $.proxy(this.changeDataSource, this));
                     this.getDataSources();
 
-
                     //details panel
                     var frameDetails = Framework.Form(this.frameDetails);
                     this.details = frameDetails.addControl(Controls.Html('details', ''));
@@ -95,13 +76,10 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         that.details.modifyValue(content);
                     });
 
-                    //Startup the browser with a start region
-                    //setTimeout(function () {
+                    //Causes the browser to start with a start region
                     this.panelBrowser.setPostInitialiseHandler(function () {
                         that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 10000);
                     });
-                    //}, 1);
-
 
                 };
 
@@ -123,13 +101,11 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     this.panelDataSource.setItems(it);
                     this.panelDataSource.render();
                     this.changeDataSource();
-                    //setTimeout($.proxy(that.changeDataSource, that), 100);
                 };
 
                 that.changeDataSource = function () {
                     this.SnpChannel.setDataSource(that.dataLocation + '/' + this.panelDataSource.getActiveItem());
                 }
-
 
                 that.createControls = function () {
                     this.panelControls = Framework.Form(this.frameControls);
@@ -228,7 +204,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         var chromoID = this.panelBrowser.getChromoID(args.chromNr);
                     }
                     DQX.assertPresence(args, 'start'); DQX.assertPresence(args, 'end');
-                    //this.activateState();
                     this.panelBrowser.highlightRegion(chromoID, (args.start + args.end) / 2, args.end - args.start);
                 };
 
