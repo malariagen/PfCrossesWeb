@@ -7,7 +7,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
             Instance: function (iPage, iFrame) {
                 var that = Framework.ViewSet(iFrame, 'genome');
                 that.myPage = iPage;
-                that.myFrame = iFrame;
                 that.registerView();
                 that.refVersion = 3;
                 that.dataLocation = "SnpDataCross";
