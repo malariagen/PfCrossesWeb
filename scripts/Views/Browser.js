@@ -11,14 +11,16 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                 that.refVersion = 3;
                 that.dataLocation = "SnpDataCross";
 
+                that.filterList = "LowQual	NonMendelian	ParentCallMissing	ParentCallNotConfident	RegionNotConserved	SingleVariantHaplotype	VQSRTrancheINDEL90.00to99.00	VQSRTrancheINDEL99.00to99.90	VQSRTrancheINDEL99.90to100.00+	VQSRTrancheINDEL99.90to100.00	VQSRTrancheSNP90.00to99.00	VQSRTrancheSNP99.00to99.90	VQSRTrancheSNP99.90to100.00+	VQSRTrancheSNP99.90to100.00".split('\t');
+
                 that.createFramework = function () {
                     this.frameLeft = thePage.frameBody.addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
                         .setMargins(5).setFixedSize(Framework.dimX, 350);
-                    this.frameDataSource = this.frameLeft.addMemberFrame(Framework.FrameFinal('datasource', 0.5))
+                    this.frameDataSource = this.frameLeft.addMemberFrame(Framework.FrameFinal('datasource', 0.15))
                         .setMargins(5).setDisplayTitle('Data source').setFixedSize(Framework.dimX, 350);
                     this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('settings', 0.7))
                         .setMargins(5).setDisplayTitle('Settings').setFixedSize(Framework.dimX, 350);
-                    this.frameDetails = this.frameLeft.addMemberFrame(Framework.FrameFinal('details', 0.3))
+                    this.frameDetails = this.frameLeft.addMemberFrame(Framework.FrameFinal('details', 0.4))
                         .setMargins(5).setDisplayTitle('Details').setFixedSize(Framework.dimX, 350);
                     this.frameBrowser = thePage.frameBody.addMemberFrame(Framework.FrameFinal('browser', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
@@ -80,6 +82,16 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 10000);
                     });
 
+                    that.SnpChannel.setCallBackFirstDataFetch(function () {
+                        $.each(that.SnpChannel.myDataFetcher._filters, function (idx, filter) {
+                            that.groupFilterControls.addControl(Controls.Check('', { label: filter })).setOnChanged(function (id, ctrl) {
+                                that.SnpChannel.myDataFetcher.setFilterActive(filter, ctrl.getValue());
+                                that.panelBrowser.render();
+                            });
+                        });
+                        that.panelControls.render();
+                    });
+
                 };
 
                 that.getDataSources = function () {
@@ -111,6 +123,10 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                     var group1 = this.panelControls.addControl(Controls.CompoundVert());
 
+                    this.groupFilterControls = group1.addControl(Controls.CompoundVert());
+
+                    group1.addControl(Controls.Html('', ''));
+
                     group1.addControl(Controls.Check('CtrlMagnif', { label: 'Show magnifying glass' })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.useMagnifyingGlass = ctrl.getValue();
                         that.panelBrowser.render();
@@ -124,7 +140,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         that.panelBrowser.render();
                     });
 
-                    group1.addControl(Controls.Check('CtrlFilterVCF', { label: 'Filter by VCF data', value: true })).setOnChanged(function (id, ctrl) {
+                    group1.addControl(Controls.Check('CtrlFilterVCF', { label: 'Filter by VCF data', value: false })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.filter.applyVCFFilter = ctrl.getValue();
                         that.panelBrowser.render();
                     });
