@@ -5,22 +5,24 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
         var BrowserModule = {
 
             Instance: function (iPage, iFrame) {
+                iFrame._tmp = 123;
                 var that = Framework.ViewSet(iFrame, 'genome');
                 that.myPage = iPage;
                 that.registerView();
                 that.refVersion = 3;
                 that.dataLocation = "SnpDataCross";
 
+
                 that.createFramework = function () {
-                    this.frameLeft = thePage.frameBody.addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
-                        .setMargins(5).setFixedSize(Framework.dimX, 380);
+                    this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
+                        .setMargins(5).setDisplayTitle('settings group').setFixedSize(Framework.dimX, 380);
                     this.frameDataSource = this.frameLeft.addMemberFrame(Framework.FrameFinal('datasource', 0.15))
                         .setMargins(5).setDisplayTitle('Data source').setFixedSize(Framework.dimX, 380);
                     this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('settings', 0.7))
                         .setMargins(5).setDisplayTitle('Settings').setFixedSize(Framework.dimX, 380);
                     this.frameDetails = this.frameLeft.addMemberFrame(Framework.FrameFinal('details', 0.4))
                         .setMargins(5).setDisplayTitle('Details').setFixedSize(Framework.dimX, 380);
-                    this.frameBrowser = thePage.frameBody.addMemberFrame(Framework.FrameFinal('browser', 0.7))
+                    this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
                     Msg.listen("", { type: 'JumpgenomeRegion' }, $.proxy(this.onJumpGenomeRegion, this));
                 };
@@ -87,8 +89,8 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                                 that.panelBrowser.render();
                             });
                         });
-/*                        setTimeout(function () {
-                            that.panelControls.render();
+                        /*                        setTimeout(function () {
+                        that.panelControls.render();
                         }, 50);*/
                     });
 
@@ -225,6 +227,15 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     DQX.assertPresence(args, 'start'); DQX.assertPresence(args, 'end');
                     this.panelBrowser.highlightRegion(chromoID, (args.start + args.end) / 2, args.end - args.start);
                 };
+
+
+                that.activateState = function () {
+                    var tabswitched = that.myPage.frameBrowser.makeVisible();
+                    /*                    setTimeout(function () {
+                    that.panelBrowser.handleResize(); //force immediate calculation of size
+                    }, 50);*/
+                };
+
 
                 return that;
             }

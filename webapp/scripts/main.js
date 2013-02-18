@@ -1,7 +1,7 @@
 ﻿
 setupRequireJS();
 
-require([DQXSCJQ(), DQXSC("Framework"), DQXSC("Msg"), DQXSC("HistoryManager"), DQXSC("Utils"), "page"],
+require([DQXSCJQ(), DQXSC("Framework"), DQXSC("Msg"), DQXSC("HistoryManager"), DQXSC("Utils"), "Page"],
     function ($, Framework, Msg, HistoryManager, DQX, thePage) {
         $(function () {
 
