@@ -72,22 +72,15 @@
  //                   this.myFrame.setSeparatorSize(bigSeparatorSize);
 
                     this.frameLeftGroup = this.myFrame.addMemberFrame(Framework.FrameGroupVert('SamplesQueries', 0.4)).setSeparatorSize(4);
-/*
-                    this.frameQueries = this.frameLeftGroup.addMemberFrame(Framework.FrameGroupVert('SamplesQueries', 1))
-                        .setMarginsIndividual(0,5,0,0).setDisplayTitle('Query type').setFrameClassClient('DQXLight');
-  */  
+
                     this.frameLeftGroup.InsertIntroBox('datagrid2.png',DQX.Text('IntroSamples'), 'HelpSamples');
                     
                     this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('SamplesQueryAdvanced', 0.4))
                         .setMargins(0).setDisplayTitle('Advanced').setMinSize(Framework.dimX,300).setAllowScrollBars(true,true);
-
-                    this.frameDispSettings = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('SamplesDispSettings', 0.4))
-                        .setMargins(5).setAutoSize().setFrameClassClient('DQXLight').setFrameClass('DQXLight').setAllowScrollBars(false,false);
-    
+                
                     this.frameTable = this.myFrame.addMemberFrame(Framework.FrameFinal('SamplesTable', 0.6))
                         .setMargins(0).setFrameClassClient('DQXDarkFrame').setAllowScrollBars(false,false);
-    
-                    
+          
 
                 };
     
@@ -139,7 +132,7 @@
     
                 that.createPanelTable = function () {
 
-                    this.theTableFetcher = new DataFetcher.Curve(serverUrl, CrossesMetaData.tableSamples, "LIMIT");
+                    this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.tableSamples);
                     this.theTableFetcher.showDownload=true;
                     this.theTableFetcher.positionField = "sample_id";
                     this.panelTable = QueryTable.Panel(this.frameTable, this.theTableFetcher, { leftfraction: 50 });
@@ -177,9 +170,9 @@
 										"Show run info");
 								Msg.listen("", msgID, $.proxy(
 										this._onClickPosition, this));
-						} else {
-							mytable.addSortOption(info.name, SQL.TableSort([info.id]));
-						}
+						} 
+						mytable.addSortOption(info.name, SQL.TableSort([info.id]));
+						
                     }
 
 
