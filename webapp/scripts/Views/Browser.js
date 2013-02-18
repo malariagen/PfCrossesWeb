@@ -89,9 +89,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                                 that.panelBrowser.render();
                             });
                         });
-                        /*                        setTimeout(function () {
                         that.panelControls.render();
-                        }, 50);*/
                     });
 
                 };
