@@ -15,7 +15,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                 that.createFramework = function () {
                     this.frameLeft = thePage.frameBody.addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
-                        .setMargins(5).setFixedSize(Framework.dimX, 350);
+                        .setMargins(5).setDisplayTitle('settings group').setFixedSize(Framework.dimX, 350);
                     this.frameDataSource = this.frameLeft.addMemberFrame(Framework.FrameFinal('datasource', 0.15))
                         .setMargins(5).setDisplayTitle('Data source').setFixedSize(Framework.dimX, 350);
                     this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('settings', 0.7))
