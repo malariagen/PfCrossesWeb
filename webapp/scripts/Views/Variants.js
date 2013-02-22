@@ -1,15 +1,15 @@
 ﻿define([DQXSCRQ(), DQXSC("SVG"), DQXSC("Framework"), DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("QueryBuilder"), DQXSC("SQL"), DQXSC("Msg"), DQXSC("DocEl"), "Page", DQXSC("Controls"), DQXSC("Popup"), "CrossesMetaData"], 
     function (require, SVG, Framework, DataFetcher, QueryTable, QueryBuilder, SQL, Msg, DocEl, thePage, Controls, Popup, CrossesMetaData) {
 
-        var SamplesModule = {
+        var VariantsModule = {
 
             Instance: function (iPage, iFrame) {
-                var that = Framework.ViewSet(iFrame,'samples');
+                var that = Framework.ViewSet(iFrame,'variants');
                 that.myPage = iPage;
                 that.myFrame = iFrame;
                 that.registerView();
 
-                that.jumpSampleSet = function(id) {
+                that.jumpVariantset = function(id) {
                     Msg.send({type: 'ShowPopulation'}, id.split('_')[1]);
                 };
 
@@ -18,8 +18,8 @@
 
                     //Fetch from meta data
                     var fieldInfo=[];
-                    for (var fieldnr=0; fieldnr<CrossesMetaData.fieldList.length; fieldnr++) {
-                        var field=CrossesMetaData.fieldList[fieldnr];
+                    for (var fieldnr=0; fieldnr<CrossesMetaData.variantFieldList.length; fieldnr++) {
+                        var field=CrossesMetaData.variantFieldList[fieldnr];
                         var dataType=CrossesMetaData.MGDataType(field.dataTypeID);
                         var panelnr=1;
                         //if (field.id=="GeneId") panelnr=0;
@@ -35,10 +35,6 @@
                             colorFunction:dataType.getBackColorFunction(),
                             textFunction:dataType.getTextConvertFunction()
                             }
-                        if (dataType.dataTypeID == "AlleleFrequency") {
-                            info.linkFunction=this.jumpSampleSet;
-                            info.linkHint='<img src="{linkbitmap}" alt="info" style="float:left;margin-right:4px"/> '.DQXformat({ linkbitmap: 'Bitmaps/samplesets1.png' })+"Show information about this sample set";
-                        }
                         fieldInfo.push(info);
                     }
 
@@ -71,14 +67,14 @@
 
  //                   this.myFrame.setSeparatorSize(bigSeparatorSize);
 
-                    this.frameLeftGroup = this.myFrame.addMemberFrame(Framework.FrameGroupVert('SamplesQueries', 0.4)).setSeparatorSize(4);
+                    this.frameLeftGroup = this.myFrame.addMemberFrame(Framework.FrameGroupVert('VariantsQueries', 0.4)).setSeparatorSize(4);
 
-                    this.frameLeftGroup.InsertIntroBox('datagrid2.png',DQX.Text('IntroSamples'), 'HelpSamples');
+                    this.frameLeftGroup.InsertIntroBox('datagrid2.png',DQX.Text('IntroVariants'), 'HelpVariants');
                     
-                    this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('SamplesQueryAdvanced', 0.4))
+                    this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('VariantsQueryAdvanced', 0.4))
                         .setMargins(0).setDisplayTitle('Advanced').setMinSize(Framework.dimX,300).setAllowScrollBars(true,true);
                 
-                    this.frameTable = this.myFrame.addMemberFrame(Framework.FrameFinal('SamplesTable', 0.6))
+                    this.frameTable = this.myFrame.addMemberFrame(Framework.FrameFinal('VariantsTable', 0.6))
                         .setMargins(0).setFrameClassClient('DQXDarkFrame').setAllowScrollBars(false,false);
           
 
@@ -132,9 +128,9 @@
     
                 that.createPanelTable = function () {
 
-                    this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.tableSamples);
+                    this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.tableVariants);
                     this.theTableFetcher.showDownload=true;
-                    this.theTableFetcher.positionField = "id";
+                    this.theTableFetcher.positionField = "pos";
                     this.panelTable = QueryTable.Panel(this.frameTable, this.theTableFetcher, { leftfraction: 50 });
     
                     var mytable = this.panelTable.myTable;
@@ -210,8 +206,8 @@
                 that.setCurrentQuery = function(qry) {
                     if ((qry!=null)||(this.currentQuery!=null)) {
                         this.currentQuery=qry;                        
-//                        _gaq.push(['_trackEvent', 'Samplesion', 'query', that.queryToString(qry)]);
-                        Msg.broadcast({ type: 'ModifySamplesQuery'},qry);
+//                        _gaq.push(['_trackEvent', 'Variants', 'query', that.queryToString(qry)]);
+                        Msg.broadcast({ type: 'ModifyVariantsQuery'},qry);
                     }
                 };
     
@@ -227,7 +223,7 @@
                 	
                     var freqPrefix=this.catVarQueryPopulationFreqType.getValue();
                     var thequery=SQL.WhereClause.AND();
-                    thequery=SQL.WhereClause.CompareFixed('cross_name','=',freqPrefix);
+                    thequery=SQL.WhereClause.CompareFixed('crossName','=',freqPrefix);
                     
                     this.panelTable.myTable.setQuery(thequery);
                     this.panelTable.myTable.reLoadTable();
@@ -247,7 +243,7 @@
 
                     var groupPop=Controls.CompoundVert();
                     groupPop.setLegend('Sample Set');
-                    this.catVarQueryPopulationFreqType=Controls.Combo('SamplesQuery', { label: 'Sample set:', states: CrossesMetaData.sampleSets }).setOnChanged($.proxy(this.updatePopQuery, this));
+                    this.catVarQueryPopulationFreqType=Controls.Combo('VariantsQuery', { label: 'Sample set:', states: CrossesMetaData.variants }).setOnChanged($.proxy(this.updatePopQuery, this));
                     groupPop.addControl(this.catVarQueryPopulationFreqType);
                     //invalidatingList.push(this.catVarQueryPopulationFreqType);
                     theForm.addControl(groupPop);
@@ -259,7 +255,7 @@
                 //Call this function to activate the catalog of variation panel
                 that.activateState = function () {
                     enableHomeButton();
-                    var tabswitched = that.myPage.frameSamples.makeVisible();
+                    var tabswitched = that.myPage.frameVariants.makeVisible();
                     setTimeout(function() {
                         that.panelTable.handleResize(); //force immediate calculation of size
                     },50);
@@ -271,6 +267,6 @@
         };
 
 
-    return SamplesModule;
+    return VariantsModule;
     });
 

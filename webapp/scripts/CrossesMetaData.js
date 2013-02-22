@@ -2,9 +2,11 @@ define([DQXSC("Utils")],
     function (DQX) {
         var CrossesMetaData = {};
 
-        CrossesMetaData.tableSamples = "samples";
+        CrossesMetaData.tableSamples = "pfx_samples";
+        CrossesMetaData.tableVariants = "pfx_variants";
         
         CrossesMetaData.sampleSets = [{ id: '', name: '' }, { id: 'hb3_dd2', name: 'hb3_dd2' }, { id: '3d7_hb3', name: '3d7_hb3' }, { id: '7g8_gb4', name: '7g8_gb4'}];
+        CrossesMetaData.variants = [{ id: '', name: '' }, { id: 'hb3_dd2', name: 'hb3_dd2' }, { id: '3d7_hb3', name: '3d7_hb3' }, { id: '7g8_gb4', name: '7g8_gb4'}];
         
         CrossesMetaData.createFieldList = function () {
         	CrossesMetaData.fieldList = [];
@@ -12,10 +14,9 @@ define([DQXSC("Utils")],
         	CrossesMetaData.fieldList.push({ id: "source_code", shortName: "Clone", name: "Clone name", dataTypeID: "String" });
         	CrossesMetaData.fieldList.push({ id: "ox_code", shortName: "Sample", name: "Sample name", dataTypeID: "String" });
         	CrossesMetaData.fieldList.push({ id: "run", shortName: "Run", name: "Run", dataTypeID: "String" });
-        	/*
-        	CrossesMetaData.fieldList.push({ id: "ox_code", shortName: "Sample", name: "Sample name", dataTypeID: "String" });
-        	CrossesMetaData.fieldList.push({ id: "ox_code", shortName: "Sample", name: "Sample name", dataTypeID: "String" });
-          */
+        	CrossesMetaData.fieldList.push({ id: "coverage", shortName: "Coverage", name: "Coverage", dataTypeID: "String" });
+        	CrossesMetaData.fieldList.push({ id: "percent_mapped", shortName: "% Mapped", name: "Percent Mapped", dataTypeID: "Float" });
+          
         	 for (var i = 0; i < CrossesMetaData.fieldList.length; i++) {
                  var info = CrossesMetaData.fieldList[i];
                  if (!(info.name))
@@ -28,6 +29,30 @@ define([DQXSC("Utils")],
         	 CrossesMetaData.fieldMap = {};
              for (var i = 0; i < CrossesMetaData.fieldList.length; i++)
             	 CrossesMetaData.fieldMap[CrossesMetaData.fieldList[i].id] = CrossesMetaData.fieldList[i];
+             
+             
+             CrossesMetaData.variantFieldList = [];
+
+         	CrossesMetaData.variantFieldList.push({ id: "pos", shortName: "position", name: "position", dataTypeID: "Int" });
+         	CrossesMetaData.variantFieldList.push({ id: "ref", shortName: "ref", name: "ref", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "alt0", shortName: "alt0", name: "alt0", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "filter", shortName: "filter", name: "filter", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "qual", shortName: "qual", name: "qual", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "qd", shortName: "qd", name: "qd", dataTypeID: "Float" });
+         	CrossesMetaData.variantFieldList.push({ id: "mq", shortName: "mq", name: "mq", dataTypeID: "Float" });
+         	
+         	 for (var i = 0; i < CrossesMetaData.variantFieldList.length; i++) {
+                  var info = CrossesMetaData.variantFieldList[i];
+                  if (!(info.name))
+                      info.name = info.shortName;
+                  if (!(info.comment))
+                      info.comment = info.name;
+              }
+
+              //Lookup object to find field info by ID
+         	 CrossesMetaData.variantFieldMap = {};
+              for (var i = 0; i < CrossesMetaData.variantFieldList.length; i++)
+             	 CrossesMetaData.variantFieldMap[CrossesMetaData.variantFieldList[i].id] = CrossesMetaData.variantFieldList[i];
         }
         
         //A class providing information about fields in the SNP data set
@@ -62,9 +87,16 @@ define([DQXSC("Utils")],
                 return false;
             }
 
+            that.isInteger = function () {
+                if (this.dataTypeID == "Int") return true;
+                
+                return false;
+            }
+            
             that.getDownloadType = function () {
                 if (this.isFloat()) return "Float3";
                 if (this.isString()) return "String";
+                if (this.isInteger()) return "Int";
                 DQX.reportError("Unrecognised data type '{tpe}'".DQXformat({ tpe: dataType }));
             }
 
@@ -72,6 +104,7 @@ define([DQXSC("Utils")],
                 
                 if (this.isFloat()) return "Float";
                 if (this.isString()) return "String";
+                if (this.isInteger()) return "Int";
                 DQX.reportError("Unrecognised data type '{tpe}'".DQXformat({ tpe: dataType }));
             }
 

@@ -111,7 +111,7 @@
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
-                                    that.myPage.frameMapResistanceMarkers.makeVisible();
+                                    that.myPage.frameVariants.makeVisible();
                                 });
                             }
                         },
