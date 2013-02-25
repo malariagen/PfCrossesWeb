@@ -45,8 +45,6 @@
                     navSectionDiv.addStyle("right", "0px");
                     navSectionDiv.addStyle("top", "0px");
                     this.createNavigationButton("HeaderHome", navSectionDiv, 'Bitmaps/home.png', "Go to<br>Intro page", "DQXToolButton2",110);
-                    this.createNavigationButton("HeaderFindSNP", navSectionDiv, DQXBMP('magnif2.png'), "Find<br><b>SNP</b>", "DQXToolButton1",70);
-                    this.createNavigationButton("HeaderFindGene", navSectionDiv, DQXBMP('magnif2.png'), "Find<br><b>Gene</b>", "DQXToolButton1",70);
                     $('#' + this.myHeaderFrame.getClientDivID()).append(navSectionDiv.toString());
                     $('#HeaderHome').mousedown(function () { Msg.send({ type: 'Home' }) });
                    
