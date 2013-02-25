@@ -34,7 +34,7 @@
                             comment:field.comment,
                             colorFunction:dataType.getBackColorFunction(),
                             textFunction:dataType.getTextConvertFunction()
-                            }
+                            };
                         fieldInfo.push(info);
                     }
 
@@ -67,14 +67,14 @@
 
  //                   this.myFrame.setSeparatorSize(bigSeparatorSize);
 
-                    this.frameLeftGroup = this.myFrame.addMemberFrame(Framework.FrameGroupVert('VariantsQueries', 0.4)).setSeparatorSize(4);
+                    this.frameLeftGroup = this.getFrame().addMemberFrame(Framework.FrameGroupVert('VariantsQueries', 0.4)).setSeparatorSize(4);
 
                     this.frameLeftGroup.InsertIntroBox('datagrid2.png',DQX.Text('IntroVariants'), 'HelpVariants');
                     
                     this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('VariantsQueryAdvanced', 0.4))
-                        .setMargins(0).setDisplayTitle('Advanced').setMinSize(Framework.dimX,300).setAllowScrollBars(true,true);
+                        .setMargins(0).setDisplayTitle('Query').setMinSize(Framework.dimX,300).setAllowScrollBars(true,true);
                 
-                    this.frameTable = this.myFrame.addMemberFrame(Framework.FrameFinal('VariantsTable', 0.6))
+                    this.frameTable = this.getFrame().addMemberFrame(Framework.FrameFinal('VariantsTable', 0.6))
                         .setMargins(0).setFrameClassClient('DQXDarkFrame').setAllowScrollBars(false,false);
           
 
@@ -111,15 +111,7 @@
                     }
 
                     $.each(buttons,function(idx,bt) { content+=bt.renderHtml(); });
-                    var popupID = Popup.create(title, content);
-                };
 
-                //This function is called when the user clicks on a genome position link in the SNP query table
-                that._onClickPosition = function(scope,id) {
-                    var runid=this.panelTable.myTable.getCellValue(id,"run");
-                    window.open("http://www.ebi.ac.uk/ena/data/view/"+runid);
-        //            require("Common").showSNPPopup(snpid);
-          
                 };
 
                 //This function is called when the currently highlighted SNP changes
@@ -157,16 +149,7 @@
                             comp.linkHint=info.linkHint;
                         }
                         comp.makeHyperlinkHeader(msgIDClickHeader,'Column information');
-                        if (info.shortName == "Run") {
-								var msgID = {
-									type : 'ClickPosition',
-									id : mytable.myBaseID
-								};
-								comp.makeHyperlinkCell(msgID,
-										"Show run info");
-								Msg.listen("", msgID, $.proxy(
-										this._onClickPosition, this));
-						} 
+                       
 						mytable.addSortOption(info.name, SQL.TableSort([info.id]));
 						
                     }
@@ -221,9 +204,12 @@
 
                 that.updatePopQuery = function () {
                 	
-                    var freqPrefix=this.catVarQueryPopulationFreqType.getValue();
-                    var thequery=SQL.WhereClause.AND();
-                    thequery=SQL.WhereClause.CompareFixed('crossName','=',freqPrefix);
+                    var callSet=this.catVarQueryPopulationFreqType.getValue();
+                    var opts = callSet.split(":");
+                    var thequery=SQL.WhereClause.AND([
+                               SQL.WhereClause.CompareFixed('crossName','=',opts[0]),
+                               SQL.WhereClause.CompareFixed('method','=',opts[1])
+                    ]);
                     
                     this.panelTable.myTable.setQuery(thequery);
                     this.panelTable.myTable.reLoadTable();
