@@ -9,10 +9,11 @@
 
                 //The top line of the page
                 thePage.frameHeaderIntro = thePage.frameRoot.addMemberFrame(Framework.FrameFinal('HeaderIntro', 1))
-                    .setFixedSize(Framework.dimY, 2).setFrameClassClient('DQXPage');
+                    .setFixedSize(Framework.dimY, 75).setFrameClassClient('DQXPage');
 
+                
                 //The body panel of the page
-                thePage.frameBody = thePage.frameRoot.addMemberFrame(Framework.FrameGroupStack('info', 2)).setFrameClassClient('DQXDarkFrame').setMargins(8);
+                thePage.frameBody = thePage.frameRoot.addMemberFrame(Framework.FrameGroupStack('info', 1)).setFrameClassClient('DQXDarkFrame').setMargins(8);
 
                 thePage.frameIntro = thePage.frameBody.addMemberFrame(Framework.FrameFinal('intro', 1))
                 .setFrameClass('DQXClient').setDisplayTitle('Introduction'); ;
@@ -27,6 +28,7 @@
                 .setMargins(10).setDisplayTitle('Samples'); ;
 
                 //Create the views
+                
                 thePage.IntroView = IntroModule.Instance(thePage, thePage.frameIntro, thePage.frameHeaderIntro);
                 thePage.IntroView.createFramework();
 
