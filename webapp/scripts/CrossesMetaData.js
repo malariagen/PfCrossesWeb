@@ -6,7 +6,7 @@ define([DQXSC("Utils")],
         CrossesMetaData.tableVariants = "pfx_variants";
         
         CrossesMetaData.sampleSets = [{ id: '', name: '' }, { id: 'hb3_dd2', name: 'hb3_dd2' }, { id: '3d7_hb3', name: '3d7_hb3' }, { id: '7g8_gb4', name: '7g8_gb4'}];
-        CrossesMetaData.variants = [{ id: '', name: '' }, { id: 'hb3_dd2', name: 'hb3_dd2' }, { id: '3d7_hb3', name: '3d7_hb3' }, { id: '7g8_gb4', name: '7g8_gb4'}];
+        CrossesMetaData.variants = [{ id: '', name: '' }, { id: 'hb3_dd2:gatk', name: 'hb3_dd2 (GATK)' }, { id: '3d7_hb3:gatk', name: '3d7_hb3 (GATK)' }, { id: '7g8_gb4:gatk', name: '7g8_gb4 (GATK)'}];
         
         CrossesMetaData.createFieldList = function () {
         	CrossesMetaData.fieldList = [];
@@ -36,6 +36,8 @@ define([DQXSC("Utils")],
          	CrossesMetaData.variantFieldList.push({ id: "pos", shortName: "position", name: "position", dataTypeID: "Int" });
          	CrossesMetaData.variantFieldList.push({ id: "ref", shortName: "ref", name: "ref", dataTypeID: "String" });
          	CrossesMetaData.variantFieldList.push({ id: "alt0", shortName: "alt0", name: "alt0", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "alt1", shortName: "alt1", name: "alt1", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "alt2", shortName: "alt2", name: "alt2", dataTypeID: "String" });
          	CrossesMetaData.variantFieldList.push({ id: "filter", shortName: "filter", name: "filter", dataTypeID: "String" });
          	CrossesMetaData.variantFieldList.push({ id: "qual", shortName: "qual", name: "qual", dataTypeID: "String" });
          	CrossesMetaData.variantFieldList.push({ id: "qd", shortName: "qd", name: "qd", dataTypeID: "Float" });
