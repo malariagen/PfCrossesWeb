@@ -207,7 +207,7 @@
                     var callSet=this.catVarQueryPopulationFreqType.getValue();
                     var opts = callSet.split(":");
                     var thequery=SQL.WhereClause.AND([
-                               SQL.WhereClause.CompareFixed('crossName','=',opts[0]),
+                               SQL.WhereClause.CompareFixed('cross_name','=',opts[0]),
                                SQL.WhereClause.CompareFixed('method','=',opts[1])
                     ]);
                     

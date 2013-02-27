@@ -6,7 +6,15 @@ define([DQXSC("Utils")],
         CrossesMetaData.tableVariants = "pfx_variants";
         
         CrossesMetaData.sampleSets = [{ id: '', name: '' }, { id: 'hb3_dd2', name: 'hb3_dd2' }, { id: '3d7_hb3', name: '3d7_hb3' }, { id: '7g8_gb4', name: '7g8_gb4'}];
-        CrossesMetaData.variants = [{ id: '', name: '' }, { id: 'hb3_dd2:gatk', name: 'hb3_dd2 (GATK)' }, { id: '3d7_hb3:gatk', name: '3d7_hb3 (GATK)' }, { id: '7g8_gb4:gatk', name: '7g8_gb4 (GATK)'}];
+        CrossesMetaData.variants = [
+                                    { id: '', name: '' }, 
+                                    { id: 'hb3_dd2:cortex', name: 'hb3_dd2 (Cortex)' }, 
+                                    { id: 'hb3_dd2:gatk', name: 'hb3_dd2 (GATK)' },
+                                    { id: '3d7_hb3:cortex', name: '3d7_hb3 (Cortex)' },
+                                    { id: '3d7_hb3:gatk', name: '3d7_hb3 (GATK)' },
+                                    { id: '7g8_gb4:cortex', name: '7g8_gb4 (Cortex)'},
+                                    { id: '7g8_gb4:gatk', name: '7g8_gb4 (GATK)'}
+                                    ];
         
         CrossesMetaData.createFieldList = function () {
         	CrossesMetaData.fieldList = [];
@@ -39,7 +47,7 @@ define([DQXSC("Utils")],
          	CrossesMetaData.variantFieldList.push({ id: "alt1", shortName: "alt1", name: "alt1", dataTypeID: "String" });
          	CrossesMetaData.variantFieldList.push({ id: "alt2", shortName: "alt2", name: "alt2", dataTypeID: "String" });
          	CrossesMetaData.variantFieldList.push({ id: "filter", shortName: "filter", name: "filter", dataTypeID: "String" });
-         	CrossesMetaData.variantFieldList.push({ id: "qual", shortName: "qual", name: "qual", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "qual", shortName: "qual", name: "qual", dataTypeID: "Float" });
          	CrossesMetaData.variantFieldList.push({ id: "qd", shortName: "qd", name: "qd", dataTypeID: "Float" });
          	CrossesMetaData.variantFieldList.push({ id: "mq", shortName: "mq", name: "mq", dataTypeID: "Float" });
          	

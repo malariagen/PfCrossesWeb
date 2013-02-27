@@ -4,5 +4,5 @@
 DBSRV = 'localhost'
 DBUSER = 'root'
 DBPASS = ''
-DB = 'world'
+DB = 'pfx'
 BASEDIR = '/vol/data/Test/Genome'
