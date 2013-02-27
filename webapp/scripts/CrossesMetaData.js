@@ -23,7 +23,9 @@ define([DQXSC("Utils")],
         	CrossesMetaData.fieldList.push({ id: "ox_code", shortName: "Sample", name: "Sample name", dataTypeID: "String" });
         	CrossesMetaData.fieldList.push({ id: "run", shortName: "Run", name: "Run", dataTypeID: "String" });
         	CrossesMetaData.fieldList.push({ id: "coverage", shortName: "Coverage", name: "Coverage", dataTypeID: "String" });
-        	CrossesMetaData.fieldList.push({ id: "percent_mapped", shortName: "% Mapped", name: "Percent Mapped", dataTypeID: "Float" });
+        	CrossesMetaData.fieldList.push({ id: "percent_mapped", shortName: "% Mapped", name: "Percent Mapped", dataTypeID: "Float",
+                     textConvertFunction : (function (x) { return (parseFloat(x)).toFixed(1); } )
+            });
           
         	 for (var i = 0; i < CrossesMetaData.fieldList.length; i++) {
                  var info = CrossesMetaData.fieldList[i];

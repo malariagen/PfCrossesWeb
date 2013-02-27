@@ -254,6 +254,7 @@
     <Content Include="webapp\scripts\DQX\Documentation.js" />
     <Content Include="webapp\scripts\DQX\DQXBootstrap.js" />
     <Content Include="webapp\scripts\DQX\DQXCommon.css" />
+    <Content Include="webapp\scripts\DQX\Externals\d3.js" />
     <Content Include="webapp\scripts\DQX\Externals\jquery-1.4.1.js" />
     <Content Include="webapp\scripts\DQX\Externals\jquery-1.8.js" />
     <Content Include="webapp\scripts\DQX\Externals\jquery.js" />
@@ -287,6 +288,7 @@
     <Content Include="webapp\scripts\Views\Browser.js" />
     <Content Include="webapp\scripts\Views\Intro.js" />
     <Content Include="webapp\scripts\Views\Samples.js" />
+    <Content Include="webapp\scripts\Views\Variants.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
