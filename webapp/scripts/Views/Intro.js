@@ -1,5 +1,5 @@
-﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils")],
-    function (require, Framework, Controls, Msg, DocEl, DQX) {
+﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils")],
+    function (require, Framework, HistoryManager, Controls, Msg, DocEl, DQX) {
 
         var IntroModule = {
 
@@ -25,6 +25,12 @@
                 };
 
                 that.createFramework = function () {
+                    HistoryManager.setCallBackChangeState(function (stateKeys) {
+                        if ('start' in stateKeys)
+                            disableHomeButton();
+                        else
+                            enableHomeButton();
+                    });
                 };
 
                 that.createNavigationButton = function (id, parentDiv, bitmap, content, styleClass, width) {
@@ -121,6 +127,17 @@
                             handler: function () {
                                 DQX.executeProcessing(function () {
                                     that.myPage.frameBrowser.makeVisible();
+                                });
+                            }
+                        },
+                        {
+                            id: 'IntroGenomeBrowser',
+                            name: "Genome browser",
+                            bitmap: 'Bitmaps/dna3.png',
+                            location: buttondiv1,
+                            handler: function () {
+                                DQX.executeProcessing(function () {
+                                    that.myPage.frameGenomeBrowser.makeVisible();
                                 });
                             }
                         }

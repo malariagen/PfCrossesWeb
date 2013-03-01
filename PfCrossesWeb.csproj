@@ -286,6 +286,7 @@
     <Content Include="webapp\scripts\Page.js" />
     <Content Include="webapp\scripts\require.js" />
     <Content Include="webapp\scripts\Views\Browser.js" />
+    <Content Include="webapp\scripts\Views\GenomeBrowser.js" />
     <Content Include="webapp\scripts\Views\Intro.js" />
     <Content Include="webapp\scripts\Views\Samples.js" />
     <Content Include="webapp\scripts\Views\Variants.js" />

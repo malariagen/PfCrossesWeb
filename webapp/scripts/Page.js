@@ -1,5 +1,5 @@
-﻿define([DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/Samples", "Views/Variants"],
-    function (Framework, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, SamplesModule, VariantsModule) {
+﻿define([DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants"],
+    function (Framework, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule) {
         thePage = {
 
             createFramework: function () {
@@ -19,7 +19,10 @@
                 .setFrameClass('DQXClient').setDisplayTitle('Introduction'); ;
 
                 thePage.frameBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('browser', 1))
-                .setMargins(10).setDisplayTitle('Browser'); ;
+                .setMargins(10).setDisplayTitle('Genotype browser'); ;
+
+                thePage.frameGenomeBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('genomebrowser', 1))
+                .setMargins(10).setDisplayTitle('Genome browser'); ;
 
                 thePage.frameVariants = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('variants', 1))
                 .setMargins(10).setDisplayTitle('Variants'); ;
@@ -35,6 +38,9 @@
 
                 thePage.BrowserView = BrowserModule.Instance(thePage, thePage.frameBrowser);
                 thePage.BrowserView.createFramework();
+
+                thePage.GenomeBrowserView = GenomeBrowserModule.Instance(thePage, thePage.frameGenomeBrowser);
+                thePage.GenomeBrowserView.createFramework();
 
                 thePage.VariantsView = VariantsModule.Instance(thePage, thePage.frameVariants);
                 thePage.VariantsView.createFramework();
