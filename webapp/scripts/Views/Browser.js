@@ -24,13 +24,14 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         .setMargins(5).setDisplayTitle('Details').setFixedSize(Framework.dimX, 380);
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
-                    Msg.listen("", { type: 'JumpgenomeRegion' }, $.proxy(this.onJumpGenomeRegion, this));
+                    Msg.listen("", { type: 'JumpgenomeRegionGenotypeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
                 };
 
                 that.createPanels = function () {
                     var browserConfig = {
                         serverURL: serverUrl,
-                        chromnrfield: 'chromid'
+                        chromnrfield: 'chromid',
+                        viewID:'GenotypeBrowser'
                     };
 
                     if (this.refVersion == 2)
@@ -220,7 +221,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         var chromoID = args.chromoID;
                     else {
                         DQX.assertPresence(args, 'chromNr');
-                        var chromoID = this.panelBrowser.getChromoID(args.chromNr);
+                        var chromoID = that.panelBrowser.getChromoID(args.chromNr);
                     }
                     DQX.assertPresence(args, 'start'); DQX.assertPresence(args, 'end');
                     this.panelBrowser.highlightRegion(chromoID, (args.start + args.end) / 2, args.end - args.start);

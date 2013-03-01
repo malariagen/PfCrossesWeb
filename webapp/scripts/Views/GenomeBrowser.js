@@ -1,6 +1,6 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile")],
-    function (require, Framework, Controls, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile) {
+define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), "GenomeBrowserSNPChannel", "CrossesMetaData"],
+    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, GenomeBrowserSNPChannel, CrossesMetaData) {
 
         var GenomeBrowserModule = {
 
@@ -22,42 +22,34 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
-//                    Msg.listen("", { type: 'JumpgenomeRegion' }, $.proxy(this.onJumpGenomeRegion, this));
+
+                    Msg.listen("", { type: 'JumpgenomeRegionGenomeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
+
                 };
 
                 that.createPanels = function () {
                     var browserConfig = {
                         serverURL: serverUrl,
-                        chromnrfield: 'chromid'
+                        chromoIdField: 'chrom',
+                        annotTableName : 'pf3annot',
+                        viewID:'GenomeBrowser'
                     };
 
-                    if (this.refVersion == 2)
-                        browserConfig.annotTableName = 'pfannot';
-                    if (this.refVersion == 3)
-                        browserConfig.annotTableName = 'pf3annot';
-
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
-
-                    if (this.refVersion == 2)
-                        this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'exon');
-                    if (this.refVersion == 3)
-                        this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'CDS');
-
+                    this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'CDS');
                     this.panelBrowser.getAnnotationChannel().setMinDrawZoomFactX(0.005);
-
                     this.panelBrowser.MaxZoomFactX = 1.0 / 0.2;
                     this.panelBrowser.getNavigator().setMinScrollSize(0.0001);
 
+                    this.createChromosomesPFV3();
 
-                    if (this.refVersion == 2)
-                        this.createChromosomesPFV2();
-                    if (this.refVersion == 3)
-                        this.createChromosomesPFV3();
+                    this.createSNPChannels();
 
                     this.createControls();
 
-
                     //Causes the browser to start with a start region
+                    var firstChromosome = CrossesMetaData.chromosomes[0].id;
+                    this.panelBrowser.setChromosome(firstChromosome, true, false);
                     this.panelBrowser.setPostInitialiseHandler(function () {
                         that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 10000);
                     });
@@ -70,26 +62,30 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     this.panelControls.render();
                 }
 
+                //Create the channels that show information for each individual SNP
+                that.createSNPChannels = function () {
+                    var channelValues = [];
 
-                that.createChromosomesPFV2 = function () {
-                    //Define chromosomes for version 3 of the reference genome
-                    var chromoids = ['Pf3D7_01', 'Pf3D7_02', 'Pf3D7_03', 'Pf3D7_04', 'Pf3D7_05', 'Pf3D7_06', 'Pf3D7_07', 'Pf3D7_08', 'Pf3D7_09', 'Pf3D7_10', 'Pf3D7_11', 'Pf3D7_12', 'Pf3D7_13', 'Pf3D7_14'];
-                    var chromosizes = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4];
-                    for (var chromnr = 0; chromnr < chromoids.length; chromnr++) {
-                        this.panelBrowser.addChromosome(chromoids[chromnr], chromoids[chromnr], chromosizes[chromnr]);
-                    }
-                    //Startup the browser with a start region
-                    this.panelBrowser.showRegion("Pf3D7_01", 0, 100000);
+                    var callsetList = ['3d7_hb3', '7g8_gb4', 'hb3_dd2'];
+
+                    $.each(callsetList, function (idx, callSetId) {
+                        var dataFetcherSNPs = new DataFetchers.Curve(serverUrl, 'pfx_variants', 'pos');
+                        //Set a limiting query so that only snps from the correct call set are fetched
+                        dataFetcherSNPs.setUserQuery2(SQL.WhereClause.CompareFixed('crossName', '=', callSetId));
+                        that.panelBrowser.addDataFetcher(dataFetcherSNPs);
+                        dataFetcherSNPs.addFetchColumn("id", "Int");
+                        dataFetcherSNPs.activateFetchColumn("id");
+                        that.channelSNPs = GenomeBrowserSNPChannel.SNPChannel(dataFetcherSNPs, callSetId);
+                        that.panelBrowser.addChannel(that.channelSNPs, false);
+                    });
+
                 }
 
+
                 that.createChromosomesPFV3 = function () {
-                    //Define chromosomes for version 3 of the reference genome
-                    var chromoids = ['Pf3D7_01', 'Pf3D7_02', 'Pf3D7_03', 'Pf3D7_04', 'Pf3D7_05', 'Pf3D7_06', 'Pf3D7_07', 'Pf3D7_08', 'Pf3D7_09', 'Pf3D7_10', 'Pf3D7_11', 'Pf3D7_12', 'Pf3D7_13', 'Pf3D7_14'];
-                    var chromosizes = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4];
-                    for (var chromnr = 0; chromnr < chromoids.length; chromnr++) {
-                        chromoids[chromnr] += '_v3';
-                        this.panelBrowser.addChromosome(chromoids[chromnr], chromoids[chromnr], chromosizes[chromnr]);
-                    }
+                    $.each(CrossesMetaData.chromosomes, function (idx, chromo) {
+                        that.panelBrowser.addChromosome(chromo.id, chromo.id, chromo.len);
+                    });
                 }
 
 
