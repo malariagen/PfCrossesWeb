@@ -120,7 +120,7 @@
     
                 that.createPanelTable = function () {
 
-                    this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.tableVariants);
+                    this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.database, CrossesMetaData.tableVariants);
                     this.theTableFetcher.showDownload=true;
                     this.theTableFetcher.positionField = "pos";
                     this.panelTable = QueryTable.Panel(this.frameTable, this.theTableFetcher, { leftfraction: 50 });

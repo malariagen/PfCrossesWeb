@@ -2,6 +2,7 @@ define([DQXSC("Utils")],
     function (DQX) {
         var CrossesMetaData = {};
 
+        CrossesMetaData.database = "pfx";
         CrossesMetaData.tableSamples = "pfx_samples";
         CrossesMetaData.tableVariants = "pfx_variants";
         

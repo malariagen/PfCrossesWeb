@@ -134,7 +134,7 @@
 
                 that.createPanelTable = function () {
 
-                    this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.tableSamples);
+                    this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.database, CrossesMetaData.tableSamples);
                     this.theTableFetcher.showDownload = true;
                     this.theTableFetcher.positionField = "id";
                     this.panelTable = QueryTable.Panel(this.frameTable, this.theTableFetcher, { leftfraction: 50 });
