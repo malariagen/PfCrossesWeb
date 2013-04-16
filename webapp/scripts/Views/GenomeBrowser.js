@@ -32,7 +32,8 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         serverURL: serverUrl,
                         chromoIdField: 'chrom',
                         annotTableName : 'pf3annot',
-                        viewID:'GenomeBrowser'
+                        viewID: 'GenomeBrowser',
+                        database: sourceDatabase
                     };
 
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
@@ -69,7 +70,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     var callsetList = ['3d7_hb3', '7g8_gb4', 'hb3_dd2'];
 
                     $.each(callsetList, function (idx, callSetId) {
-                        var dataFetcherSNPs = new DataFetchers.Curve(serverUrl, 'pfx_variants', 'pos');
+                        var dataFetcherSNPs = new DataFetchers.Curve(serverUrl, sourceDatabase, 'pfx_variants', 'pos');
                         //Set a limiting query so that only snps from the correct call set are fetched
                         dataFetcherSNPs.setUserQuery2(SQL.WhereClause.CompareFixed('crossName', '=', callSetId));
                         that.panelBrowser.addDataFetcher(dataFetcherSNPs);
