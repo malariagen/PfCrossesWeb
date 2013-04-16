@@ -1,1 +1,5 @@
+#To load the samples use
 mysql --local-infile=1 -u root PfCrosses < ./loadSamples.sql 
+
+#Most tables are created via the scripts in ../vcf
+#Use the export.sh script to export only the tables that are required by the app
