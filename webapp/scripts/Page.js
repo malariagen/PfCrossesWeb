@@ -4,7 +4,8 @@
 
             createFramework: function () {
 
-                thePage.frameRoot = Framework.FrameGroupVert('');
+                thePage.frameWindow = Framework.FrameFullWindow(Framework.FrameGroupVert(''));
+                thePage.frameRoot = thePage.frameWindow.getFrameRoot();
                 thePage.frameRoot.setMargins(0);
 
                 //The top line of the page
@@ -13,22 +14,22 @@
 
                 
                 //The body panel of the page
-                thePage.frameBody = thePage.frameRoot.addMemberFrame(Framework.FrameGroupStack('info', 1)).setFrameClassClient('DQXDarkFrame').setMargins(8);
+                thePage.frameBody = thePage.frameRoot.addMemberFrame(Framework.FrameGroupStack('info', 1)).setFrameClassClient('DQXDarkFrame').setMargins(0);
 
                 thePage.frameIntro = thePage.frameBody.addMemberFrame(Framework.FrameFinal('intro', 1))
                 .setFrameClass('DQXClient').setDisplayTitle('Introduction'); ;
 
                 thePage.frameBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('browser', 1))
-                .setMargins(10).setDisplayTitle('Genotype browser'); ;
+                .setMarginsIndividual(0,7,0,0).setDisplayTitle('Genotype browser'); ;
 
                 thePage.frameGenomeBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('genomebrowser', 1))
-                .setMargins(10).setDisplayTitle('Genome browser'); ;
+                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle('Genome browser'); ;
 
                 thePage.frameVariants = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('variants', 1))
-                .setMargins(10).setDisplayTitle('Variants'); ;
+                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle('Variants'); ;
                 
                 thePage.frameSamples = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('samples', 1))
-                .setMargins(10).setDisplayTitle('Samples'); ;
+                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle('Samples'); ;
 
                 //Create the views
                 
