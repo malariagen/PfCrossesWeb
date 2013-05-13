@@ -12,6 +12,11 @@ def insertFilters(c, filterValues):
       """INSERT INTO pfx_variant_filter (filter, record_id, cross_name, method, chrom, pos, snp)
       VALUES (%s, %s, %s, %s, %s, %s, %s)""",filterValues)
 
+def insertFilterDescrips(c, filterValues):
+    c.executemany(
+      """INSERT IGNORE INTO variant_filter_descrip (filter, method, description)
+      VALUES (%s, %s, %s)""",filterValues)
+
 db=MySQLdb.connect(host=config.DBSRV, user=config.DBUSER, passwd=config.DBPASS, db=config.DB, charset='utf8')
 c=db.cursor()
 
@@ -19,8 +24,13 @@ c=db.cursor()
 def loadFile(vcfFile, crossName, method):
   insertValues = []
   filterValues = []
+  filterDescrips = []
   print vcfFile
   vcf_reader = vcf.Reader(filename=vcfFile)
+  for vcf_filter in vcf_reader.filters:
+        t=vcf_filter,method,vcf_reader.filters[vcf_filter].desc
+        filterDescrips.append(t)
+  insertFilterDescrips(c, filterDescrips)
   for record in vcf_reader:
 	snp = 1
 	indel = 0
