@@ -14,7 +14,7 @@ fupdates = []
 fQuery = "UPDATE pfx_variant_filter "
 c.execute("""SELECT DISTINCT filter from variant_filter""")
 
-fields='''SELECT pv.*,CONCAT_WS(',',pv.alt0,pv.alt1,pv.alt2) as alt,COALESCE(pv1.vqslod,999999) as vqslod_snp,COALESCE(pv2.vqslod,999999) as vqslod_indel, TRIM(leading '0' FROM substr(substr(pv.chrom,7),1,2)) as chrom_num, CONCAT(TRIM(leading '0' FROM substr(substr(pv.chrom,7),1,2)),':',pv.pos) as chrom_pos,'''
+fields='''SELECT pv.*,CONCAT_WS(',',pv.alt0,pv.alt1,pv.alt2) as alt,COALESCE(pv1.vqslod,999999) as vqslod_snp,COALESCE(pv2.vqslod,999999) as vqslod_indel, TRIM(leading '0' FROM substr(substr(pv.chrom,7),1,2)) as chrom_num, CONCAT(pv.chrom,':',pv.pos) as chrom_pos,'''
 fromTab=''' FROM pfx_variants pv\n'''
 joins=''' LEFT JOIN pfx_variants pv1 ON pv1.id = pv.id AND pv1.snp = 1
  LEFT JOIN pfx_variants pv2 ON pv2.id = pv.id AND pv2.indel = 1
