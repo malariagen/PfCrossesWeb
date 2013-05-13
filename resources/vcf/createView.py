@@ -4,8 +4,9 @@ import config
 import MySQLdb
 
 def convert(name):
-    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+    return name
+#    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+#    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 db=MySQLdb.connect(host=config.DBSRV, user=config.DBUSER, passwd=config.DBPASS, db=config.DB, charset='utf8')
 c=db.cursor()
