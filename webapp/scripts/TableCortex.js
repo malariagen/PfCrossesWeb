@@ -82,6 +82,11 @@ define([  DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("Control
                 }
                 comp.makeHyperlinkHeader(msgIDClickHeader,'Column information');
                
+                if (info.qbuildertype == "Float") {
+                    comp.CellToText = function (text) {
+                    	return (text.toFixed(2));
+                    };
+                }
 				mytable.addSortOption(info.name, SQL.TableSort([info.id]));
 				
             }

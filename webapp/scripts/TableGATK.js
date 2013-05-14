@@ -1,5 +1,5 @@
-define([  DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("SQL"), DQXSC("Msg"),"CrossesMetaData" ], 
-		function(DataFetcher, QueryTable,SQL,Msg,CrossesMetaData) {
+define([  DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("Controls"), DQXSC("SQL"), DQXSC("Msg"),"CrossesMetaData" ], 
+		function(DataFetcher, QueryTable, Controls, SQL,Msg,CrossesMetaData) {
 	return  {
 		
 		getFieldList: function () {
@@ -82,6 +82,11 @@ define([  DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("SQL"), 
                 }
                 comp.makeHyperlinkHeader(msgIDClickHeader,'Column information');
                
+                if (info.qbuildertype == "Float") {
+                    comp.CellToText = function (text) {
+                    	return (text.toFixed(2));
+                    };
+                }
 				mytable.addSortOption(info.name, SQL.TableSort([info.id]));
 				
             }
