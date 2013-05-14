@@ -27,6 +27,7 @@ CREATE TABLE `pfx_variants` (
   `fs` decimal(7,3) DEFAULT NULL,
   `svtype` varchar(64) DEFAULT NULL,
   `svlen` int(10) DEFAULT NULL,
+  `uq` int(10) DEFAULT NULL,
   `version` bigint(20) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `ipos` (`pos`),
