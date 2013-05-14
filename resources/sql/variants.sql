@@ -22,7 +22,7 @@ CREATE TABLE `pfx_variants` (
   `snp` tinyint(1) DEFAULT NULL,
   `indel` tinyint(1) DEFAULT NULL,
   `dp` int(10) DEFAULT NULL,
-  `mq0fraction` int(10) DEFAULT NULL,
+  `mq0fraction` decimal(5,4) DEFAULT NULL,
   `haplotype_score` decimal(9,4) DEFAULT NULL,
   `fs` decimal(7,3) DEFAULT NULL,
   `svtype` varchar(64) DEFAULT NULL,
