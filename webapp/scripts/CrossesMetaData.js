@@ -4,7 +4,7 @@ define([DQXSC("Utils")],
 
         CrossesMetaData.database = "pfx";
         CrossesMetaData.tableSamples = "pfx_samples";
-        CrossesMetaData.tableVariants = "pfx_variants";
+        CrossesMetaData.tableVariants = "variants_filtered";
         
         CrossesMetaData.sampleSets = [{ id: '', name: '' }, { id: 'hb3_dd2', name: 'hb3_dd2' }, { id: '3d7_hb3', name: '3d7_hb3' }, { id: '7g8_gb4', name: '7g8_gb4'}];
         CrossesMetaData.variants = [
@@ -36,7 +36,16 @@ define([DQXSC("Utils")],
         ];
         $.each(CrossesMetaData.chromosomes, function (idx, chr) { chr.name = chr.id; });
 
-        
+
+        CrossesMetaData.fillFieldList = function (fieldList) {
+        	for (var i = 0; i < fieldList.length; i++) {
+                var info = fieldList[i];
+                if (!(info.name))
+                    info.name = info.shortName;
+                if (!(info.comment))
+                    info.comment = info.name;
+            }
+        }
         CrossesMetaData.createFieldList = function () {
         	CrossesMetaData.fieldList = [];
 
@@ -48,14 +57,8 @@ define([DQXSC("Utils")],
                      textConvertFunction : (function (x) { return (parseFloat(x)).toFixed(1); } )
             });
           
-        	 for (var i = 0; i < CrossesMetaData.fieldList.length; i++) {
-                 var info = CrossesMetaData.fieldList[i];
-                 if (!(info.name))
-                     info.name = info.shortName;
-                 if (!(info.comment))
-                     info.comment = info.name;
-             }
-
+        	CrossesMetaData.fillFieldList(CrossesMetaData.fieldList);
+        	 
              //Lookup object to find field info by ID
         	 CrossesMetaData.fieldMap = {};
              for (var i = 0; i < CrossesMetaData.fieldList.length; i++)
@@ -64,23 +67,26 @@ define([DQXSC("Utils")],
              
              CrossesMetaData.variantFieldList = [];
 
-         	CrossesMetaData.variantFieldList.push({ id: "pos", shortName: "position", name: "position", dataTypeID: "Int" });
-         	CrossesMetaData.variantFieldList.push({ id: "ref", shortName: "ref", name: "ref", dataTypeID: "String" });
-         	CrossesMetaData.variantFieldList.push({ id: "alt0", shortName: "alt0", name: "alt0", dataTypeID: "String" });
-         	CrossesMetaData.variantFieldList.push({ id: "alt1", shortName: "alt1", name: "alt1", dataTypeID: "String" });
-         	CrossesMetaData.variantFieldList.push({ id: "alt2", shortName: "alt2", name: "alt2", dataTypeID: "String" });
-         	CrossesMetaData.variantFieldList.push({ id: "filter", shortName: "filter", name: "filter", dataTypeID: "String" });
-         	CrossesMetaData.variantFieldList.push({ id: "qual", shortName: "qual", name: "qual", dataTypeID: "Float" });
-         	CrossesMetaData.variantFieldList.push({ id: "qd", shortName: "qd", name: "qd", dataTypeID: "Float" });
-         	CrossesMetaData.variantFieldList.push({ id: "mq", shortName: "mq", name: "mq", dataTypeID: "Float" });
+         	CrossesMetaData.variantFieldList.push({ id: "chrom_pos", shortName: "position", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "gene", shortName: "gene", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "ref", shortName: "ref", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "alt", shortName: "alt", dataTypeID: "String" });
+         	CrossesMetaData.variantFieldList.push({ id: "filter", shortName: "filter", dataTypeID: "String" });
          	
-         	 for (var i = 0; i < CrossesMetaData.variantFieldList.length; i++) {
-                  var info = CrossesMetaData.variantFieldList[i];
-                  if (!(info.name))
-                      info.name = info.shortName;
-                  if (!(info.comment))
-                      info.comment = info.name;
-              }
+         	CrossesMetaData.gatkVariantFieldList = CrossesMetaData.variantFieldList.slice(0);
+         	
+         	CrossesMetaData.gatkVariantFieldList.push({ id: "vqslod", shortName: "vqslod", dataTypeID: "Float" });
+         	CrossesMetaData.gatkVariantFieldList.push({ id: "dp", shortName: "dp", dataTypeID: "Int" });
+         	CrossesMetaData.gatkVariantFieldList.push({ id: "mq", shortName: "mq", dataTypeID: "Int" });
+         	CrossesMetaData.gatkVariantFieldList.push({ id: "mq0fraction", shortName: "mq0fraction", dataTypeID: "Float" });
+         	CrossesMetaData.gatkVariantFieldList.push({ id: "uq", shortName: "uq", dataTypeID: "Int" });
+         	
+         	CrossesMetaData.cortexVariantFieldList = CrossesMetaData.variantFieldList.slice(0);
+         	CrossesMetaData.cortexVariantFieldList.push({ id: "site_conf", shortName: "site_conf", dataTypeID: "Float" });
+         	
+         	CrossesMetaData.fillFieldList(CrossesMetaData.gatkVariantFieldList);
+         	CrossesMetaData.fillFieldList(CrossesMetaData.cortexVariantFieldList);
+         	
 
               //Lookup object to find field info by ID
          	 CrossesMetaData.variantFieldMap = {};
