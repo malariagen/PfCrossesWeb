@@ -37,8 +37,8 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
             		options[i].modifyValue(true);
             	}	
             });
-			self.queryPane.addControl(this.clear);
-			self.queryPane.addControl(this.setAll);
+			var multiSet = Controls.CompoundHor([ this.clear, this.setAll]);
+			self.queryPane.addControl(multiSet);
 		},
 		processFilters : function(filterList) {
 			
@@ -72,6 +72,7 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
 			this.queryPane = Controls.CompoundVert();
 			this.queryPane.setLegend(this.getLabel());
 
+			this.setAllFilterOptions();
 			//select distinct filter,method from pfx_variant_filter;
 					var cortex_filters = [
 					                      /*
