@@ -18,15 +18,14 @@
 
                 that.createPanels = function () {
                 	
-                	this.tableCortex = TableCortex.constructor(this.frameTables['cortex']);
- 					this.tableCortex = TableCortex;
+                	
+ 					this.tableCortex = new TableCortex();
  					
- 					this.tableCortex.createPanelTable();
+ 					this.tableCortex.createPanelTable(this.frameTables['cortex']);
                   
- 					this.tableGATK = TableGATK.constructor(this.frameTables['gatk']);
- 					this.tableGATK = TableGATK;
+ 					this.tableGATK = new TableGATK();
  					
- 					this.tableGATK.createPanelTable();
+ 					this.tableGATK.createPanelTable(this.frameTables['gatk']);
  					
                     this.createPanelAdvancedQuery();
 
@@ -164,12 +163,13 @@
                     
                     this.sOpts = SearchOptions.constructor(this.changeFunction, this, this.panelTable);
 					this.sOpts = SearchOptions;
-                    this.tOpts = TypeOptions.constructor(this.changeFunction, this, this.panelTable);
-					this.tOpts = TypeOptions;
-                    this.gOpts = GATKOptions.constructor(this.changeFunction, this, this.panelTable);
-					this.gOpts = GATKOptions;
-					this.cOpts = CortexOptions.constructor(this.changeFunction, this, this.panelTable);
-					this.cOpts = CortexOptions;
+                    
+					this.tOpts = new TypeOptions();
+					this.tOpts.setup(this.changeFunction, this);
+					this.gOpts = new GATKOptions();
+					this.gOpts.setup(this.changeFunction, this);
+					this.cOpts = new CortexOptions();
+					this.cOpts.setup(this.changeFunction, this);
 					theForm.addControl(this.sOpts.getQueryPane());
 					theForm.addControl(this.tOpts.getQueryPane());
 					
