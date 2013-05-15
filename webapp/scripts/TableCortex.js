@@ -1,5 +1,5 @@
-define([  DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("Controls"), DQXSC("SQL"), DQXSC("Msg"),"CrossesMetaData" ], 
-		function(DataFetcher, QueryTable, Controls, SQL,Msg,CrossesMetaData) {
+define([  DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("Controls"), DQXSC("Popup"), DQXSC("SQL"), DQXSC("Msg"),"CrossesMetaData" ], 
+		function(DataFetcher, QueryTable, Controls, Popup, SQL, Msg, CrossesMetaData) {
 	return  {
 		
 		getFieldList: function () {
@@ -96,39 +96,39 @@ define([  DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("Control
             this.theTableFetcher.setUserQuery1(SQL.WhereClause.None());
             this.panelTable.myTable.render();
         },
-      //This function is called when the user clicks on a link in a column header of the SNP query table
-        _onClickHeader : function(scope,id) {
-            var thecol=this.panelTable.myTable.findColumn(id);
-            title='Column "{id}"'.DQXformat({id:thecol.myName.replace('<br>',' ')});
-            content='<br>'+thecol.myComment+'<br><br>';
-            var buttons=[];
+        //This function is called when the user clicks on a link in a column header of the SNP query table
+        _onClickHeader : function (scope, id) {
+            var thecol = this.panelTable.myTable.findColumn(id);
+            title = 'Column "{id}"'.DQXformat({ id: thecol.myName.replace('<br>', ' ') });
+            content = '<br>' + thecol.myComment + '<br><br>';
+            var buttons = [];
+            var self = this;
             if (thecol.sortOption) {
-                buttons.push( Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Sort by<br>increasing value" })
-                    .setOnChanged(function() {
-                        that.panelTable.myTable.sortByColumn(id,false);
+                buttons.push(Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Sort by<br>increasing value" })
+                    .setOnChanged(function () {
+                        self.panelTable.myTable.sortByColumn(id, false);
                         if (!Popup.isPinned(popupID))
                             DQX.ClosePopup(popupID);
-                    }) );
-                buttons.push( Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Sort by<br>decreasing value" })
-                    .setOnChanged(function() {
-                        that.panelTable.myTable.sortByColumn(id,true);
+                    }));
+                buttons.push(Controls.Button(null, { buttonClass: 'DQXToolButton2', content: "Sort by<br>decreasing value" })
+                    .setOnChanged(function () {
+                        self.panelTable.myTable.sortByColumn(id, true);
                         if (!Popup.isPinned(popupID))
                             DQX.ClosePopup(popupID);
-                    }) );
+                    }));
             }
             if (thecol.linkFunction) {
-                buttons.push( Controls.Button(null, { buttonClass: 'DQXToolButton2', content: thecol.linkHint, width:190 })
-                    .setOnChanged(function() {
+                buttons.push(Controls.Button(null, { buttonClass: 'DQXToolButton2', content: thecol.linkHint, width: 190 })
+                    .setOnChanged(function () {
                         thecol.linkFunction(id);
                         if (!Popup.isPinned(popupID))
                             DQX.ClosePopup(popupID);
-                    }) );
+                    }));
             }
 
-            $.each(buttons,function(idx,bt) { content+=bt.renderHtml(); });
-
+            $.each(buttons, function (idx, bt) { content += bt.renderHtml(); });
+            var popupID = Popup.create(title, content);
         },
-
         //This function is called when the currently highlighted SNP changes
         _onHighlightRowModified : function(scope,obj) {
         },
