@@ -1,5 +1,5 @@
-﻿define([DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants"],
-    function (Framework, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule) {
+﻿define([DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "i18n!nls/PfCrossesWebResources.js"],
+    function (Framework, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule, resources) {
         thePage = {
 
             createFramework: function () {
@@ -17,19 +17,19 @@
                 thePage.frameBody = thePage.frameRoot.addMemberFrame(Framework.FrameGroupStack('info', 1)).setFrameClassClient('DQXDarkFrame').setMargins(0);
 
                 thePage.frameIntro = thePage.frameBody.addMemberFrame(Framework.FrameFinal('intro', 1))
-                .setFrameClass('DQXClient').setDisplayTitle('Introduction'); ;
-
+                .setFrameClass('DQXClient').setDisplayTitle(resources.appName + resources.introPageHeader); ;
+                
                 thePage.frameBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('browser', 1))
-                .setMarginsIndividual(0,7,0,0).setDisplayTitle('Genotype browser'); ;
+                .setMarginsIndividual(0,7,0,0).setDisplayTitle(resources.appName + resources.genotypePageHeader); ;
 
                 thePage.frameGenomeBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('genomebrowser', 1))
-                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle('Genome browser'); ;
+                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.genomePageHeader); ;
 
                 thePage.frameVariants = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('variants', 1))
-                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle('Variants'); ;
+                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.variantsPageHeader); ;
                 
                 thePage.frameSamples = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('samples', 1))
-                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle('Samples'); ;
+                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.samplesPageHeader); ;
 
                 //Create the views
                 

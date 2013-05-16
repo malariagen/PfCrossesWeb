@@ -1,20 +1,23 @@
-define([DQXSC("Utils")],
-    function (DQX) {
+define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
+    function (DQX, resources) {
         var CrossesMetaData = {};
 
         CrossesMetaData.database = "pfx";
         CrossesMetaData.tableSamples = "pfx_samples";
         CrossesMetaData.tableVariants = "variants_filtered";
         
-        CrossesMetaData.sampleSets = [{ id: '', name: '' }, { id: 'hb3_dd2', name: 'hb3_dd2' }, { id: '3d7_hb3', name: '3d7_hb3' }, { id: '7g8_gb4', name: '7g8_gb4'}];
+        CrossesMetaData.sampleSets = [{ id: '', name: '' }, 
+                                      { id: 'hb3_dd2', name: resources.xhb3_dd2 }, 
+                                      { id: '3d7_hb3', name: resources.x3d7_hb3 }, 
+                                      { id: '7g8_gb4', name: resources.x7g8_gb4}];
         CrossesMetaData.variants = [
                                     { id: '', name: '' }, 
-                                    { id: 'hb3_dd2:cortex', name: 'hb3_dd2 (Cortex)' }, 
-                                    { id: 'hb3_dd2:gatk', name: 'hb3_dd2 (GATK)' },
-                                    { id: '3d7_hb3:cortex', name: '3d7_hb3 (Cortex)' },
-                                    { id: '3d7_hb3:gatk', name: '3d7_hb3 (GATK)' },
-                                    { id: '7g8_gb4:cortex', name: '7g8_gb4 (Cortex)'},
-                                    { id: '7g8_gb4:gatk', name: '7g8_gb4 (GATK)'}
+                                    { id: 'hb3_dd2:cortex', name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (Cortex)' }, 
+                                    { id: 'hb3_dd2:gatk', name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (GATK)' },
+                                    { id: '3d7_hb3:cortex', name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (Cortex)' },
+                                    { id: '3d7_hb3:gatk', name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (GATK)' },
+                                    { id: '7g8_gb4:cortex', name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (Cortex)'},
+                                    { id: '7g8_gb4:gatk', name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (GATK)'}
                                     ];
 
         //////// Information about the chromosomes

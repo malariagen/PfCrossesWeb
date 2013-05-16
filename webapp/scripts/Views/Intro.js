@@ -1,5 +1,5 @@
-﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils")],
-    function (require, Framework, HistoryManager, Controls, Msg, DocEl, DQX) {
+﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
+    function (require, Framework, HistoryManager, Controls, Msg, DocEl, DQX, resources) {
 
         var IntroModule = {
 
@@ -12,7 +12,7 @@
 
                 that.createPanels = function () {
                     this.myHeaderFrame.setContentStaticDiv('HeaderIntroPanel');
-                    this.myFrame.setContentStaticDiv('IntroPanel');
+                    this.myFrame.setContentHtml(resources.introTitle + resources.introText);
 
                     this.createNavigationSection();
 
@@ -69,8 +69,8 @@
                     var button = DocEl.Div({ id: id, parent: parentDiv });
                     button.setWidthPx(200);
                     button.addStyle('margin', '10px');
-                    button.setWidthPx(200);
-                    button.setHeightPx(50);
+                    button.setWidthPx(550);
+                    button.setHeightPx(20);
                     button.setCssClass(style);
                     button.addStyle('float', 'left');
                     if (bitmap)
@@ -99,8 +99,7 @@
                     var jumpStarts = [
                         {
                             id: 'Samples',
-                            name: "Samples - view available samples and download sequence data",
-                            bitmap: 'Bitmaps/datagrid2.png',
+                            name: resources.samplesPageHeader + resources.samplesButton,
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
@@ -110,8 +109,7 @@
                         },
                         {
                             id: 'Variants',
-                            name: "Variants - view catalogues of genetic variants (SNPs and indels)",
-                            bitmap: 'Bitmaps/world2.png',
+                            name: resources.variantsPageHeader + resources.variantsButton,
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
@@ -120,9 +118,8 @@
                             }
                         },
                         {
-                            id: 'IntroPlublicGenotypes',
-                            name: "Explore the <b>genotypes</b> of the public samples",
-                            bitmap: 'Bitmaps/genotypes.png',
+                            id: 'IntroPublicGenotypes',
+                            name: resources.genotypePageHeader + resources.genotypeButton,
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
@@ -132,8 +129,7 @@
                         },
                         {
                             id: 'IntroGenomeBrowser',
-                            name: "Genome browser",
-                            bitmap: 'Bitmaps/dna3.png',
+                            name: resources.genomePageHeader + resources.genomeButton,
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {

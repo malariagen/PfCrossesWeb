@@ -1,5 +1,5 @@
-﻿define([DQXSCRQ(), DQXSC("SVG"), DQXSC("Framework"), DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("QueryBuilder"), DQXSC("SQL"), DQXSC("Msg"), DQXSC("DocEl"), "Page", DQXSC("Controls"), DQXSC("Popup"), "CrossesMetaData"],
-    function (require, SVG, Framework, DataFetcher, QueryTable, QueryBuilder, SQL, Msg, DocEl, thePage, Controls, Popup, CrossesMetaData) {
+﻿define([DQXSCRQ(), DQXSC("SVG"), DQXSC("Framework"), DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("QueryBuilder"), DQXSC("SQL"), DQXSC("Msg"), DQXSC("DocEl"), "Page", DQXSC("Controls"), DQXSC("Popup"), "CrossesMetaData", "i18n!nls/PfCrossesWebResources.js"],
+    function (require, SVG, Framework, DataFetcher, QueryTable, QueryBuilder, SQL, Msg, DocEl, thePage, Controls, Popup, CrossesMetaData, resources) {
 
         var SamplesModule = {
 
@@ -75,10 +75,10 @@
 
                     this.frameLeftGroup = this.myFrame.addMemberFrame(Framework.FrameGroupVert('SamplesQueries', 0.4)).setSeparatorSize(4);
 
-                    this.frameLeftGroup.InsertIntroBox('datagrid2.png', DQX.Text('IntroSamples'), 'HelpSamples');
+                    this.frameLeftGroup.InsertIntroBox('datagrid2.png', resources.samplesHelp);
 
                     this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('SamplesQueryAdvanced', 0.4))
-                        .setMargins(0).setDisplayTitle('Advanced').setMinSize(Framework.dimX, 300).setAllowScrollBars(true, true);
+                        .setMargins(0).setDisplayTitle(resources.samplePanelHeader).setMinSize(Framework.dimX, 300).setAllowScrollBars(true, true);
 
                     this.frameTable = this.myFrame.addMemberFrame(Framework.FrameFinal('SamplesTable', 0.6))
                         .setMargins(0).setFrameClassClient('DQXDarkFrame').setAllowScrollBars(false, false);
@@ -247,12 +247,10 @@
                     this.panelPopQuery = Framework.Form(this.frameQueryAdvanced);
                     var theForm = this.panelPopQuery;
 
-                    var groupPop = Controls.CompoundVert();
-                    groupPop.setLegend('Sample Set');
-                    this.catVarQueryPopulationFreqType = Controls.Combo('SamplesQuery', { label: 'Sample set:', states: CrossesMetaData.sampleSets }).setOnChanged($.proxy(this.updatePopQuery, this));
-                    groupPop.addControl(this.catVarQueryPopulationFreqType);
+                    this.catVarQueryPopulationFreqType = Controls.Combo('SamplesQuery', { label: '', states: CrossesMetaData.sampleSets }).setOnChanged($.proxy(this.updatePopQuery, this));
+                   
                     //invalidatingList.push(this.catVarQueryPopulationFreqType);
-                    theForm.addControl(groupPop);
+                    theForm.addControl(this.catVarQueryPopulationFreqType);
 
                     theForm.render();
                 };

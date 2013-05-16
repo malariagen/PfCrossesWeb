@@ -153,8 +153,8 @@
                     var theForm=this.panelPopQuery;
 
                     var groupPop=Controls.CompoundVert();
-                    groupPop.setLegend('Sample Set');
-                    this.catVarQueryPopulationFreqType=Controls.Combo('VariantsQuery', { label: 'Sample set:', states: CrossesMetaData.variants });
+                    groupPop.setLegend(resources.variantCallSet);
+                    this.catVarQueryPopulationFreqType=Controls.Combo('VariantsQuery', { label: '', states: CrossesMetaData.variants });
                     this.catVarQueryPopulationFreqType.variantContainer=this;
                     this.catVarQueryPopulationFreqType.setOnChanged(this.changeFunction);
                     groupPop.addControl(this.catVarQueryPopulationFreqType);
