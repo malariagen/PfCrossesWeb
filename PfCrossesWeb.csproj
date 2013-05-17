@@ -284,8 +284,16 @@
     <Content Include="webapp\scripts\Local\_SetAnalyticsId.js" />
     <Content Include="webapp\scripts\Local\_SetServerUrl.js" />
     <Content Include="webapp\scripts\main.js" />
+    <Content Include="webapp\scripts\OptionsCommon.js" />
+    <Content Include="webapp\scripts\OptionsCortex.js" />
+    <Content Include="webapp\scripts\OptionsGATK.js" />
+    <Content Include="webapp\scripts\OptionsGenomeSearch.js" />
+    <Content Include="webapp\scripts\OptionsVariantType.js" />
     <Content Include="webapp\scripts\Page.js" />
     <Content Include="webapp\scripts\require.js" />
+    <Content Include="webapp\scripts\TableCommon.js" />
+    <Content Include="webapp\scripts\TableCortex.js" />
+    <Content Include="webapp\scripts\TableGATK.js" />
     <Content Include="webapp\scripts\Views\Browser.js" />
     <Content Include="webapp\scripts\Views\GenomeBrowser.js" />
     <Content Include="webapp\scripts\Views\Intro.js" />

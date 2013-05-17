@@ -33,7 +33,8 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
             	var options = self.getOptionsList();
             	var modified = false;
             	for (var i = 0; i < options.length; i++) {
-            		modified |= options[i].modifyValue(false, true);
+            		modified |= options[i].getValue();
+                    options[i].modifyValue(false, true);
             	}
             	if (modified) {
             		self.changeFunction(self);
@@ -44,7 +45,8 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
             	var options = self.getOptionsList();
             	var modified = false;
             	for (var i = 0; i < options.length; i++) {
-            		modified |= options[i].modifyValue(true, true);
+            		modified |= !options[i].getValue();
+                    options[i].modifyValue(true, true);
             	}
             	if (modified) {
             		self.changeFunction(self);
