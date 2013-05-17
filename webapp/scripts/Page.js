@@ -1,5 +1,5 @@
-﻿define([DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "i18n!nls/PfCrossesWebResources.js"],
-    function (Framework, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule, resources) {
+﻿define([DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "Views/LookSeq", "Views/Downloads", "i18n!nls/PfCrossesWebResources.js"],
+    function (Framework, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule, LookSeqModule, DownloadsModule, resources) {
         thePage = {
 
             createFramework: function () {
@@ -31,6 +31,12 @@
                 thePage.frameSamples = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('samples', 1))
                 .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.samplesPageHeader); ;
 
+                thePage.frameLookSeq = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('lookSeq', 1))
+                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.lookseqPageHeader); ;
+                
+                thePage.frameDownloads = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('downloads', 1))
+                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.downloadsPageHeader); ;
+                
                 //Create the views
                 
                 thePage.IntroView = IntroModule.Instance(thePage, thePage.frameIntro, thePage.frameHeaderIntro);
@@ -48,6 +54,12 @@
                 
                 thePage.SamplesView = SamplesModule.Instance(thePage, thePage.frameSamples);
                 thePage.SamplesView.createFramework();
+                
+                thePage.LookSeqView = LookSeqModule.Instance(thePage, thePage.frameLookSeq);
+                thePage.LookSeqView.createFramework();
+                
+                thePage.DownloadsView = DownloadsModule.Instance(thePage, thePage.frameDownloads);
+                thePage.DownloadsView.createFramework();
                 
                 //Register some message handlers that can be used to navigate around in the app
                 Msg.listen('', { type: 'Home' }, function (context) { if (!thePage.frameIntro.isVisible()) HistoryManager.setState({ start:null }); });

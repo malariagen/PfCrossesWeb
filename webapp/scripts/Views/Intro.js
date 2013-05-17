@@ -136,6 +136,26 @@
                                     that.myPage.frameGenomeBrowser.makeVisible();
                                 });
                             }
+                        },
+                        {
+                            id: 'IntroLookSeq',
+                            name: resources.lookseqPageHeader + resources.lookseqButton,
+                            location: buttondiv1,
+                            handler: function () {
+                                DQX.executeProcessing(function () {
+                                    that.myPage.frameLookSeq.makeVisible();
+                                });
+                            }
+                        },
+                        {
+                            id: 'IntroDownloads',
+                            name: resources.downloadsPageHeader + resources.downloadsButton,
+                            location: buttondiv1,
+                            handler: function () {
+                                DQX.executeProcessing(function () {
+                                    that.myPage.frameDownloads.makeVisible();
+                                });
+                            }
                         }
                     ];
 
