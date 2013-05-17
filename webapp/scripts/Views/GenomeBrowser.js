@@ -33,7 +33,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         chromoIdField: 'chrom',
                         annotTableName : 'pf3annot',
                         viewID: 'GenomeBrowser',
-                        database: sourceDatabase
+                        database: CrossesMetaData.database
                     };
 
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
@@ -67,16 +67,23 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                 that.createSNPChannels = function () {
                     var channelValues = [];
 
-                    var callsetList = ['3d7_hb3', '7g8_gb4', 'hb3_dd2'];
+                    var callsetList = [
+                        { Id: '3d7_hb3', Method: 'gatk' },
+                        { Id: '3d7_hb3', Method: 'cortex' },
+                        { Id: '7g8_gb4', Method: 'gatk' },
+                        { Id: '7g8_gb4', Method: 'cortex' },
+                        { Id: 'hb3_dd2', Method: 'gatk' },
+                        { Id: 'hb3_dd2', Method: 'cortex' }
+                        ];
 
-                    $.each(callsetList, function (idx, callSetId) {
-                        var dataFetcherSNPs = new DataFetchers.Curve(serverUrl, sourceDatabase, 'pfx_variants', 'pos');
+                    $.each(callsetList, function (idx, callSet) {
+                        var dataFetcherSNPs = new DataFetchers.Curve(serverUrl, CrossesMetaData.database, CrossesMetaData.tableVariants, 'pos');
                         //Set a limiting query so that only snps from the correct call set are fetched
-                        dataFetcherSNPs.setUserQuery2(SQL.WhereClause.CompareFixed('crossName', '=', callSetId));
+                        dataFetcherSNPs.setUserQuery2(SQL.WhereClause.AND([SQL.WhereClause.CompareFixed('cross_name', '=', callSet.Id), SQL.WhereClause.CompareFixed('method', '=', callSet.Method)]));
                         that.panelBrowser.addDataFetcher(dataFetcherSNPs);
                         dataFetcherSNPs.addFetchColumn("id", "Int");
                         dataFetcherSNPs.activateFetchColumn("id");
-                        that.channelSNPs = GenomeBrowserSNPChannel.SNPChannel(dataFetcherSNPs, callSetId);
+                        that.channelSNPs = GenomeBrowserSNPChannel.SNPChannel(dataFetcherSNPs, callSet.Id + '_' + callSet.Method);
                         that.panelBrowser.addChannel(that.channelSNPs, false);
                     });
 
