@@ -1,6 +1,6 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), "GenomeBrowserSNPChannel", "CrossesMetaData"],
-    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, GenomeBrowserSNPChannel, CrossesMetaData) {
+define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), "GenomeBrowserSNPChannel", "CrossesMetaData", "OptionsCortex", "OptionsGATK"],
+    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, GenomeBrowserSNPChannel, CrossesMetaData, CortexOptions, GATKOptions) {
 
         var GenomeBrowserModule = {
 
@@ -17,8 +17,18 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
 
                     this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
                         .setMargins(5).setDisplayTitle('settings group').setFixedSize(Framework.dimX, 380);
-                    this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('settings', 0.7))
-                        .setMargins(5).setDisplayTitle('Settings').setFixedSize(Framework.dimX, 380);
+
+                    this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameGroupTab('controls', 0.7))
+                        .setMargins(5).setFixedSize(Framework.dimX, 380);
+
+                    this.frameFilters = this.frameLeft.addMemberFrame(Framework.FrameGroupTab('filters', 0.7))
+                        .setMargins(5).setFixedSize(Framework.dimX, 380);
+
+                    this.frameFiltersGATK = this.frameFilters.addMemberFrame(Framework.FrameFinal('filtersGATK', 0.7))
+                        .setMargins(5).setDisplayTitle('GATK filters').setFixedSize(Framework.dimX, 380);
+
+                    this.frameFiltersCortex = this.frameFilters.addMemberFrame(Framework.FrameFinal('filtersCortex', 0.7))
+                        .setMargins(5).setDisplayTitle('Cortex filters').setFixedSize(Framework.dimX, 380);
 
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
@@ -61,6 +71,16 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                 that.createControls = function () {
                     this.panelControls = Framework.Form(this.frameControls);
                     this.panelControls.render();
+
+					this.gOpts = new GATKOptions();
+					this.gOpts.setup(this.changeFunction, this);
+					//this.cOpts = new CortexOptions();
+					//this.cOpts.setup(this.changeFunction, this);
+
+                    this.formFiltersGATK = Framework.Form(this.frameFiltersGATK);
+					this.formFiltersGATK.addControl(this.gOpts.getQueryPane());
+
+                    this.formFiltersGATK.render();
                 }
 
                 //Create the channels that show information for each individual SNP

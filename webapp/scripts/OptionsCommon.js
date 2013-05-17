@@ -12,7 +12,7 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
 		optionsList : null,
 		widgetNumber: 0,
 		statics: {
-			widgetCount: 0,
+			widgetCount: 0
 		},
 
 		convertName : function(name) {
