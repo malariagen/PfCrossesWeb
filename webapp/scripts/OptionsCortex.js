@@ -6,7 +6,12 @@ define([  "OptionsCommon", "CrossesMetaData", "i18n!nls/PfCrossesWebResources.js
 	
 	OptionsCortex.prototype.getLabel = function () {
 		return resources.cortexOptionsContainer;
-	};
+};
+
+    OptionsCortex.prototype.getMethod = function () {
+			return "cortex";
+		};
+
 	OptionsCortex.prototype.createFilters = function () {
 		var cortex_filters = [
 		                      /*

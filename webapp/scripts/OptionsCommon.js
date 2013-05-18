@@ -107,9 +107,6 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
 		getQueryPane : function() {
 			return this.queryPane;
 		},
-		getMethod : function () {
-			return "cortex";
-		},
 		getIdPrefix: function () {
 			return this.getMethod() + this.widgetNumber.toString();
 		},

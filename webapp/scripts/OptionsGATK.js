@@ -1,8 +1,13 @@
 define([  "OptionsCommon", "CrossesMetaData", "i18n!nls/PfCrossesWebResources.js" ], 
 		function(OptionsCommon, CrossesMetaData, resources) {
 	function OptionsGATK() {};
-	
+
 	OptionsGATK.prototype = new OptionsCommon();
+
+    OptionsGATK.prototype.getMethod = function () {
+			return "gatk";
+		};
+
 	
 	OptionsGATK.prototype.getLabel = function () {
 		return resources.gatkOptionsContainer;
