@@ -181,7 +181,6 @@
     <Content Include="scripts\main.js" />
     <Content Include="scripts\page.js" />
     <Content Include="scripts\Views\Browser.js" />
-    <Content Include="PfCrossesWeb.htm" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

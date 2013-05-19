@@ -46,6 +46,18 @@ define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
                                     }
                                     ];
 
+
+        //generate the SNP datasources
+        $.each(CrossesMetaData.variants, function (idx, callSet) {
+            callSet.dataSourceSNP = '';
+            if (callSet.id.length > 0) {
+                var crossName = callSet.id.split(':')[0];
+                var callMethod = callSet.id.split(':')[1].toUpperCase();
+                callSet.dataSourceSNP = callMethod + '_final_' + crossName;
+            }
+        });
+
+
         //////// Information about the chromosomes
         CrossesMetaData.chromosomes = [
             { id: 'Pf3D7_01_v3', len: 0.7 },

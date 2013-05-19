@@ -16,8 +16,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                 that.createFramework = function () {
                     this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.3))
                         .setMargins(0).setMinSize(Framework.dimX, 380);
-                    this.frameDataSource = this.frameLeft.addMemberFrame(Framework.FrameFinal('datasource', 0.15))
-                        .setMargins(5).setDisplayTitle('Data source').setFixedSize(Framework.dimX, 380);
                     this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('settings', 0.7))
                         .setMargins(5).setDisplayTitle('Settings').setFixedSize(Framework.dimX, 380);
                     this.frameDetails = this.frameLeft.addMemberFrame(Framework.FrameFinal('details', 0.4))
@@ -31,7 +29,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     var browserConfig = {
                         serverURL: serverUrl,
                         chromnrfield: 'chromid',
-                        viewID:'GenotypeBrowser',
+                        viewID: 'GenotypeBrowser',
                         database: CrossesMetaData.database
                     };
 
@@ -66,10 +64,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                     this.createControls();
 
-                    //data source picker
-                    this.panelDataSource = FrameList(this.frameDataSource);
-                    Msg.listen('', { type: 'SelectItem', id: this.panelDataSource.getID() }, $.proxy(this.changeDataSource, this));
-                    this.getDataSources();
 
                     //details panel
                     var frameDetails = Framework.Form(this.frameDetails);
@@ -96,34 +90,22 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                 };
 
-                that.getDataSources = function () {
-                    DQX.setProcessing("Downloading...");
-                    DataFetcherFile.getFile(serverUrl, that.dataLocation + "/SnpSets", $.proxy(this.handleGetDataSources, this));
-                };
-
-                that.handleGetDataSources = function (content) {
-                    DQX.stopProcessing();
-                    var rows = content.split('\n');
-                    var it = [];
-                    for (var i = 0; i < rows.length; i++)
-                        if (rows[i])
-                            it.push({
-                                id: rows[i],
-                                content: rows[i]
-                            });
-                    this.panelDataSource.setItems(it);
-                    this.panelDataSource.render();
-                    this.changeDataSource();
-                };
-
                 that.changeDataSource = function () {
-                    this.SnpChannel.setDataSource(that.dataLocation + '/' + this.panelDataSource.getActiveItem());
+                    this.SnpChannel.setDataSource(that.dataLocation + '/' + this.callSetControl.getValue());
                 }
 
                 that.createControls = function () {
                     this.panelControls = Framework.Form(this.frameControls);
 
                     var group1 = this.panelControls.addControl(Controls.CompoundVert());
+
+                    var callSetList = [];
+                    $.each(CrossesMetaData.variants, function (idx, callSet) {
+                        callSetList.push({name:callSet.name, id:callSet.dataSourceSNP});
+                    });
+                    this.callSetControl = Controls.Combo('', { label: 'Call set', states: callSetList });
+                    this.callSetControl.setOnChanged($.proxy(that.changeDataSource, that));
+                    group1.addControl(this.callSetControl);
 
                     this.groupFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Assembly quality filters');
 
