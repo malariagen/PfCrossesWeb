@@ -92,8 +92,12 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
 			                      ];
 					
 			this.processFilters(my_filters);
-			
-		},
+
+        },
+
+        getMethod: function() {
+            return "unknown";
+        },
 		createContainer: function () {
 			this.queryPane = Controls.CompoundVert();
 			this.queryPane.setLegend(this.getLabel());	
