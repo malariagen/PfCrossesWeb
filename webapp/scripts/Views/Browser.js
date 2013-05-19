@@ -1,6 +1,6 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "CrossesMetaData"],
-    function (require, Framework, Controls, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, CrossesMetaData) {
+define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "CrossesMetaData", "OptionsCortex", "OptionsGATK"],
+    function (require, Framework, Controls, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, CrossesMetaData, CortexOptions, GATKOptions) {
 
         var BrowserModule = {
 
@@ -79,19 +79,28 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     });
 
                     that.SnpChannel.setCallBackFirstDataFetch(function () {
-                        $.each(that.SnpChannel.myDataFetcher._filters, function (idx, filter) {
-                            that.groupFilterControls.addControl(Controls.Check('', { label: filter })).setOnChanged(function (id, ctrl) {
-                                that.SnpChannel.myDataFetcher.setFilterActive(filter, ctrl.getValue());
-                                that.panelBrowser.render();
-                            });
+                        /*                        $.each(that.SnpChannel.myDataFetcher._filters, function (idx, filter) {
+                        that.groupFilterControls.addControl(Controls.Check('', { label: filter })).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.myDataFetcher.setFilterActive(filter, ctrl.getValue());
+                        that.panelBrowser.render();
                         });
-                        that.panelControls.render();
+                        });
+                        that.panelControls.render();*/
                     });
 
                 };
 
                 that.changeDataSource = function () {
-                    this.SnpChannel.setDataSource(that.dataLocation + '/' + this.callSetControl.getValue());
+                    var dataSourceID = this.callSetControl.getValue();
+                    var callMethod = dataSourceID.split('_')[0].toLowerCase();
+                    //Set visibility of the approprate filter controls
+                    that.formFilters[callMethod].controlsGroupShowHide.setVisible(true);
+                    $.each(CrossesMetaData.callMethods, function (idx, theCallMethod) {
+                        if (theCallMethod != callMethod)
+                            that.formFilters[theCallMethod].controlsGroupShowHide.setVisible(false);
+                    });
+                    //Switch the data source for the SNP data
+                    this.SnpChannel.setDataSource(that.dataLocation + '/' + dataSourceID);
                 }
 
                 that.createControls = function () {
@@ -101,13 +110,32 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                     var callSetList = [];
                     $.each(CrossesMetaData.variants, function (idx, callSet) {
-                        callSetList.push({name:callSet.name, id:callSet.dataSourceSNP});
+                        callSetList.push({ name: callSet.name, id: callSet.dataSourceSNP });
                     });
                     this.callSetControl = Controls.Combo('', { label: 'Call set', states: callSetList });
                     this.callSetControl.setOnChanged($.proxy(that.changeDataSource, that));
                     group1.addControl(this.callSetControl);
 
-                    this.groupFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Assembly quality filters');
+                    this.formFilters = {};
+                    $.each(CrossesMetaData.callMethods, function (idx, callMethod) {
+                        if (callMethod == 'gatk')
+                            var opts = new GATKOptions();
+                        if (callMethod == 'cortex')
+                            var opts = new CortexOptions();
+                        var changeFunction = function (a, b, c) {
+                            alert('change filter here');
+                        }
+                        opts.setup(changeFunction, that);
+
+                        that.formFilters[callMethod] = {};
+                        that.formFilters[callMethod].controlsGroup = opts.getQueryPane();
+                        that.formFilters[callMethod].controlsGroupShowHide = Controls.ShowHide(that.formFilters[callMethod].controlsGroup);
+                        that.formFilters[callMethod].controlsGroupShowHide.setVisible(false);
+                        that.formFilters[callMethod].options = opts;
+
+                        group1.addControl(that.formFilters[callMethod].controlsGroupShowHide);
+                    });
+
 
                     this.groupDispSettingsControls = group1.addControl(Controls.CompoundVert()).setLegend('Display settings');
 

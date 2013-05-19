@@ -71,7 +71,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                 that.createControls = function () {
                     this.panelControls = Framework.Form(this.frameControls);
 
-                    this.panelControls.addControl(Controls.Check('CtrlMaghhghggnif', { label: 'Show magnifying glass' }));
+                    //this.panelControls.addControl(Controls.Check('CtrlMaghhghggnif', { label: 'Show magnifying glass' }));
 
                     this.panelControls.render();
 
