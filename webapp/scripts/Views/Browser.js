@@ -210,7 +210,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
 
 
-                    that.groupCallFilterControls.addControl(Controls.ValueSlider('CtrlMinSNPCov', { label: 'Min. SNP coverage', width: sliderWidth, minval: 1, maxval: 200, startval: 1, digits: 0 })).setOnChanged(function (id, ctrl) {
+                    that.groupCallFilterControls.addControl(Controls.ValueSlider('CtrlMinSNPCov', { label: 'Min. SNP coverage', width: sliderWidth, minval: 1, maxval: 50, startval: 1, digits: 0 })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.setMinSnpCoverage(ctrl.getValue());
                     });
 
