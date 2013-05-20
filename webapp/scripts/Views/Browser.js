@@ -30,6 +30,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     this.createControls();
 
                     var browserConfig = {
+                        leftWidth: 230,
                         serverURL: serverUrl,
                         chromnrfield: 'chromid',
                         viewID: 'GenotypeBrowser',
@@ -188,8 +189,8 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     that.panelBrowser.render();
                     });*/
                     /*this.groupDispSettingsControls.addControl(Controls.Check('CtrlRequireParents', { label: 'Require parents' })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.filter.requireParentsPresent = ctrl.getValue();
-                        that.panelBrowser.render();
+                    that.SnpChannel.filter.requireParentsPresent = ctrl.getValue();
+                    that.panelBrowser.render();
                     });*/
                     this.groupDispSettingsControls.addControl(Controls.Check('CtrlShowInheritance', { label: 'Show inheritance', value: true })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.colorByParent = ctrl.getValue();
@@ -200,13 +201,9 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     });
 
                     var sliderWidth = 300;
-                    this.groupCallFilterControls.addControl(Controls.ValueSlider('CtrlCoverage', { label: 'Coverage scale', width: sliderWidth, minval: 0, maxval: 200, value: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.setCoverageRange(ctrl.getValue());
-                    });
-
 
                     //Some slider-type per-variant filters
-                    that.groupVariantFilterControls.addControl(Controls.Static(''));
+                    that.groupVariantFilterControls.addControl(Controls.VerticalSeparator(10));
                     that.groupVariantFilterControls.addControl(Controls.ValueSlider('CtrlPresence', { label: 'Min. % presence on samples', width: sliderWidth, minval: 0, maxval: 100, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.setMinPresence(ctrl.getValue());
                     });
@@ -217,6 +214,11 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         that.SnpChannel.setMinSnpCoverage(ctrl.getValue());
                     });
 
+
+                    that.groupDispSettingsControls.addControl(Controls.VerticalSeparator(10));
+                    this.groupDispSettingsControls.addControl(Controls.ValueSlider('CtrlCoverage', { label: 'Coverage scale', width: sliderWidth, minval: 0, maxval: 200, value: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.setCoverageRange(ctrl.getValue());
+                    });
 
                     /*this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinAvgCov', { label: 'Min. avg. coverage', width: sliderWidth, minval: 0, maxval: 200, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
                     that.SnpChannel.setMinAvgCoverage(ctrl.getValue());

@@ -96,10 +96,12 @@
                     var buttondiv2 = DocEl.Div();
                     buttondiv2.addStyle('clear', 'both');
 
+                    var buttonFormatter = "<b>{title}</b> {description}";
+
                     var jumpStarts = [
                         {
                             id: 'Samples',
-                            name: resources.samplesPageHeader + resources.samplesButton,
+                            name: buttonFormatter.DQXformat({title:resources.samplesPageHeader, description:resources.samplesButton }),
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
@@ -109,7 +111,7 @@
                         },
                         {
                             id: 'Variants',
-                            name: resources.variantsPageHeader + resources.variantsButton,
+                            name: buttonFormatter.DQXformat({title:resources.variantsPageHeader, description:resources.variantsButton }),
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
@@ -119,7 +121,7 @@
                         },
                         {
                             id: 'IntroPublicGenotypes',
-                            name: resources.genotypePageHeader + resources.genotypeButton,
+                            name: buttonFormatter.DQXformat({title:resources.genotypePageHeader, description:resources.genotypeButton }),
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
@@ -129,7 +131,7 @@
                         },
                         {
                             id: 'IntroGenomeBrowser',
-                            name: resources.genomePageHeader + resources.genomeButton,
+                            name: buttonFormatter.DQXformat({title:resources.genomePageHeader, description:resources.genomeButton }),
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
@@ -139,7 +141,7 @@
                         },
                         {
                             id: 'IntroLookSeq',
-                            name: resources.lookseqPageHeader + resources.lookseqButton,
+                            name: buttonFormatter.DQXformat({title:resources.lookseqPageHeader, description:resources.lookseqButton }),
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
@@ -149,7 +151,7 @@
                         },
                         {
                             id: 'IntroDownloads',
-                            name: resources.downloadsPageHeader + resources.downloadsButton,
+                            name: buttonFormatter.DQXformat({title:resources.downloadsPageHeader, description:resources.downloadsButton }),
                             location: buttondiv1,
                             handler: function () {
                                 DQX.executeProcessing(function () {
