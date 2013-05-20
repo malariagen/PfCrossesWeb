@@ -167,9 +167,9 @@
 					this.tOpts = new TypeOptions();
 					this.tOpts.setup(this.changeFunction, this);
 					this.gOpts = new GATKOptions();
-					this.gOpts.setup(this.changeFunction, this);
+					this.gOpts.setup(this.changeFunction, this, { showHeader: true });
 					this.cOpts = new CortexOptions();
-					this.cOpts.setup(this.changeFunction, this);
+					this.cOpts.setup(this.changeFunction, this, { showHeader: true });
 					theForm.addControl(this.sOpts.getQueryPane());
 					theForm.addControl(this.tOpts.getQueryPane());
 					

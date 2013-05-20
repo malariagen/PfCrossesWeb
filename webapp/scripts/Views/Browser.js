@@ -66,6 +66,10 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         this.createChromosomesPFV3();
 
 
+                    //Set some default properties
+                    that.SnpChannel.fillBlocks = true;
+                    that.SnpChannel.colorByParent = true;
+                    that.SnpChannel.allowSmallBlocks = true;
 
                     //details panel
                     var frameDetails = Framework.Form(this.frameDetails);
@@ -77,7 +81,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                     //Causes the browser to start with a start region
                     this.panelBrowser.setPostInitialiseHandler(function () {
-                        that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 10000);
+                        that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 100000);
                     });
 
                     /*that.SnpChannel.setCallBackFirstDataFetch(function () {
@@ -128,6 +132,10 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     this.callSetControl.setOnChanged($.proxy(that.changeDataSource, that));
                     group1.addControl(this.callSetControl);
 
+                    this.groupVariantFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Variant filters');
+                    this.groupCallFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Call filters');
+                    this.groupDispSettingsControls = group1.addControl(Controls.CompoundVert()).setLegend('Display settings');
+
                     //this function will be called when a filter option was changed
                     var changeFunction = function () {
                         var filterList = that.formFilters[that.currentCallMethod].options.getOptionsList();
@@ -143,7 +151,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                             var opts = new GATKOptions();
                         if (callMethod == 'cortex')
                             var opts = new CortexOptions();
-                        opts.setup(changeFunction, that);
+                        opts.setup(changeFunction, that, { showHeader: false });
 
                         that.formFilters[callMethod] = {};
                         that.formFilters[callMethod].controlsGroup = opts.getQueryPane();
@@ -151,41 +159,39 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         that.formFilters[callMethod].controlsGroupShowHide.setVisible(false);
                         that.formFilters[callMethod].options = opts;
 
-                        group1.addControl(that.formFilters[callMethod].controlsGroupShowHide);
+                        that.groupVariantFilterControls.addControl(that.formFilters[callMethod].controlsGroupShowHide);
                     });
 
 
-                    this.groupDispSettingsControls = group1.addControl(Controls.CompoundVert()).setLegend('Display settings');
 
-                    this.groupClientFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Threshold filters');
 
 
                     this.groupDispSettingsControls.addControl(Controls.Check('CtrlMagnif', { label: 'Show magnifying glass' })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.useMagnifyingGlass = ctrl.getValue();
                         that.panelBrowser.render();
                     });
-                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlEquiDistant', { label: 'Equidistant blocks' })).setOnChanged(function (id, ctrl) {
+                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlEquiDistant', { label: 'Equidistant blocks', value: true })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.fillBlocks = ctrl.getValue();
                         that.panelBrowser.render();
                     });
-                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlSmallBlocks', { label: 'Allow small blocks' })).setOnChanged(function (id, ctrl) {
+                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlSmallBlocks', { label: 'Allow small blocks', value: true })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.allowSmallBlocks = ctrl.getValue();
                         that.panelBrowser.render();
                     });
 
-                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlFilterVCF', { label: 'Filter by VCF data', value: false })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.filter.applyVCFFilter = ctrl.getValue();
-                        that.panelBrowser.render();
-                    });
-                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlHideFiltered', { label: 'Hide filtered SNPs', value: true })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.hideFiltered = ctrl.getValue();
-                        that.panelBrowser.render();
-                    });
-                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlRequireParents', { label: 'Require parents' })).setOnChanged(function (id, ctrl) {
+                    /*this.groupDispSettingsControls.addControl(Controls.Check('CtrlFilterVCF', { label: 'Filter by VCF data', value: false })).setOnChanged(function (id, ctrl) {
+                    that.SnpChannel.filter.applyVCFFilter = ctrl.getValue();
+                    that.panelBrowser.render();
+                    });*/
+                    /*this.groupDispSettingsControls.addControl(Controls.Check('CtrlHideFiltered', { label: 'Hide filtered SNPs', value: true })).setOnChanged(function (id, ctrl) {
+                    that.SnpChannel.hideFiltered = ctrl.getValue();
+                    that.panelBrowser.render();
+                    });*/
+                    /*this.groupDispSettingsControls.addControl(Controls.Check('CtrlRequireParents', { label: 'Require parents' })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.filter.requireParentsPresent = ctrl.getValue();
                         that.panelBrowser.render();
-                    });
-                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlShowInheritance', { label: 'Show inheritance' })).setOnChanged(function (id, ctrl) {
+                    });*/
+                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlShowInheritance', { label: 'Show inheritance', value: true })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.colorByParent = ctrl.getValue();
                         that.panelBrowser.render();
                     });
@@ -194,29 +200,36 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     });
 
                     var sliderWidth = 300;
-                    this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlCoverage', { label: 'Coverage scale', width: sliderWidth, minval: 0, maxval: 200, value: 5, digits: 0 })).setOnChanged(function (id, ctrl) {
+                    this.groupCallFilterControls.addControl(Controls.ValueSlider('CtrlCoverage', { label: 'Coverage scale', width: sliderWidth, minval: 0, maxval: 200, value: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.setCoverageRange(ctrl.getValue());
                     });
 
-                    this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinSNPCov', { label: 'Min. SNP coverage', width: sliderWidth, minval: 0, maxval: 200, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
+
+                    //Some slider-type per-variant filters
+                    that.groupVariantFilterControls.addControl(Controls.Static(''));
+                    that.groupVariantFilterControls.addControl(Controls.ValueSlider('CtrlPresence', { label: 'Min. % presence on samples', width: sliderWidth, minval: 0, maxval: 100, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.setMinPresence(ctrl.getValue());
+                    });
+
+
+
+                    that.groupCallFilterControls.addControl(Controls.ValueSlider('CtrlMinSNPCov', { label: 'Min. SNP coverage', width: sliderWidth, minval: 1, maxval: 200, startval: 1, digits: 0 })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.setMinSnpCoverage(ctrl.getValue());
                     });
 
-                    this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinAvgCov', { label: 'Min. avg. coverage', width: sliderWidth, minval: 0, maxval: 200, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.setMinAvgCoverage(ctrl.getValue());
-                    });
 
-                    this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinSnpPurity', { label: 'Min. SNP purity', width: sliderWidth, minval: 0, maxval: 1, startval: 0, digits: 2 })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.setMinSnpPurity(ctrl.getValue());
-                    });
+                    /*this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinAvgCov', { label: 'Min. avg. coverage', width: sliderWidth, minval: 0, maxval: 200, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
+                    that.SnpChannel.setMinAvgCoverage(ctrl.getValue());
+                    });*/
 
-                    this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinAvgPurity', { label: 'Min. avg. purity', width: sliderWidth, minval: 0, maxval: 1, startval: 0, digits: 2 })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.setMinAvgPurity(ctrl.getValue());
-                    });
+                    /*this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinSnpPurity', { label: 'Min. SNP purity', width: sliderWidth, minval: 0, maxval: 1, startval: 0, digits: 2 })).setOnChanged(function (id, ctrl) {
+                    that.SnpChannel.setMinSnpPurity(ctrl.getValue());
+                    });*/
 
-                    this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlPresence', { label: 'Min. % presence on samples', width: sliderWidth, minval: 0, maxval: 100, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.setMinPresence(ctrl.getValue());
-                    });
+                    /*this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinAvgPurity', { label: 'Min. avg. purity', width: sliderWidth, minval: 0, maxval: 1, startval: 0, digits: 2 })).setOnChanged(function (id, ctrl) {
+                    that.SnpChannel.setMinAvgPurity(ctrl.getValue());
+                    });*/
+
 
                     this.panelControls.render();
                 }

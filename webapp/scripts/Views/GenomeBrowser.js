@@ -88,7 +88,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                             });
                             that.panelBrowser.render();
                         }
-                        opts.setup(changeFunction, that);
+                        opts.setup(changeFunction, that, { showHeader: true });
 
                         that.formFilters[callMethod] = Framework.Form(that.frameFilters[callMethod]);
                         that.formFilters[callMethod].addControl(opts.getQueryPane());
