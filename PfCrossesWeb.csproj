@@ -181,6 +181,7 @@
     <Content Include="scripts\main.js" />
     <Content Include="scripts\page.js" />
     <Content Include="scripts\Views\Browser.js" />
+    <Content Include="webapp\Specifics.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -188,6 +189,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="webapp\PfCrossesWeb.htm" />
     <Content Include="webapp\scripts\async.js" />
     <Content Include="webapp\scripts\CrossesMetaData.js" />
     <Content Include="webapp\scripts\DQX\base64.js" />

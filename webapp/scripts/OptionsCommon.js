@@ -27,8 +27,8 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
 		},
 		setAllFilterOptions: function () {
 			var self = this;
-			
-			this.clear = Controls.Button(self.getIdPrefix() + 'SetNone', { content: resources.filtersSetNone, width: 100 })
+
+			this.clear = Controls.Button(self.getIdPrefix() + 'SetNone', { content: resources.filtersSetNone, width: 100, buttonClass: "DQXWizardButton FilterGroupChangeButton" })
             .setOnChanged(function (id) {
             	var options = self.getOptionsList();
             	var modified = false;
@@ -40,7 +40,7 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
             		self.changeFunction(self);
             	}
             });
-			this.setAll = Controls.Button(self.getIdPrefix() + 'SetAll', { content: resources.filtersSetAll, width: 100 })
+            this.setAll = Controls.Button(self.getIdPrefix() + 'SetAll', { content: resources.filtersSetAll, width: 100, buttonClass: "DQXWizardButton FilterGroupChangeButton" })
             .setOnChanged(function (id) {
             	var options = self.getOptionsList();
             	var modified = false;
