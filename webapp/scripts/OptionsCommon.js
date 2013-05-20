@@ -72,6 +72,7 @@ define([ DQXSC("Controls"), DQXSC("SQL"), "i18n!nls/PfCrossesWebResources.js" ],
 					});
                 box.setOnChanged(self.changeFunction);
                 box.variantContainer = self.variantContainer;
+				box.originalFilterID = filter.label;
                 self.optionsList.push(box);
                 self.queryPane.addControl(box);
             });

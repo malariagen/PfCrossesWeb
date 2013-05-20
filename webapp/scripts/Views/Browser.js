@@ -26,6 +26,9 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                 };
 
                 that.createPanels = function () {
+
+                    this.createControls();
+
                     var browserConfig = {
                         serverURL: serverUrl,
                         chromnrfield: 'chromid',
@@ -62,7 +65,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     if (this.refVersion == 3)
                         this.createChromosomesPFV3();
 
-                    this.createControls();
 
 
                     //details panel
@@ -78,29 +80,43 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                         that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 10000);
                     });
 
-                    that.SnpChannel.setCallBackFirstDataFetch(function () {
-                        /*                        $.each(that.SnpChannel.myDataFetcher._filters, function (idx, filter) {
-                        that.groupFilterControls.addControl(Controls.Check('', { label: filter })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.myDataFetcher.setFilterActive(filter, ctrl.getValue());
-                        that.panelBrowser.render();
-                        });
-                        });
-                        that.panelControls.render();*/
+                    /*that.SnpChannel.setCallBackFirstDataFetch(function () {
+                    $.each(that.SnpChannel.myDataFetcher._filters, function (idx, filter) {
+                    that.groupFilterControls.addControl(Controls.Check('', { label: filter })).setOnChanged(function (id, ctrl) {
+                    that.SnpChannel.myDataFetcher.setFilterActive(filter, ctrl.getValue());
+                    that.panelBrowser.render();
                     });
+                    });
+                    that.panelControls.render();
+                    });*/
 
                 };
 
                 that.changeDataSource = function () {
-                    var dataSourceID = this.callSetControl.getValue();
-                    var callMethod = dataSourceID.split('_')[0].toLowerCase();
-                    //Set visibility of the approprate filter controls
-                    that.formFilters[callMethod].controlsGroupShowHide.setVisible(true);
-                    $.each(CrossesMetaData.callMethods, function (idx, theCallMethod) {
-                        if (theCallMethod != callMethod)
-                            that.formFilters[theCallMethod].controlsGroupShowHide.setVisible(false);
-                    });
-                    //Switch the data source for the SNP data
-                    this.SnpChannel.setDataSource(that.dataLocation + '/' + dataSourceID);
+                    var variantSetID = this.callSetControl.getValue();
+                    if (variantSetID.length == 0) {
+                        this.SnpChannel.setDataSource("");
+                        that.panelBrowser.render();
+                    }
+                    else {
+                        var dataSourceID = CrossesMetaData.variantsMap[variantSetID].dataSourceSNP;
+                        this.currentCallMethod = dataSourceID.split('_')[0].toLowerCase();
+                        //Set visibility of the appropriate filter controls
+                        that.formFilters[this.currentCallMethod].controlsGroupShowHide.setVisible(true);
+                        $.each(CrossesMetaData.callMethods, function (idx, theCallMethod) {
+                            if (theCallMethod != that.currentCallMethod)
+                                that.formFilters[theCallMethod].controlsGroupShowHide.setVisible(false);
+                        });
+                        //This callback assures that the correct filters will be (des)activated
+                        this.SnpChannel._CallBackFirstDataFetch = function () {
+                            var filterList = that.formFilters[that.currentCallMethod].options.getOptionsList();
+                            $.each(filterList, function (idx, filter) {
+                                that.SnpChannel.myDataFetcher.setFilterActive(filter.originalFilterID, filter.getValue());
+                            });
+                        }
+                        //Switch the data source for the SNP data
+                        this.SnpChannel.setDataSource(that.dataLocation + '/' + dataSourceID);
+                    }
                 }
 
                 that.createControls = function () {
@@ -108,13 +124,18 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
 
                     var group1 = this.panelControls.addControl(Controls.CompoundVert());
 
-                    var callSetList = [];
-                    $.each(CrossesMetaData.variants, function (idx, callSet) {
-                        callSetList.push({ name: callSet.name, id: callSet.dataSourceSNP });
-                    });
-                    this.callSetControl = Controls.Combo('', { label: 'Call set', states: callSetList });
+                    this.callSetControl = Controls.Combo('', { label: 'Call set', states: CrossesMetaData.variants });
                     this.callSetControl.setOnChanged($.proxy(that.changeDataSource, that));
                     group1.addControl(this.callSetControl);
+
+                    //this function will be called when a filter option was changed
+                    var changeFunction = function () {
+                        var filterList = that.formFilters[that.currentCallMethod].options.getOptionsList();
+                        $.each(filterList, function (idx, filter) {
+                            that.SnpChannel.myDataFetcher.setFilterActive(filter.originalFilterID, filter.getValue());
+                        });
+                        that.panelBrowser.render();
+                    }
 
                     this.formFilters = {};
                     $.each(CrossesMetaData.callMethods, function (idx, callMethod) {
@@ -122,9 +143,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                             var opts = new GATKOptions();
                         if (callMethod == 'cortex')
                             var opts = new CortexOptions();
-                        var changeFunction = function (a, b, c) {
-                            alert('change filter here');
-                        }
                         opts.setup(changeFunction, that);
 
                         that.formFilters[callMethod] = {};

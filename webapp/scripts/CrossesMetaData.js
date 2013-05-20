@@ -57,6 +57,13 @@ define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
             }
         });
 
+        //Generate map for variants lookup
+        CrossesMetaData.variantsMap = {}
+        $.each(CrossesMetaData.variants, function (idx, callSet) {
+            if (callSet.id.length > 0) {
+                CrossesMetaData.variantsMap[callSet.id] = callSet;
+            }
+        });
 
         //////// Information about the chromosomes
         CrossesMetaData.chromosomes = [
