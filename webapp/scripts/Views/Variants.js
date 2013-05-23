@@ -1,5 +1,5 @@
-﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("SQL"), DQXSC("Msg"), DQXSC("Controls"), "CrossesMetaData", "OptionsCortex", "OptionsGATK", "OptionsVariantType", "OptionsGenomeSearch", "TableCortex", "TableGATK", "i18n!nls/PfCrossesWebResources.js"], 
-    function (require, Framework, SQL, Msg, Controls, CrossesMetaData, CortexOptions, GATKOptions, TypeOptions, SearchOptions, TableCortex, TableGATK, resources) {
+﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("SQL"), DQXSC("Msg"), DQXSC("Controls"), "CrossesMetaData", "OptionsVariantType", "OptionsGenomeSearch", "TableCortex", "TableGATK", "VariantFilters", "i18n!nls/PfCrossesWebResources.js"],
+    function (require, Framework, SQL, Msg, Controls, CrossesMetaData, TypeOptions, SearchOptions, TableCortex, TableGATK, VariantFilters, resources) {
 
         var VariantsModule = {
 
@@ -19,13 +19,13 @@
                 that.createPanels = function () {
                 	
                 	
- 					this.tableCortex = new TableCortex();
+ 					this.tablecortex = new TableCortex();
  					
- 					this.tableCortex.createPanelTable(this.frameTables['cortex']);
+ 					this.tablecortex.createPanelTable(this.frameTables['cortex']);
                   
- 					this.tableGATK = new TableGATK();
+ 					this.tablegatk = new TableGATK();
  					
- 					this.tableGATK.createPanelTable(this.frameTables['gatk']);
+ 					this.tablegatk.createPanelTable(this.frameTables['gatk']);
  					
                     this.createPanelAdvancedQuery();
 
@@ -87,64 +87,35 @@
                     }
                 };
     
-				that.changeFunction = function(b) {
-
-					var variantContainer = this.variantContainer;
-					
-					var callSet=variantContainer.catVarQueryPopulationFreqType.getValue();
+				that.changeFunction = function() {
+                    var callSet=that.catVarQueryPopulationFreqType.getValue();
+                    if (callSet == "")
+                        return;
                     var opts = callSet.split(":");
                     var cross_name = opts[0];
                     var method = opts[1];
-                    
-					var gatk = true;
-					var cortex = true;
+                    that.variant_filter_controls.setCallMethod(method);
+                    that.frameTableGroup.switchTab(method);
 
-					if (method == 'cortex') {
-							gatk = false;
-							cortex = true;
-					//		variantContainer.optionsStack.selectChild(variantContainer.cOpts.getOptionsPane());
-					}
-					if (method == 'gatk') {
-							gatk = true;
-							cortex = false;
-					//		variantContainer.optionsStack.selectChild(variantContainer.gOpts.getOptionsPane());
-					}
-					//variantContainer.gOpts.getOptionsPane().set('open', gatk);
-					//variantContainer.cOpts.getOptionsPane().set('open', cortex);
-
-					
+                    //Build the query
 					var options = [];
 		            options.push(SQL.WhereClause.CompareFixed('cross_name','=',cross_name));
                     options.push(SQL.WhereClause.CompareFixed('method','=',method));
-                    
-					variantContainer.sOpts.setQueryParams(options);
-                    variantContainer.tOpts.setQueryParams(options);
-                    
-                    var panelTable = {};
-                    
-                	if (gatk) {
-						variantContainer.gOpts.setQueryParams(options);
-						variantContainer.frameTableGroup.switchTab('gatk');
-						variantContainer.gatkShowHide.setVisible(true);
-						variantContainer.cortexShowHide.setVisible(false);
-						panelTable = variantContainer.tableGATK.panelTable.myTable;
-					} else if (cortex) {
-						variantContainer.cOpts.setQueryParams(options);
-						variantContainer.frameTableGroup.switchTab('cortex');
-						variantContainer.gatkShowHide.setVisible(false);
-						variantContainer.cortexShowHide.setVisible(true);
-						panelTable = variantContainer.tableCortex.panelTable.myTable;
-					} else {
-						//error
-					}
-                    				
+					that.sOpts.setQueryParams(options);
+                    that.tOpts.setQueryParams(options);
+                    //Iterate over the filters model adding those that are checked
+                    $.each(that.myPage.variant_filters.get(), function (filter, value) {
+                        //We only care about a value if it is checked, unchecked means all are wanted, checked means we don't want!.
+                        if (value &&
+                            ($.inArray(method, CrossesMetaData.variant_filters[filter].call_methods) != -1)) { 
+                            options.push(SQL.WhereClause.CompareFixed(filter, '=', false))
+                        }
+                    });
+                    var panelTable = that['table'+method].panelTable.myTable;
 					var thequery=SQL.WhereClause.AND(options);
-
 					panelTable.setQuery(thequery);
 					panelTable.reLoadTable();
-
-					variantContainer.setCurrentQuery(thequery);
-
+					that.setCurrentQuery(thequery);
 				};
 				
                 that.createPanelAdvancedQuery = function () {
@@ -166,17 +137,18 @@
                     
 					this.tOpts = new TypeOptions();
 					this.tOpts.setup(this.changeFunction, this);
-					this.gOpts = new GATKOptions();
-					this.gOpts.setup(this.changeFunction, this, { showHeader: true });
-					this.cOpts = new CortexOptions();
-					this.cOpts.setup(this.changeFunction, this, { showHeader: true });
 					theForm.addControl(this.sOpts.getQueryPane());
 					theForm.addControl(this.tOpts.getQueryPane());
-					
-					this.cortexShowHide = Controls.ShowHide(this.cOpts.getQueryPane()).setVisible(false);
-					this.gatkShowHide = Controls.ShowHide(this.gOpts.getQueryPane()).setVisible(false);
-					theForm.addControl(this.cortexShowHide);
-					theForm.addControl(this.gatkShowHide);
+
+                    var pane = Controls.CompoundVert();
+                    pane.setLegend(resources.variant_filters);
+                    that.variant_filter_controls = VariantFilters(CrossesMetaData.variant_filters, that.myPage.variant_filters);
+                    pane.addControl(that.variant_filter_controls.grid);
+                    theForm.addControl(pane);
+                    that.myPage.variant_filters.on({change: true}, function () {
+                        that.changeFunction();
+                    });
+
                     theForm.render();
                 };
 
@@ -186,7 +158,8 @@
                     enableHomeButton();
                     var tabswitched = that.myPage.frameVariants.makeVisible();
                     setTimeout(function() {
-                        that.tableCortex.panelTable.handleResize(); //force immediate calculation of size
+                        that.tablecortex.panelTable.handleResize(); //force immediate calculation of size
+                        that.tablegatk.panelTable.handleResize(); //force immediate calculation of size
                     },50);
                 };
 

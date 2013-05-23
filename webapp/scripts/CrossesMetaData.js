@@ -46,6 +46,76 @@ define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
                                     }
                                     ];
 
+        CrossesMetaData.variant_filters = {
+            ParentCallMissing: {
+                label : "Parent Call Missing",
+                description : "One or both parents have a missing genotype call. (ParentCallMissing)",
+                call_methods: ['cortex', 'gatk']
+            },
+            SubtelomericHypervariable:{
+                label : "Subtelomeric Hypervariable",
+                description : "Variant is within a sub-telomeric hypervariable region. (SubtelomericHypervariable)",
+                call_methods: ['cortex', 'gatk']
+            },
+            NonMendelian:{
+                label : "Non Mendelian",
+                description : "Variant calls are not consistent with Mendelian segregation because one or more progeny have an allele not found in either parent. (NonMendelian)",
+                call_methods: ['cortex', 'gatk']
+            },
+            LowQuality:{
+                label : "Low Quality",
+                description : "Recalibrated variant quality score (VQSLOD) falls below defined threshold. (LowQuality)",
+                call_methods: ['gatk']
+            },
+            InternalHypervariable:{
+                label : "Internal Hypervariable",
+                description : "Variant is within a chromosome-internal hypervariable region. (InternalHypervariable)",
+                call_methods: ['cortex', 'gatk']
+            },
+            Centromere:{
+                label : "Centromere",
+                description : "Variant is within a centromere. (Centromere)",
+                call_methods: ['cortex', 'gatk']
+            },
+            SubtelomericRepeat:{
+                label : "Subtelomeric Repeat",
+                description : "Variant is within a sub-telomeric repeat region. (SubtelomericRepeat)",
+                call_methods: ['cortex', 'gatk']
+            },
+            MAPQ:{
+                label : "Mapping Quality",
+                description : "5prime flank maps to reference with mapping quality below 40 (MAPQ)",
+                call_methods: ['cortex']
+            },
+            MISMAPPED_UNPLACEABLE:{
+                id : "",
+                label : "Mismapped Unplaceable",
+                description : "Stampy mapped the variant (using the 5p-flank) confidently (mapqual> 40) to a place where the ref-allele does not match (MISMAPPED_UNPLACEABLE)",
+                call_methods: ['cortex']
+            },
+            MULTIALLELIC:{
+                id : "",
+                label : "Multi-allelic",
+                description : "Variant formed from merged alleles (MULTIALLELIC)",
+                call_methods: ['cortex']
+            },
+            OVERLAPPING_SITE:{
+                label : "Overlapping Site",
+                description : "If Stampy (or combining VCFs) has placed two biallelic variants overlapping, they are filtered (OVERLAPPING_SITE)",
+                call_methods: ['cortex']
+            },
+            PF_FAIL_REPEAT:{
+                label : "Likely Pf Related Repeat",
+                description : "The variant is likely to be an artifact due to repetitive sequence. (PF_FAIL_REPEAT)",
+                call_methods: ['cortex']
+
+            },
+            PF_FAIL_ERROR:{
+                label : "Likely Pf Related Error",
+                description : "The variant is likely to be a sequencing error. (PF_FAIL_ERROR)",
+                call_methods: ['cortex']
+            }
+        };
 
         //generate the SNP datasources
         $.each(CrossesMetaData.variants, function (idx, callSet) {

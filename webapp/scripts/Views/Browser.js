@@ -1,6 +1,6 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "CrossesMetaData", "OptionsCortex", "OptionsGATK"],
-    function (require, Framework, Controls, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, CrossesMetaData, CortexOptions, GATKOptions) {
+define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "Page", "CrossesMetaData", "VariantFilters"],
+    function (require, Framework, Controls, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, Page, CrossesMetaData, VariantFilters) {
 
         var BrowserModule = {
 
@@ -106,19 +106,15 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     else {
                         var dataSourceID = CrossesMetaData.variantsMap[variantSetID].dataSourceSNP;
                         this.currentCallMethod = dataSourceID.split('_')[0].toLowerCase();
-                        //Set visibility of the appropriate filter controls
-                        that.formFilters[this.currentCallMethod].controlsGroupShowHide.setVisible(true);
-                        $.each(CrossesMetaData.callMethods, function (idx, theCallMethod) {
-                            if (theCallMethod != that.currentCallMethod)
-                                that.formFilters[theCallMethod].controlsGroupShowHide.setVisible(false);
-                        });
+                        that.variant_filter_controls.setCallMethod(that.currentCallMethod);
                         //This callback assures that the correct filters will be (des)activated
                         this.SnpChannel._CallBackFirstDataFetch = function () {
-                            var filterList = that.formFilters[that.currentCallMethod].options.getOptionsList();
-                            $.each(filterList, function (idx, filter) {
-                                that.SnpChannel.myDataFetcher.setFilterActive(filter.originalFilterID, filter.getValue());
+                            $.each(that.myPage.variant_filters.get(), function (filter, value) {
+                                if ($.inArray(that.currentCallMethod, CrossesMetaData.variant_filters[filter].call_methods) != -1) {
+                                    that.SnpChannel.myDataFetcher.setFilterActive(filter, value);
+                                }
                             });
-                        }
+                        };
                         //Switch the data source for the SNP data
                         this.SnpChannel.setDataSource(that.dataLocation + '/' + dataSourceID);
                     }
@@ -137,35 +133,18 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     this.groupCallFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Call filters');
                     this.groupDispSettingsControls = group1.addControl(Controls.CompoundVert()).setLegend('Display settings');
 
-                    //this function will be called when a filter option was changed
-                    var changeFunction = function () {
-                        var filterList = that.formFilters[that.currentCallMethod].options.getOptionsList();
-                        $.each(filterList, function (idx, filter) {
-                            that.SnpChannel.myDataFetcher.setFilterActive(filter.originalFilterID, filter.getValue());
+                    that.variant_filter_controls = VariantFilters(CrossesMetaData.variant_filters, that.myPage.variant_filters);
+                    that.groupVariantFilterControls.addControl(that.variant_filter_controls.grid);
+
+                    that.myPage.variant_filters.on({change: true}, function () {
+                        //Context is new model
+                        $.each(this.attributes, function (filter, value) {
+                            if ($.inArray(that.currentCallMethod, CrossesMetaData.variant_filters[filter].call_methods) != -1) {
+                                that.SnpChannel.myDataFetcher.setFilterActive(filter, value);
+                            }
                         });
                         that.panelBrowser.render();
-                    }
-
-                    this.formFilters = {};
-                    $.each(CrossesMetaData.callMethods, function (idx, callMethod) {
-                        if (callMethod == 'gatk')
-                            var opts = new GATKOptions();
-                        if (callMethod == 'cortex')
-                            var opts = new CortexOptions();
-                        opts.setup(changeFunction, that, { showHeader: false });
-
-                        that.formFilters[callMethod] = {};
-                        that.formFilters[callMethod].controlsGroup = opts.getQueryPane();
-                        that.formFilters[callMethod].controlsGroupShowHide = Controls.ShowHide(that.formFilters[callMethod].controlsGroup);
-                        that.formFilters[callMethod].controlsGroupShowHide.setVisible(false);
-                        that.formFilters[callMethod].options = opts;
-
-                        that.groupVariantFilterControls.addControl(that.formFilters[callMethod].controlsGroupShowHide);
                     });
-
-
-
-
 
                     this.groupDispSettingsControls.addControl(Controls.Check('CtrlMagnif', { label: 'Show magnifying glass' })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.useMagnifyingGlass = ctrl.getValue();

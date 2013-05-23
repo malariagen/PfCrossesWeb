@@ -1,8 +1,7 @@
 define({
 
   root: {
-	 cortexOptionsContainer: "Variant Filters",
-	 gatkOptionsContainer: "Variant Filters",
+     variant_filters: "Variant Filters (check to exclude)",
 	 variantTypeOptionsContainer: "Variant type",
 	 genomeSearchOptionsContainer: "Genome region",
 	 genomeSearchChromosome: 'Chromosome',
@@ -45,6 +44,6 @@ define({
 	 downloadsGenomeText: "<h3>Genome region classification</h3>" +
 	 		"<p>The file below is a BED file containing the classification of genome regions into Core, SubtelomericHypervariable, InternalHypervariable, SubtelomericRepeat and Centromere</p>" +
 	 		"<ul><li><a href=\"\">Genome region classification</a></li></ul>"
-	 
+
   }
 });
