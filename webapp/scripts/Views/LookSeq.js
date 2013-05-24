@@ -12,7 +12,7 @@
 
                 that.createPanels = function () {
                     
-                    this.frameContent.setContentHtml('<iframe width="100%" height="100%" src="https://lookseq.sanger.ac.uk/lookseq2/index.html"></iframe>');
+                    this.frameContent.setContentHtml('<iframe width="100%" height="100%" src="http://panoptes.cggh.org/lookseq/"></iframe>');
                    
                 };
                 that.createFramework = function () {
