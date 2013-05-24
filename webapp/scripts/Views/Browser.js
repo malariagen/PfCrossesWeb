@@ -1,6 +1,6 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "CrossesMetaData", "OptionsCortex", "OptionsGATK"],
-    function (require, Framework, Controls, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, CrossesMetaData, CortexOptions, GATKOptions) {
+define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("PopupFrame"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "CrossesMetaData", "OptionsCortex", "OptionsGATK"],
+    function (require, Framework, Controls, PopupFrame, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, CrossesMetaData, CortexOptions, GATKOptions) {
 
         var BrowserModule = {
 
@@ -78,6 +78,19 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("D
                     frameDetails.render();
                     Msg.listen('', { type: 'SnpInfoChanged', id: this.SnpChannel.getID() }, function (scope, content) {
                         that.details.modifyValue(content);
+                    });
+                    Msg.listen('', { type: 'SnpClicked', id: this.SnpChannel.getID() }, function (scope, content) {
+                        var snp = content.snp;
+                        var seq = content.seq;
+                        var popup = PopupFrame.PopupFrame('LookseqPopupFrame', Framework.FrameFinal('LookseqPic'), { title: seq, sizeX: 900, sizeY: 600 });
+                        var frameRoot = popup.getFrameRoot();
+                        popup.render();
+                        console.log(snp);
+//                        frameRoot.setContentHtml("<img src= 'http://panoptes.cggh.org/lookseq/cgi-bin/index.pl?action=render_image&alg=bwa&from="+ (snp.position-50) +"&to="+ (snp.position+50) + "&chr=Pf3D7_01_v3&sample=%20" + 3D7_Glasgow/PG0051-C/ERR019061 +"&width=800&height=0&maxdist=500&view=pileup&output=image&display=|noscale|perfect|snps|single|inversions|pairlinks|faceaway|basequal|&debug=0'>");
+                        var img = "<img src= 'http://panoptes.cggh.org/lookseq/cgi-bin/index.pl?action=render_image&alg=bwa&from="+ (snp.position-5) +"&to="+ (snp.position+5) + "&chr=Pf3D7_01_v3&sample=" + seq.replace(/__/g,'/') +"&width=800&height=0&maxdist=500&view=pileup&output=image&display=|noscale|perfect|snps|single|inversions|pairlinks|faceaway|basequal|&debug=0'>"
+                        console.log(img);
+                        frameRoot.setContentHtml(img);
+
                     });
 
                     //Causes the browser to start with a start region
