@@ -24,7 +24,18 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("PopupFrame"), D
                         .setMargins(0).setDisplayTitle('Browser');
                     Msg.listen("", { type: 'JumpgenomeRegionGenotypeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
                 };
-
+                that.lookseq_img_url = function (args) {
+                    var defaults = {base_url: 'http://panoptes.cggh.org/lookseq',
+                     start_pos: 0,
+                     end_pos: 0,
+                     chrom: '',
+                     sample: '',
+                     width: 800
+                    };
+                    $.extend(defaults, args);
+                    console.log(args);
+                    return Handlebars.compile("{{base_url}}/cgi-bin/index.pl?action=render_image&alg=bwa&from={{start_pos}}&to={{end_pos}}&chr={{chrom}}&sample={{sample}}&width={{width}}&height=0&maxdist=500&view=pileup&output=image&display=|noscale|perfect|snps|single|inversions|pairlinks|faceaway|basequal|&debug=0")(defaults);
+                };
                 that.createPanels = function () {
 
                     this.createControls();
@@ -82,15 +93,24 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("PopupFrame"), D
                     Msg.listen('', { type: 'SnpClicked', id: this.SnpChannel.getID() }, function (scope, content) {
                         var snp = content.snp;
                         var seq = content.seq;
-                        var popup = PopupFrame.PopupFrame('LookseqPopupFrame', Framework.FrameFinal('LookseqPic'), { title: seq, sizeX: 900, sizeY: 600 });
+                        var popup = PopupFrame.PopupFrame('LookseqPopupFrame', Framework.FrameFinal('LookseqPic'), { title: seq.replace(/__/g,'/') + snp.position, sizeX: 830, sizeY: 800 });
                         var frameRoot = popup.getFrameRoot();
                         popup.render();
-                        console.log(snp);
-//                        frameRoot.setContentHtml("<img src= 'http://panoptes.cggh.org/lookseq/cgi-bin/index.pl?action=render_image&alg=bwa&from="+ (snp.position-50) +"&to="+ (snp.position+50) + "&chr=Pf3D7_01_v3&sample=%20" + 3D7_Glasgow/PG0051-C/ERR019061 +"&width=800&height=0&maxdist=500&view=pileup&output=image&display=|noscale|perfect|snps|single|inversions|pairlinks|faceaway|basequal|&debug=0'>");
-                        var img = "<img src= 'http://panoptes.cggh.org/lookseq/cgi-bin/index.pl?action=render_image&alg=bwa&from="+ (snp.position-5) +"&to="+ (snp.position+5) + "&chr=Pf3D7_01_v3&sample=" + seq.replace(/__/g,'/') +"&width=800&height=0&maxdist=500&view=pileup&output=image&display=|noscale|perfect|snps|single|inversions|pairlinks|faceaway|basequal|&debug=0'>"
-                        console.log(img);
-                        frameRoot.setContentHtml(img);
-
+                        var uid = DQX.getNextUniqueID();
+                        frameRoot.setContentHtml("<img style='position:absolute; top=0px; left=0px;' src='"+that.lookseq_img_url({
+                            width:800,
+                            start_pos: snp.position - 50,
+                            end_pos: snp.position + 50,
+                            sample: seq.replace(/__/g,'/'),
+                            chrom: content.chrom
+                        })+"'><div style='position: absolute; overflow: visible;'><canvas id='lookseq"+uid+"' style='position:absolute; top=0px; left=0px;' width=800 height=9000></canvas></div>");
+                        var c = $('#lookseq'+ uid)[0].getContext('2d');
+                        c.strokeStyle = '#F00';
+                        c.beginPath();
+                        c.moveTo(395,0);
+                        c.lineTo(395,9000);
+                        c.lineWidth = 1;
+                        c.stroke();
                     });
 
                     //Causes the browser to start with a start region
