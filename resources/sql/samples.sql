@@ -17,5 +17,5 @@ CREATE TABLE `pfx_samples` (
 `percent_singletons` decimal(5,2) NULL default NULL,
 `percent_mate_other_chr` decimal(5,2) NULL default NULL,
 `percent_duplicates` decimal(5,2) NULL default NULL,
-`coverage` varchar(64) NULL default NULL
+`coverage` int NULL default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
