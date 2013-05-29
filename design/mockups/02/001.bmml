@@ -1,0 +1,81 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1176" measuredH="878" mockupW="1116" mockupH="858">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="60" y="20" w="1116" h="858" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>www.malariagen.net%20%7C%20P.%20falciparum%20genetic%20crosses%20data%20release%202013%0Ahttp%3A//www.malariagen.net/pf-crosses-2013</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="75" y="103" w="-1" h="-1" measuredW="230" measuredH="45" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/malariagen_logo.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::HRule" x="75" y="153" w="1086" h="-1" measuredW="100" measuredH="10" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Title" x="75" y="163" w="-1" h="-1" measuredW="450" measuredH="19" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>_P.%20falciparum_%20genetic%20crosses%20data%20release%202013%20-%20Introduction</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::HRule" x="75" y="184" w="1086" h="-1" measuredW="100" measuredH="10" zOrder="4" locked="false" isInGroup="-1"/>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Title" x="75" y="209" w="-1" h="-1" measuredW="318" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>24</size>
+        <text>Welcome%20to%20_Pf_%20Crosses%202013</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Paragraph" x="75" y="244" w="1086" h="163" measuredW="200" measuredH="80" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>This%20web%20application%20provides%20access%20to%20data%20released%20by%20the%20%5BMalariaGEN%20P.%20falciparum%20Genetic%20Crosses%20Project%5D%2C%20which%20is%20working%20to%20establish%20a%20shared%20resource%20of%20data%20on%20genetic%20variation%20in%20the%20three%20_P.%20falciparum_%20crosses%203D7%20x%20HB3%2C%20HB3%20x%20Dd2%20and%207G8%20x%20GB4.%20%0A%20%0AIf%20you%20use%20these%20data%2C%20please%20cite%20the%20following%20publication%3A%20*High%20density%20analysis%20of%20recombination%20in%20P.%20falciparum%20using%20deep%20sequencing*%20%28in%20preparation%29%20%0A%20%0ATo%20begin%2C%20please%20choose%20one%20of%20the%20options%20below.</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Button" x="75" y="357" w="402" h="27" measuredW="402" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>002%26bm%3B002.bmml%26bm%3B002.bmml%26bm%3B002.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C337%2C417%2C364%22%20href%3D%22002.bmml%22%20alt%3D%22002%22%20id%3D%229%22/%3E</map>
+        <text>*Sample%20Metadata*%20-%20view%20samples%20and%20download%20sequence%20data</text>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Button" x="75" y="399" w="-1" h="-1" measuredW="403" measuredH="27" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>003%26bm%3B003.bmml%26bm%3B003.bmml%26bm%3B003.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C379%2C418%2C406%22%20href%3D%22003.bmml%22%20alt%3D%22003%22%20id%3D%2210%22/%3E</map>
+        <text>*Variant%20Call%20Sets*%20-%20find%20SNPs%20%26%20indels%20discovered%20in%20the%20crosses</text>
+      </controlProperties>
+    </control>
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Button" x="75" y="441" w="-1" h="-1" measuredW="523" measuredH="27" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>004%26bm%3B004.bmml%26bm%3B004.bmml%26bm%3B004.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C421%2C538%2C448%22%20href%3D%22004.bmml%22%20alt%3D%22004%22%20id%3D%2211%22/%3E</map>
+        <text>*Genotype%20Calls*%20-%20browse%20genotypes%20%26%20recombination%20patterns%20for%20individual%20samples</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Button" x="75" y="483" w="-1" h="-1" measuredW="478" measuredH="27" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>005%26bm%3B005.bmml%26bm%3B005.bmml%26bm%3B005.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C463%2C493%2C490%22%20href%3D%22005.bmml%22%20alt%3D%22005%22%20id%3D%2212%22/%3E</map>
+        <text>*Genome%20Accessibility*%20-%20explore%20the%20accessibility%20of%20different%20genome%20regions</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Button" x="75" y="525" w="-1" h="-1" measuredW="476" measuredH="27" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>006%26bm%3B006.bmml%26bm%3B006.bmml%26bm%3B006.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C505%2C491%2C532%22%20href%3D%22006.bmml%22%20alt%3D%22006%22%20id%3D%2213%22/%3E</map>
+        <text>*Sequence%20Alignments*%20-%20browse%20sequence%20alignments%20for%20individual%20samples</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Button" x="75" y="567" w="-1" h="-1" measuredW="304" measuredH="27" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>007%26bm%3B007.bmml%26bm%3B007.bmml%26bm%3B007.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C547%2C319%2C574%22%20href%3D%22007.bmml%22%20alt%3D%22007%22%20id%3D%2214%22/%3E</map>
+        <text>*Downloads*%20-%20download%20VCF%20and%20other%20data%20files</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Paragraph" x="515" y="103" w="241" h="23" measuredW="200" measuredH="80" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>*N.B.%20this%20site%20is%20under%20development%21*</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

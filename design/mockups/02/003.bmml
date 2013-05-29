@@ -1,0 +1,152 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1176" measuredH="878" mockupW="1116" mockupH="858">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="60" y="20" w="1116" h="858" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>www.malariagen.net%20%7C%20P.%20falciparum%20genetic%20crosses%20data%20release%202013%0Ahttp%3A//www.malariagen.net/pf-crosses-2013</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="75" y="103" w="-1" h="-1" measuredW="230" measuredH="45" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/malariagen_logo.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::HRule" x="75" y="153" w="1086" h="-1" measuredW="100" measuredH="10" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Title" x="75" y="163" w="-1" h="-1" measuredW="486" measuredH="19" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>_P.%20falciparum_%20genetic%20crosses%20data%20release%202013%20-%20Variant%20Call%20Sets</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::HRule" x="75" y="184" w="1086" h="-1" measuredW="100" measuredH="10" zOrder="4" locked="false" isInGroup="-1"/>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Button" x="1080" y="112" w="-1" h="-1" measuredW="81" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>001%26bm%3B001.bmml%26bm%3B001.bmml%26bm%3B001.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%221020%2C92%2C1101%2C119%22%20href%3D%22001.bmml%22%20alt%3D%22001%22%20id%3D%226%22/%3E</map>
+        <text>Intro%20view</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Button" x="964" y="112" w="-1" h="-1" measuredW="104" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Previous%20view</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Paragraph" x="515" y="103" w="241" h="23" measuredW="200" measuredH="80" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>*N.B.%20this%20site%20is%20under%20development%21*</text>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::Canvas" x="75" y="203" w="272" h="65" measuredW="100" measuredH="70" zOrder="8" locked="false" isInGroup="-1"/>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::Canvas" x="75" y="274" w="272" h="88" measuredW="100" measuredH="70" zOrder="9" locked="false" isInGroup="-1"/>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::Paragraph" x="105" y="209" w="233" h="59" measuredW="200" measuredH="80" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>10</size>
+        <text>The%20variant%20catalogues%20display%20basic%20properties%20of%20SNPs%20and%20indels%20discovered%20in%20the%20crosses.%20There%20are%20several%20catalogues%20for%20each%20cross%2C%20for%20variants%20discovered%20by%20different%20methods.</text>
+      </controlProperties>
+    </control>
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::Icon" x="82" y="209" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>Info2Icon%7Cxsmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::ComboBox" x="84" y="326" w="-1" h="-1" measuredW="250" measuredH="24" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <state>closed</state>
+        <text>3D7%20x%20HB3%20-%20SNPs%20and%20indels%20%28GATK%29%0A3D7%20x%20HB3%20-%20SNPs%20and%20indels%20%28Cortex%29%0AHB3%20x%20Dd2%20-%20SNPs%20and%20indels%20%28GATK%29%0AHb3%20x%20Dd2%20-%20SNPs%20and%20indels%20%28Cortex%29%0A7G8%20x%20GB4%20-%20SNPs%20and%20indels%20%28GATK%29%0A7G8%20x%20GB4%20-%20SNPs%20and%20indels%20%28Cortex%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::DataGrid" x="357" y="209" w="800" h="594" measuredW="735" measuredH="111" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>*CHROM%3APOS*%2C%20*Gene*%2C%20*REF*%2C%20*ALT*%2C%20*FILTER*%2C%20*VQSLOD*%2C%20*DP*%2C%20*MQ*%2C%20*MQ0Fraction*%2C%20*UQ*%0APf3D7_02_v3%3A100456%2C%20PF3D7_0206800%20%28MSP2%29%2C%20A%2C%20G%2C%20PASS%2C%202.4%2C%201234%2C%2045%2C%200.1%2C%2023%0APf3D7_02_v3%3A134555%2C%20-%2C%20A%2C%20AGG%2C%20LowQuality%2C%200.1%2C%201234%2C%2023%2C%2010.3%2C%2077%0A...%2C%20...%2C%20...%2C%20...%2C%20...</text>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::Canvas" x="353" y="203" w="808" h="631" measuredW="100" measuredH="70" zOrder="13" locked="false" isInGroup="-1"/>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::Canvas" x="75" y="374" w="272" h="460" measuredW="100" measuredH="70" zOrder="15" locked="false" isInGroup="-1"/>
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::SubTitle" x="82" y="384" w="-1" h="-1" measuredW="51" measuredH="19" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>Search</text>
+      </controlProperties>
+    </control>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::HRule" x="82" y="404" w="256" h="-1" measuredW="100" measuredH="10" zOrder="17" locked="false" isInGroup="-1"/>
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::SubTitle" x="82" y="285" w="-1" h="-1" measuredW="109" measuredH="19" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>Variant%20call%20set</text>
+      </controlProperties>
+    </control>
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::HRule" x="82" y="303" w="256" h="-1" measuredW="100" measuredH="10" zOrder="19" locked="false" isInGroup="-1"/>
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::Label" x="92" y="438" w="-1" h="-1" measuredW="80" measuredH="21" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Chromosome%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="35" controlTypeID="com.balsamiq.mockups::ComboBox" x="179" y="438" w="-1" h="-1" measuredW="111" measuredH="24" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Pf3D7_01_v3</text>
+      </controlProperties>
+    </control>
+    <control controlID="36" controlTypeID="com.balsamiq.mockups::Label" x="92" y="474" w="-1" h="-1" measuredW="34" measuredH="21" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Start%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="37" controlTypeID="com.balsamiq.mockups::TextInput" x="128" y="471" w="-1" h="-1" measuredW="79" measuredH="26" zOrder="24" locked="false" isInGroup="-1"/>
+    <control controlID="38" controlTypeID="com.balsamiq.mockups::Label" x="214" y="474" w="-1" h="-1" measuredW="31" measuredH="21" zOrder="25" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Stop%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="39" controlTypeID="com.balsamiq.mockups::TextInput" x="248" y="471" w="-1" h="-1" measuredW="79" measuredH="26" zOrder="26" locked="false" isInGroup="-1"/>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::FieldSet" x="82" y="416" w="256" h="135" measuredW="200" measuredH="170" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Genome%20region</text>
+      </controlProperties>
+    </control>
+    <control controlID="42" controlTypeID="com.balsamiq.mockups::Button" x="92" y="509" w="-1" h="-1" measuredW="39" measuredH="27" zOrder="27" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Go</text>
+      </controlProperties>
+    </control>
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::Button" x="137" y="509" w="-1" h="-1" measuredW="55" measuredH="27" zOrder="28" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Clear</text>
+      </controlProperties>
+    </control>
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::Paragraph" x="357" y="811" w="356" h="16" measuredW="200" measuredH="80" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>1-10%20of%2012000%20%7C%20show%2010%20%5B25%5D%20%5B50%5D%20%5B100%5D%20%7C%20%5B%3C%20prev%5D%20%5Bnext%20%3E%5D</text>
+      </controlProperties>
+    </control>
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::FieldSet" x="82" y="557" w="256" h="64" measuredW="200" measuredH="170" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Variant%20type</text>
+      </controlProperties>
+    </control>
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::CheckBoxGroup" x="92" y="572" w="-1" h="-1" measuredW="56" measuredH="39" zOrder="31" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%5Bx%5D%20SNP%0A%5Bx%5D%20indel</text>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::FieldSet" x="82" y="626" w="256" h="201" measuredW="200" measuredH="170" zOrder="32" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Variant%20filters</text>
+      </controlProperties>
+    </control>
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::CheckBoxGroup" x="92" y="646" w="235" h="175" measuredW="186" measuredH="105" zOrder="33" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%5Bapply%20all%5D%20%5Bapply%20none%5D%0A%5Bx%5D%20%5BLowQuality%5D%0A%5Bx%5D%20%5BCentromere%5D%0A%5Bx%5D%20%5BSubtelomericHypervariable%5D%0A...</text>
+      </controlProperties>
+    </control>
+    <control controlID="49" controlTypeID="com.balsamiq.mockups::StickyNote" x="320" y="644" w="-1" h="-1" measuredW="109" measuredH="123" zOrder="34" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Click%20on%20filter%20name%20to%20show%20description%20from%20VCF%20header</text>
+      </controlProperties>
+    </control>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::StickyNote" x="526" y="348" w="223" h="176" measuredW="109" measuredH="123" zOrder="35" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Table%20columns%20for%20Cortex%20callsets%3A%0A*%20CHROM%3APOS%0A*%20Gene%0A*%20REF%0A*%20ALT%0A*%20FILTER%0A*%20SITE_CONF</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
