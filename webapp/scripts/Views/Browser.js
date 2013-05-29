@@ -33,7 +33,6 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("PopupFrame"), D
                      width: 800
                     };
                     $.extend(defaults, args);
-                    console.log(args);
                     return Handlebars.compile("{{base_url}}/cgi-bin/index.pl?action=render_image&alg=bwa&from={{start_pos}}&to={{end_pos}}&chr={{chrom}}&sample={{sample}}&width={{width}}&height=0&maxdist=500&view=pileup&output=image&display=|noscale|perfect|snps|single|inversions|pairlinks|faceaway|basequal|&debug=0")(defaults);
                 };
                 that.createPanels = function () {
@@ -97,20 +96,28 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("PopupFrame"), D
                         var frameRoot = popup.getFrameRoot();
                         popup.render();
                         var uid = DQX.getNextUniqueID();
-                        frameRoot.setContentHtml("<img style='position:absolute; top=0px; left=0px;' src='"+that.lookseq_img_url({
+                        frameRoot.setContentHtml("<img id='"+ uid +"' style='position:absolute; top=0px; left=0px;' src='"+that.lookseq_img_url({
                             width:800,
                             start_pos: snp.position - 50,
                             end_pos: snp.position + 50,
                             sample: seq.replace(/__/g,'/'),
                             chrom: content.chrom
-                        })+"'><div style='position: absolute; overflow: visible;'><canvas id='lookseq"+uid+"' style='position:absolute; top=0px; left=0px;' width=800 height=9000></canvas></div>");
-                        var c = $('#lookseq'+ uid)[0].getContext('2d');
-                        c.strokeStyle = '#F00';
-                        c.beginPath();
-                        c.moveTo(395,0);
-                        c.lineTo(395,9000);
-                        c.lineWidth = 1;
-                        c.stroke();
+                        })+"'>");
+                        $('#'+ uid).load(function() {
+                            var img = $('#' + uid);
+                            console.log('ALARM');
+                            var canvas = $("<canvas id='canvas"+uid+"' style='position:absolute; top=0px; left=0px;'></canvas>");
+                            canvas.insertAfter(img);
+                            canvas.attr('height', img.height());
+                            canvas.attr('width', img.width());
+                            var c = canvas.get(0).getContext('2d');
+                            c.strokeStyle = '#F00';
+                            c.beginPath();
+                            c.moveTo(395,0);
+                            c.lineTo(395,canvas.height());
+                            c.lineWidth = 1;
+                            c.stroke();
+                        })
                     });
 
                     //Causes the browser to start with a start region
