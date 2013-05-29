@@ -108,7 +108,6 @@ DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "Page", 
                         })+"'>");
                         $('#'+ uid).load(function() {
                             var img = $('#' + uid);
-                            console.log('ALARM');
                             var canvas = $("<canvas id='canvas"+uid+"' style='position:absolute; top=0px; left=0px;'></canvas>");
                             canvas.insertAfter(img);
                             canvas.attr('height', img.height());
@@ -128,20 +127,13 @@ DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "Page", 
                         that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 100000);
                     });
 
-                    /*that.SnpChannel.setCallBackFirstDataFetch(function () {
-                    $.each(that.SnpChannel.myDataFetcher._filters, function (idx, filter) {
-                    that.groupFilterControls.addControl(Controls.Check('', { label: filter })).setOnChanged(function (id, ctrl) {
-                    that.SnpChannel.myDataFetcher.setFilterActive(filter, ctrl.getValue());
-                    that.panelBrowser.render();
-                    });
-                    });
-                    that.panelControls.render();
-                    });*/
+                    //Act like we just changed the callset so that we load the SNPs when we first open
+                    that.changeDataSource();
 
                 };
 
                 that.changeDataSource = function () {
-                    var variantSetID = this.callSetControl.getValue();
+                    var variantSetID = that.myPage.current_call_set.get('call_set');
                     if (variantSetID.length == 0) {
                         this.SnpChannel.setDataSource("");
                         that.panelBrowser.render();
@@ -168,8 +160,11 @@ DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "Page", 
 
                     var group1 = this.panelControls.addControl(Controls.CompoundVert());
 
-                    this.callSetControl = Controls.Combo('', { label: 'Call set', states: CrossesMetaData.variants });
-                    this.callSetControl.setOnChanged($.proxy(that.changeDataSource, that));
+                    this.callSetControl = Controls.Combo('', { label: 'Call set',
+                                                               states: CrossesMetaData.variants,
+                                                               value: that.myPage.current_call_set.get('call_set')});
+                    this.callSetControl.bindToModel(that.myPage.current_call_set, 'call_set');
+                    that.myPage.current_call_set.on({change: true}, $.proxy(that.changeDataSource, that));
                     group1.addControl(this.callSetControl);
 
                     this.groupVariantFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Variant filters');

@@ -40,9 +40,10 @@
                 //Create some models for app state
                 var filters = {};
                 $.each(CrossesMetaData.variant_filters, function (id, filter){
-                    filters[id] = false;
+                    filters[id] = true;
                 });
                 thePage.variant_filters = Model(filters);
+                thePage.current_call_set = Model({'call_set': CrossesMetaData.variants[0].id});
 
                 //Create the views
                 

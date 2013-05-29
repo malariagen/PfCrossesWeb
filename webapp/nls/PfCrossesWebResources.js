@@ -14,7 +14,7 @@ define({
 	 variantsHelp: "The variant catalogues display basic properties of SNPs and indels discovered in the crosses. There are several catalogues for each cross, for variants discovered by different methods.",
 	 variantsDescrip: "SNPs and indels",
 	 x3d7_hb3: "3D7 x HB3",
-	 xhb3_dd2: "HB3 x Dd2",
+	 xhb3_dd2: "HB3 x DD2",
 	 x7g8_gb4: "7G8 x GB4",
 	 samplesHelp: "This page displays metadata about the samples that have been sequenced, with some summary statistics and links to the European Nucleotide Archive where the sequence data are held.",
 	 samplePanelHeader: "Sample set",

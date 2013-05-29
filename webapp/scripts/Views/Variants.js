@@ -13,52 +13,33 @@
                     Msg.send({type: 'ShowPopulation'}, id.split('_')[1]);
                 };
 
-                //Creates the data structure that defines what fields will be displayed in the table browser
-                
-
                 that.createPanels = function () {
-                	
-                	
- 					this.tablecortex = new TableCortex();
- 					
+                	this.tablecortex = new TableCortex();
  					this.tablecortex.createPanelTable(this.frameTables['cortex']);
-                  
- 					this.tablegatk = new TableGATK();
- 					
+                    this.tablegatk = new TableGATK();
  					this.tablegatk.createPanelTable(this.frameTables['gatk']);
- 					
-                    this.createPanelAdvancedQuery();
-
+ 					this.createPanelAdvancedQuery();
+                    //Run the change func to load first data
+                    this.changeFunction();
                 };
 
                 that.createFramework = function () {
                     this.currentQuery=null;
-
  //                   this.myFrame.setSeparatorSize(bigSeparatorSize);
-
                     this.frameLeftGroup = this.getFrame().addMemberFrame(Framework.FrameGroupVert('VariantsQueries', 0.4)).setSeparatorSize(4);
-
                     this.frameLeftGroup.InsertIntroBox('datagrid2.png',resources.variantsHelp);
-                    
                     this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('VariantsQueryAdvanced', 0.4))
                         .setMargins(0).setDisplayTitle('Query').setMinSize(Framework.dimX,300).setAllowScrollBars(true,true);
-                
                     this.frameTableGroup = this.getFrame().addMemberFrame(Framework.FrameGroupStack('', 0.6));
-                    
                     var tables=['cortex','gatk'];
-                    
                     this.frameTables= {};
-                    
                     $.each(tables,function(idx,tableID) {
                     	var aFrameTable= that.frameTableGroup.addMemberFrame(Framework.FrameFinal(tableID, 0.6))
                        		.setMargins(0).setFrameClassClient('DQXDarkFrame').setAllowScrollBars(false,false);
                         that.frameTables[tableID]=aFrameTable
                     });
-
                 };
-    
 
-                                
                 that.queryComponentToString = function(sq) {
                     return sq.ColName + sq.Tpe + sq.CompValue + ",";
                 };
@@ -88,7 +69,7 @@
                 };
     
 				that.changeFunction = function() {
-                    var callSet=that.catVarQueryPopulationFreqType.getValue();
+                    var callSet = that.myPage.current_call_set.get('call_set');
                     if (callSet == "")
                         return;
                     var opts = callSet.split(":");
@@ -125,9 +106,14 @@
 
                     var groupPop=Controls.CompoundVert();
                     groupPop.setLegend(resources.variantCallSet);
-                    this.catVarQueryPopulationFreqType=Controls.Combo('VariantsQuery', { label: '', states: CrossesMetaData.variants });
+                    this.catVarQueryPopulationFreqType = Controls.Combo('VariantsQuery', { label: '',
+                                                          states: CrossesMetaData.variants,
+                                                          value: that.myPage.current_call_set.get('call_set')});
                     this.catVarQueryPopulationFreqType.variantContainer=this;
-                    this.catVarQueryPopulationFreqType.setOnChanged(this.changeFunction);
+                    this.catVarQueryPopulationFreqType.bindToModel(that.myPage.current_call_set, 'call_set');
+                    that.myPage.current_call_set.on({change: true}, $.proxy(that.changeFunction, that));
+
+
                     groupPop.addControl(this.catVarQueryPopulationFreqType);
                     //invalidatingList.push(this.catVarQueryPopulationFreqType);
                     theForm.addControl(groupPop);    
