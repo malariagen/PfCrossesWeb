@@ -1,5 +1,5 @@
-﻿define([DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "Views/LookSeq", "Views/Downloads", "i18n!nls/PfCrossesWebResources.js"],
-    function (Framework, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule, LookSeqModule, DownloadsModule, resources) {
+﻿define([DQXSC("Framework"), DQXSC("Model"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "Views/LookSeq", "Views/Downloads", "i18n!nls/PfCrossesWebResources.js", "CrossesMetaData"],
+    function (Framework, Model, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule, LookSeqModule, DownloadsModule, resources, CrossesMetaData) {
         thePage = {
 
             createFramework: function () {
@@ -36,7 +36,14 @@
                 
                 thePage.frameDownloads = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('downloads', 1))
                 .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.downloadsPageHeader); ;
-                
+
+                //Create some models for app state
+                var filters = {};
+                $.each(CrossesMetaData.variant_filters, function (id, filter){
+                    filters[id] = false;
+                });
+                thePage.variant_filters = Model(filters);
+
                 //Create the views
                 
                 thePage.IntroView = IntroModule.Instance(thePage, thePage.frameIntro, thePage.frameHeaderIntro);

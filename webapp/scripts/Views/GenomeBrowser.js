@@ -1,6 +1,6 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), "GenomeBrowserSNPChannel", "CrossesMetaData", "OptionsCortex", "OptionsGATK"],
-    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, GenomeBrowserSNPChannel, CrossesMetaData, CortexOptions, GATKOptions) {
+define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources.js"],
+    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, GenomeBrowserSNPChannel, CrossesMetaData, VariantFilters, resources) {
 
         var GenomeBrowserModule = {
 
@@ -16,19 +16,13 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                 that.createFramework = function () {
 
                     this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
-                        .setMargins(0).setDisplayTitle('Settings').setMinSize(Framework.dimX, 380);
+                        .setMargins(0).setDisplayTitle('Settings').setMinSize(Framework.dimX, 430);
 
                     this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('controls', 0.7))
                         .setMargins(0).setFixedSize(Framework.dimX, 380);
 
-                    this.frameAllFilters = this.frameLeft.addMemberFrame(Framework.FrameGroupTab('filters', 0.7))
+                    this.frameFilters = this.frameLeft.addMemberFrame(Framework.FrameFinal('filters', 0.7))
                         .setMargins(0).setFixedSize(Framework.dimX, 380);
-
-                    this.frameFilters = {};
-                    $.each(CrossesMetaData.callMethods, function (idx, callMethod) {
-                        that.frameFilters[callMethod] = that.frameAllFilters.addMemberFrame(Framework.FrameFinal('filtersGATK', 0.7))
-                            .setMargins(0).setDisplayTitle(callMethod + ' filters').setFixedSize(Framework.dimX, 380);
-                    });
 
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
@@ -70,32 +64,23 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
 
                 that.createControls = function () {
                     this.panelControls = Framework.Form(this.frameControls);
+                    this.panelControls.render();
 
                     //this.panelControls.addControl(Controls.Check('CtrlMaghhghggnif', { label: 'Show magnifying glass' }));
 
-                    this.panelControls.render();
-
-                    this.formFilters = {};
-                    $.each(CrossesMetaData.callMethods, function (idx, callMethod) {
-                        if (callMethod == 'gatk')
-                            var opts = new GATKOptions();
-                        if (callMethod == 'cortex')
-                            var opts = new CortexOptions();
-                        var changeFunction = function (a, b, c) {
-                            $.each(that.callSetViewers, function (idx, callSetViewer) {
-                                if (callSetViewer.callMethod == opts.getMethod())
-                                    that.updateCallSetViewerQuery(callSetViewer);
-                            });
-                            that.panelBrowser.render();
-                        }
-                        opts.setup(changeFunction, that, { showHeader: true });
-
-                        that.formFilters[callMethod] = Framework.Form(that.frameFilters[callMethod]);
-                        that.formFilters[callMethod].addControl(opts.getQueryPane());
-                        that.formFilters[callMethod].render();
-                        that.formFilters[callMethod].options = opts;
+                    this.formFilters = Framework.Form(this.frameFilters);
+                    var pane = Controls.CompoundVert();
+                    pane.setLegend(resources.variant_filters);
+                    that.variant_filter_controls = VariantFilters(CrossesMetaData.variant_filters, that.myPage.variant_filters);
+                    pane.addControl(that.variant_filter_controls.grid);
+                    this.formFilters.addControl(pane);
+                    that.formFilters.render();
+                    that.myPage.variant_filters.on({change: true}, function () {
+                        $.each(that.callSetViewers, function (idx, callSetViewer) {
+                            that.updateCallSetViewerQuery(callSetViewer);
+                        });
+                        that.panelBrowser.render();
                     });
-
                 }
 
                 //Create the channels that show information for each individual SNP
@@ -123,16 +108,20 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         that.panelBrowser.addChannel(that.channelSNPs, false);
                         that.callSetViewers.push(callSetViewer);
                     });
-
-                }
+                };
 
 
                 that.updateCallSetViewerQuery = function (callSetViewer) {
                     var andList = [SQL.WhereClause.CompareFixed('cross_name', '=', callSetViewer.Id), SQL.WhereClause.CompareFixed('method', '=', callSetViewer.callMethod)];
-                    var options = that.formFilters[callSetViewer.callMethod].options;
-                    options.setQueryParams(andList);
+                    $.each(that.myPage.variant_filters.get(), function (filter, value) {
+                        //We only care about a value if it is checked, unchecked means all are wanted, checked means we don't want!.
+                        if (value &&
+                            ($.inArray(callSetViewer.callMethod, CrossesMetaData.variant_filters[filter].call_methods) != -1)) {
+                            andList.push(SQL.WhereClause.CompareFixed(filter, '=', false))
+                        }
+                    });
                     callSetViewer.dataFetcherSNPs.setUserQuery2(SQL.WhereClause.AND(andList));
-                }
+                };
 
                 that.createChromosomesPFV3 = function () {
                     $.each(CrossesMetaData.chromosomes, function (idx, chromo) {
