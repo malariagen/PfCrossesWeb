@@ -13,7 +13,7 @@ define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
                                       { id: '3d7_hb3', name: resources.x3d7_hb3 },
                                       { id: '7g8_gb4', name: resources.x7g8_gb4}];
         CrossesMetaData.variants = [
-                                    //{ id: '', name: '' },
+                                    { id: '', name: '' },
                                     {
                                         id: 'hb3_dd2:cortex',
                                         name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (Cortex)',
