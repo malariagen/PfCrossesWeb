@@ -245,14 +245,11 @@
                 that.createPanelAdvancedQuery = function () {
 
                     this.panelPopQuery = Framework.Form(this.frameQueryAdvanced);
-                    var theForm = this.panelPopQuery;
-
+                    var group = this.panelPopQuery.addControl(Controls.CompoundVert());
+                    group.setLegend('Cross');
                     this.catVarQueryPopulationFreqType = Controls.Combo('SamplesQuery', { label: '', states: CrossesMetaData.sampleSets }).setOnChanged($.proxy(this.updatePopQuery, this));
-                   
-                    //invalidatingList.push(this.catVarQueryPopulationFreqType);
-                    theForm.addControl(this.catVarQueryPopulationFreqType);
-
-                    theForm.render();
+                    group.addControl(this.catVarQueryPopulationFreqType);
+                    this.panelPopQuery.render();
                 };
 
 
