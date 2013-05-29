@@ -1,0 +1,46 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1176" measuredH="878" mockupW="1116" mockupH="858">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="60" y="20" w="1116" h="858" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>www.malariagen.net%20%7C%20P.%20falciparum%20genetic%20crosses%20data%20release%202013%0Ahttp%3A//www.malariagen.net/pf-crosses-2013</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Image" x="75" y="103" w="-1" h="-1" measuredW="230" measuredH="45" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/malariagen_logo.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::HRule" x="75" y="153" w="1086" h="-1" measuredW="100" measuredH="10" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Title" x="75" y="163" w="-1" h="-1" measuredW="524" measuredH="19" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>_P.%20falciparum_%20genetic%20crosses%20data%20release%202013%20-%20Sequence%20Alignments</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::HRule" x="75" y="184" w="1086" h="-1" measuredW="100" measuredH="10" zOrder="4" locked="false" isInGroup="-1"/>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Button" x="1080" y="112" w="-1" h="-1" measuredW="81" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>001%26bm%3B001.bmml%26bm%3B001.bmml%26bm%3B001.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%221020%2C92%2C1101%2C119%22%20href%3D%22001.bmml%22%20alt%3D%22001%22%20id%3D%226%22/%3E</map>
+        <text>Intro%20view</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Button" x="964" y="112" w="-1" h="-1" measuredW="104" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Previous%20view</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Paragraph" x="515" y="103" w="241" h="23" measuredW="200" measuredH="80" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>*N.B.%20this%20site%20is%20under%20development%21*</text>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::Canvas" x="75" y="194" w="1086" h="640" measuredW="100" measuredH="70" zOrder="8" locked="false" isInGroup="-1"/>
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::Title" x="95" y="217" w="-1" h="-1" measuredW="160" measuredH="43" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>LookSeq</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
