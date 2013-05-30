@@ -21,6 +21,7 @@
  					this.createPanelAdvancedQuery();
                     //Run the change func to load first data
                     this.changeFunction();
+                    this.frameMessage.setContentHtml(resources.select_call_set);
                 };
 
                 that.createFramework = function () {
@@ -31,6 +32,7 @@
                     this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('VariantsQueryAdvanced', 0.4))
                         .setMargins(0).setDisplayTitle('Query').setMinSize(Framework.dimX,300).setAllowScrollBars(true,true);
                     this.frameTableGroup = this.getFrame().addMemberFrame(Framework.FrameGroupStack('', 0.6));
+                    this.frameMessage = this.frameTableGroup.addMemberFrame(Framework.FrameFinal('VariantsMessage', 0.6));
                     var tables=['cortex','gatk'];
                     this.frameTables= {};
                     $.each(tables,function(idx,tableID) {
@@ -70,8 +72,10 @@
     
 				that.changeFunction = function() {
                     var callSet = that.myPage.current_call_set.get('call_set');
-                    if (callSet == "")
+                    if (callSet == "") {
+                        that.frameTableGroup.switchTab('VariantsMessage');
                         return;
+                    }
                     var opts = callSet.split(":");
                     var cross_name = opts[0];
                     var method = opts[1];

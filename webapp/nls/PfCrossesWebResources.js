@@ -44,7 +44,9 @@ define({
 	 downloadsGenomeText: "<h3>Genome region classification</h3>" +
 	 		"<p>The file below is a BED file containing the classification of genome regions into Core, SubtelomericHypervariable, InternalHypervariable, SubtelomericRepeat and Centromere</p>" +
 	 		"<ul><li><a href=\"\">Genome region classification</a></li></ul>",
-      select_cross: "<center><em>Please select a sample set from the left</em></center>"
+      select_cross: "<center><em>Please select a sample set from the left</em></center>",
+      select_call_set: "<center><em>Please select a call set from the left</em></center>"
+
 
   }
 });
