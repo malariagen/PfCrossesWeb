@@ -27,7 +27,7 @@ define({
 	 downloadsPageHeader: "Downloads",
 	 introPageHeader: "Introduction",
 	 introTitle: "<h2>Welcome to Pf Crosses 2013</h2>",
-	 introText: "This web application provides access to data released by the <a href='http://www.malariagen.net/node/45'>MalariaGEN P.falciparum Genetic Crosses Project</a> which is working to establish a shared resource of data on genetic variation in the three <i>P. falciparum</i> crosses 3D7 x HB3, HB3 x Dd2 and 7G8 x GB4." +
+	 introText: "This web application provides access to data released by the <a href='http://www.malariagen.net/projects/parasite/pf-crosses'>MalariaGEN P.falciparum Genetic Crosses Project</a> which is working to establish a shared resource of data on genetic variation in the three <i>P. falciparum</i> crosses 3D7 x HB3, HB3 x Dd2 and 7G8 x GB4." +
 	 		"<p>If you use these data, please cite the following publication: <b>High density analysis of recombination in P. falciparum using deep sequencing</b> (in preparation)</p>" +
 	 		"To begin, please choose one of the options below:",
 	 samplesButton: " - view samples and download sequence data",
