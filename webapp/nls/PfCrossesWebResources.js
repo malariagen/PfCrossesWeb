@@ -43,7 +43,8 @@ define({
 	 		"The files below are VCF files containing details of SNPs and indels discovered and genotyped in the crosses.",
 	 downloadsGenomeText: "<h3>Genome region classification</h3>" +
 	 		"<p>The file below is a BED file containing the classification of genome regions into Core, SubtelomericHypervariable, InternalHypervariable, SubtelomericRepeat and Centromere</p>" +
-	 		"<ul><li><a href=\"\">Genome region classification</a></li></ul>"
+	 		"<ul><li><a href=\"\">Genome region classification</a></li></ul>",
+      select_cross: "<center><em>Please select a sample set from the left</em></center>"
 
   }
 });
