@@ -10,3 +10,8 @@ LOAD DATA LOCAL INFILE '/data/malariagen2/plasmodium/pf-crosses/meta/20121206/qc
         )
 
         ;
+
+UPDATE pfx_samples SET is_parent=1 WHERE source_code IN ('3D7_Glasgow', 'HB3_Glasgow', 'HB3_Ferdig', 'DD2_Ferdig', '7G8_NIH', 'GB4_NIH');
+
+CREATE VIEW pfx_samples_sort AS SELECT * FROM pfx_samples ORDER BY is_parent DESC, source_code;
+
