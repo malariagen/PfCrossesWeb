@@ -14,20 +14,16 @@ define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
                                       { id: '7g8_gb4', name: resources.x7g8_gb4}];
         CrossesMetaData.variants = [
                                     { id: '', name: '' },
-                                    {
-                                        id: '3d7_hb3:cortex',
-                                        name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (Cortex)',
-                                        download_href: 'downloads/3d7_hb3.cortex.both.final.vcf.gz'
-                                    },
+
                                     {
                                         id: '3d7_hb3:gatk',
                                         name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (GATK)',
                                         download_href: 'downloads/3d7_hb3.gatk.both.final.vcf.gz'
                                     },
                                     {
-                                        id: 'hb3_dd2:cortex',
-                                        name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (Cortex)',
-                                        download_href: 'downloads/hb3_dd2.cortex.both.final.vcf.gz'
+                                        id: '3d7_hb3:cortex',
+                                        name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (Cortex)',
+                                        download_href: 'downloads/3d7_hb3.cortex.both.final.vcf.gz'
                                     },
                                     {
                                         id: 'hb3_dd2:gatk',
@@ -35,16 +31,21 @@ define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
                                         download_href: 'downloads/hb3_dd2.gatk.both.final.vcf.gz'
                                     },
                                     {
-                                        id: '7g8_gb4:cortex',
-                                        name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (Cortex)',
-                                        download_href: 'downloads/7g8_gb4.cortex.both.final.vcf.gz'
+                                        id: 'hb3_dd2:cortex',
+                                        name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (Cortex)',
+                                        download_href: 'downloads/hb3_dd2.cortex.both.final.vcf.gz'
                                     },
                                     {
                                         id: '7g8_gb4:gatk',
                                         name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (GATK)',
                                         download_href: 'downloads/7g8_gb4.gatk.both.final.vcf.gz'
-                                    }
-                                    ];
+                                    },
+                                    {
+                                        id: '7g8_gb4:cortex',
+                                        name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (Cortex)',
+                                        download_href: 'downloads/7g8_gb4.cortex.both.final.vcf.gz'
+                                    },
+        ];
 
         CrossesMetaData.variant_filters = {
             ParentCallMissing: {
