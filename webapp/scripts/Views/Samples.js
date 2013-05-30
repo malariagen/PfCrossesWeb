@@ -136,7 +136,7 @@
 
                     this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.database, CrossesMetaData.tableSamples);
                     this.theTableFetcher.showDownload = true;
-                    this.theTableFetcher.positionField = "id";
+                    this.theTableFetcher.positionField = "sort_order";
                     this.panelTable = QueryTable.Panel(this.frameTable, this.theTableFetcher, { leftfraction: 50 });
 
                     var mytable = this.panelTable.myTable;
