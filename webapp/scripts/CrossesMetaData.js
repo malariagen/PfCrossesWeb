@@ -3,7 +3,7 @@ define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
         var CrossesMetaData = {};
 
         CrossesMetaData.database = "pfx";
-        CrossesMetaData.tableSamples = "pfx_samples";
+        CrossesMetaData.tableSamples = "pfx_samples_sort";
         CrossesMetaData.tableVariants = "variants_filtered";
 
         CrossesMetaData.callMethods = ['gatk', 'cortex'];
