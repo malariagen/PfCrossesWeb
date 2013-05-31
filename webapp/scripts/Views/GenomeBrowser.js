@@ -1,6 +1,6 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameTree"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelYVals"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), DQXSC("DataFetcher/DataFetcherSummary"), "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources.js"],
-    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, FrameTree, FrameList, GenomePlotter, ChannelYVals, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, DataFetcherSummary, GenomeBrowserSNPChannel, CrossesMetaData, VariantFilters, resources) {
+define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("Popup"), DQXSC("FrameTree"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelYVals"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), DQXSC("DataFetcher/DataFetcherSummary"), "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources.js"],
+    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, Popup, FrameTree, FrameList, GenomePlotter, ChannelYVals, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, DataFetcherSummary, GenomeBrowserSNPChannel, CrossesMetaData, VariantFilters, resources) {
 
         var GenomeBrowserModule = {
 
@@ -125,6 +125,16 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     });
                 };
 
+
+                that.addChannelToTree = function (channel, name, defaultVisible, docID) {
+                    var chk = Controls.Check(null, { label: '<b>' + name + '</b>', value: defaultVisible });
+                    if (!defaultVisible)
+                        that.channelModifyVisibility(channel.getID(), false);
+                    that.branchChannelsProfiles.addItem(FrameTree.Control(Controls.CompoundHor([chk, Controls.Static('&nbsp;&nbsp;')/*, infoButton*/])));
+                    chk.setOnChanged(function () { that.channelModifyVisibility(channel.getID(), chk.getValue()); });
+                }
+
+
                 //modifies the visibility status of a channel, prodived its id
                 that.channelModifyVisibility = function (id, status) {
                     var channel = this.panelBrowser.findChannelRequired(id);
@@ -132,6 +142,22 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         channel.modifyComponentActiveStatus(compid, status);
                     this.panelBrowser.channelModifyVisibility(id, status);
                 };
+
+
+                //This callback is activated when the ajax data returns after a user has clicked on a repeat in the repeat channel
+                that._callBackPointInfoFetched_Repeat = function (data) {
+                    DQX.stopProcessing();
+                    var subdata = {
+                        'Matches': data.percentmatches + '%',
+                        'Pattern': '<div style="max-width:500px;word-wrap:break-word;">' + data.pattern + '</div>',
+                        'Copies': data.nrcopies,
+                        'Length': data.fstop - data.fstart,
+                        'Genomic region': data.chromid + ':' + data.fstart + '-' + data.fstop
+                    }
+                    var content = '<div>' + DQX.CreateKeyValueTable(subdata) + '</div>';
+                    var ID = Popup.create("Tandem repeat", content);
+                };
+
 
                 //Create the channels that provide summary information about the genome (coverage, %gc, etc...)
                 that.createSummaryChannels = function () {
@@ -203,13 +229,12 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Coverage2', id: 'Coverage', title: '[@channelCoverage]', hasStdev: true, maxval: 3, active: true });
                     cha.setChangeYScale(false, true);*/
 
-                    /*
                     //Create the repeats channel
                     var repeatConfig = {
-                    database: MetaData1.database,
-                    serverURL: serverUrl,
-                    annotTableName: 'tandemrepeats',
-                    chromnrfield: 'chrom'
+                        database: CrossesMetaData.database,
+                        serverURL: serverUrl,
+                        annotTableName: 'tandemrepeats',
+                        chromnrfield: 'chrom'
                     };
                     var DataFetcherAnnotation = require(DQXSC("DataFetcher/DataFetcherAnnotation"));
                     var ChannelAnnotation = require(DQXSC("ChannelPlot/ChannelAnnotation"));
@@ -225,13 +250,9 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
 
                     that.addChannelToTree(repeatChannel, '[@channelRepeatRegions]', false, 'Doc/GenomeBrowser/Channels/Repeats.htm');
                     repeatChannel.handleFeatureClicked = function (id) {
-                    DQX.setProcessing("Downloading...");
-                    repeatFetcher.fetchFullAnnotInfo(id,
-                    that._callBackPointInfoFetched_Repeat,
-                    DQX.createFailFunction("Failed to download data")
-                    );
+                        DQX.setProcessing("Downloading...");
+                        repeatFetcher.fetchFullAnnotInfo(id,that._callBackPointInfoFetched_Repeat,DQX.createFailFunction("Failed to download data"));
                     }
-                    */
                 }
 
 
