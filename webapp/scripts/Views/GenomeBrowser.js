@@ -192,8 +192,8 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     //Create the generic summary channels
                     var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/GC300', id: 'GC300', title: '[@channelPercentGC]', hasStdev: false, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 15 });
                     cha.setChangeYScale(true, true);
-                    /*                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Uniqueness', id: 'Uniqueness', title: '[@ChannelNonuniqueness]', hasStdev: false, maxval: 75, active: true, alertZoneMin: 26, alertZoneMax: 199 });
-                    cha.setChangeYScale(false, true);*/
+                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Uniqueness', id: 'Uniqueness', title: '[@ChannelNonuniqueness]', hasStdev: false, maxval: 75, active: true, alertZoneMin: 26, alertZoneMax: 199 });
+                    cha.setChangeYScale(false, true);
 
                     /*                    createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/MapQuality2', id: 'MapQuality', title: '[@channelMapQuality]', hasStdev: true, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 40 });
                     var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Coverage2', id: 'Coverage', title: '[@channelCoverage]', hasStdev: true, maxval: 3, active: true });
