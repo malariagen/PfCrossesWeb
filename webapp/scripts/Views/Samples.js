@@ -61,29 +61,22 @@
 
 
                 that.createPanels = function () {
+                    this.frameMessage.setContentHtml(resources.select_cross);
                     this.createFieldCatalog(); //This function translates the metadata field info to a format that is better suited in this context (todo: remove this conversion step?)
                     this.createPanelTable();
-
                     this.createPanelAdvancedQuery();
-
                 };
 
                 that.createFramework = function () {
                     this.currentQuery = null;
-
-                    //                   this.myFrame.setSeparatorSize(bigSeparatorSize);
-
                     this.frameLeftGroup = this.myFrame.addMemberFrame(Framework.FrameGroupVert('SamplesQueries', 0.4)).setSeparatorSize(4);
-
                     this.frameLeftGroup.InsertIntroBox('datagrid2.png', resources.samplesHelp);
-
                     this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('SamplesQueryAdvanced', 0.4))
                         .setMargins(0).setDisplayTitle(resources.samplePanelHeader).setMinSize(Framework.dimX, 300).setAllowScrollBars(true, true);
-
-                    this.frameTable = this.myFrame.addMemberFrame(Framework.FrameFinal('SamplesTable', 0.6))
+                    this.frameTableGroup = this.getFrame().addMemberFrame(Framework.FrameGroupStack('', 0.6));
+                    this.frameMessage = this.frameTableGroup.addMemberFrame(Framework.FrameFinal('SamplesMessage', 0.6));
+                    this.frameTable = this.frameTableGroup.addMemberFrame(Framework.FrameFinal('SamplesTable', 0.6))
                         .setMargins(0).setFrameClassClient('DQXDarkFrame').setAllowScrollBars(false, false);
-
-
                 };
 
 
@@ -226,8 +219,13 @@
                 };
 
                 that.updatePopQuery = function () {
-
                     var freqPrefix = this.catVarQueryPopulationFreqType.getValue();
+                    if (freqPrefix == '') {
+                        that.frameTableGroup.switchTab('SamplesMessage');
+                        return;
+                    }
+                    that.frameTableGroup.switchTab('SamplesTable');
+
                     var thequery = SQL.WhereClause.AND();
                     thequery = SQL.WhereClause.CompareFixed('cross_name', '=', freqPrefix);
 
