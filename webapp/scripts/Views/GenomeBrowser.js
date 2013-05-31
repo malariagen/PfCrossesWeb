@@ -50,6 +50,10 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     this.panelBrowser.MaxZoomFactX = 1.0 / 0.2;
                     this.panelBrowser.getNavigator().setMinScrollSize(0.0001);
 
+                    SeqChannel = ChannelSequence.Channel(serverUrl, 'Tracks-Cross/Sequence', 'Summ01',true);
+                    this.panelBrowser.addChannel(SeqChannel, true);
+
+
                     this.createChromosomesPFV3();
 
                     this.createChannelVisibilityControls();
