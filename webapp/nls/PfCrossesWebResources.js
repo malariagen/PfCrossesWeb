@@ -2,12 +2,13 @@ define({
 
   root: {
      variant_filters: "Variant Filters (check to exclude)",
-	 variantTypeOptionsContainer: "Variant type",
-	 genomeSearchOptionsContainer: "Genome region",
+	 variantTypeOptions: "Variant type",
+	 genomeSearchOptions: "Genome region",
 	 genomeSearchChromosome: 'Chromosome',
 	 genomeSearchStart: 'Start',
 	 genomeSearchEnd: 'Stop',
 	 genomeSearchClear: 'Clear',
+     genomeSearch: 'Search',
 	 filtersSetAll: 'apply all',
 	 filtersSetNone: 'apply none',
 	 variantCallSet: 'Variant call set',
