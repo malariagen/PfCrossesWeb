@@ -1,6 +1,6 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources.js"],
-    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, GenomeBrowserSNPChannel, CrossesMetaData, VariantFilters, resources) {
+define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("FrameTree"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelYVals"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), DQXSC("DataFetcher/DataFetcherSummary"), "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources.js"],
+    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, FrameTree, FrameList, GenomePlotter, ChannelYVals, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, DataFetcherSummary, GenomeBrowserSNPChannel, CrossesMetaData, VariantFilters, resources) {
 
         var GenomeBrowserModule = {
 
@@ -16,9 +16,9 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                 that.createFramework = function () {
 
                     this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
-                        .setMargins(0).setDisplayTitle('Settings').setMinSize(Framework.dimX, 430);
+                        .setMargins(0).setDisplayTitle('Visible channels').setMinSize(Framework.dimX, 430);
 
-                    this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('controls', 0.7))
+                    this.frameChannels = this.frameLeft.addMemberFrame(Framework.FrameFinal('channels', 0.7))
                         .setMargins(0).setFixedSize(Framework.dimX, 380);
 
                     this.frameFilters = this.frameLeft.addMemberFrame(Framework.FrameFinal('filters', 0.7))
@@ -28,6 +28,10 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         .setMargins(0).setDisplayTitle('Browser');
 
                     Msg.listen("", { type: 'JumpgenomeRegionGenomeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
+
+                    //Create the datafetcher that will obtain the summary profiles over the genome, such as coverage, mapping quality, etc.
+                    this.dataFetcherProfiles = new DataFetcherSummary.Fetcher(serverUrl, 1, 600);
+
 
                 };
 
@@ -48,9 +52,15 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
 
                     this.createChromosomesPFV3();
 
+                    this.createChannelVisibilityControls();
                     this.createControls();
                     this.createSNPChannels();
 
+                    //Initialise the summary profiles
+                    this.panelBrowser.addDataFetcher(this.dataFetcherProfiles);
+                    this.createSummaryChannels();
+
+                    this.treeChannels.render();
 
                     //Causes the browser to start with a start region
                     var firstChromosome = CrossesMetaData.chromosomes[0].id;
@@ -62,11 +72,12 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                 };
 
 
-                that.createControls = function () {
-                    this.panelControls = Framework.Form(this.frameControls);
-                    this.panelControls.render();
+                that.createChannelVisibilityControls = function () {
+                    this.treeChannels = FrameTree.Tree(this.frameChannels);
+                    this.branchChannelsProfiles = this.treeChannels.root;
+                }
 
-                    //this.panelControls.addControl(Controls.Check('CtrlMaghhghggnif', { label: 'Show magnifying glass' }));
+                that.createControls = function () {
 
                     this.formFilters = Framework.Form(this.frameFilters);
                     var pane = Controls.CompoundVert();
@@ -75,7 +86,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     pane.addControl(that.variant_filter_controls.grid);
                     this.formFilters.addControl(pane);
                     that.formFilters.render();
-                    that.myPage.variant_filters.on({change: true}, function () {
+                    that.myPage.variant_filters.on({ change: true }, function () {
                         $.each(that.callSetViewers, function (idx, callSetViewer) {
                             that.updateCallSetViewerQuery(callSetViewer);
                         });
@@ -109,6 +120,115 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         that.callSetViewers.push(callSetViewer);
                     });
                 };
+
+                //modifies the visibility status of a channel, prodived its id
+                that.channelModifyVisibility = function (id, status) {
+                    var channel = this.panelBrowser.findChannelRequired(id);
+                    for (var compid in channel.myComponents)
+                        channel.modifyComponentActiveStatus(compid, status);
+                    this.panelBrowser.channelModifyVisibility(id, status);
+                };
+
+                //Create the channels that provide summary information about the genome (coverage, %gc, etc...)
+                that.createSummaryChannels = function () {
+
+                    //A helper function that creates an individual summary channel
+                    function createSummaryChannel(info) {
+                        var ID = info.id;
+                        var mydatafetcher_loc = that.dataFetcherProfiles;
+                        var minval = 0;
+                        if ('minval' in info)
+                            minval = info.minval;
+                        var SummChannel = ChannelYVals.Channel(info.id, { minVal: minval, maxVal: info.maxval });
+                        SummChannel.setTitle(info.title);
+                        SummChannel.setHeight(120, true);
+                        that.panelBrowser.addChannel(SummChannel);
+                        if (('alertZoneMin' in info) || ('alertZoneMax' in info)) {//create alert zone
+                            SummChannel.addComponent(ChannelYVals.YColorZone(ID + "_alert", info.alertZoneMin, info.alertZoneMax, DQX.Color(1.0, 0.5, 0, 0.15)));
+                        }
+
+                        if (info.hasStdev) {
+                            var colinfo_min = mydatafetcher_loc.addFetchColumn(info.folder, info.config, ID + "Q05_min", DQX.Color(1, 0, 0));
+                            var colinfo_max = mydatafetcher_loc.addFetchColumn(info.folder, info.config, ID + "Q95_max", DQX.Color(1, 0, 0));
+                            SummChannel.addComponent(ChannelYVals.YRange(ID + "_minmax2", mydatafetcher_loc, colinfo_min.myID, colinfo_max.myID, DQX.Color(0.3, 0.3, 0.7, 0.25)));
+
+                            var colinfo_min = mydatafetcher_loc.addFetchColumn(info.folder, info.config, ID + "Q25_min", DQX.Color(1, 0, 0));
+                            var colinfo_max = mydatafetcher_loc.addFetchColumn(info.folder, info.config, ID + "Q75_max", DQX.Color(1, 0, 0));
+                            SummChannel.addComponent(ChannelYVals.YRange(ID + "_minmax", mydatafetcher_loc, colinfo_min.myID, colinfo_max.myID, DQX.Color(0.2, 0.2, 0.5, 0.4)));
+
+                            var IDCentral = ID + "Q50_avg";
+                        }
+                        else {
+                            var colinfo_min = mydatafetcher_loc.addFetchColumn(info.folder, info.config, ID + "_min", DQX.Color(1, 0, 0));
+                            var colinfo_max = mydatafetcher_loc.addFetchColumn(info.folder, info.config, ID + "_max", DQX.Color(1, 0, 0));
+                            SummChannel.addComponent(ChannelYVals.YRange(ID + "_minmax", mydatafetcher_loc, colinfo_min.myID, colinfo_max.myID, DQX.Color(0.3, 0.3, 0.7, 0.25)));
+
+                            var IDCentral = ID + "_avg";
+                        }
+
+                        var colinfo_avg = mydatafetcher_loc.addFetchColumn(info.folder, info.config, IDCentral);
+                        var comp = SummChannel.addComponent(ChannelYVals.Comp(ID + "_avg", mydatafetcher_loc, colinfo_avg.myID));
+                        comp.setColor(DQX.Color(0, 0, 0.5));
+                        comp.myPlotHints.makeDrawLines(3000000.0); //This causes the points to be connected with lines
+                        comp.myPlotHints.interruptLineAtAbsent = true;
+                        comp.myPlotHints.drawPoints = false;
+                        if (info.active) {
+                            if (info.hasStdev)
+                                SummChannel.modifyComponentActiveStatus(ID + "_minmax2", true, false);
+                            SummChannel.modifyComponentActiveStatus(ID + "_minmax", true, false);
+                            SummChannel.modifyComponentActiveStatus(ID + "_avg", true, false);
+                        }
+                        else
+                            that.panelBrowser.channelModifyVisibility(SummChannel.getID(), false);
+                        //Create the visibility control
+                        var chk = Controls.Check('ChannelControl' + info.id, { label: '<b>' + info.title + '</b>', value: info.active });
+                        that.branchChannelsProfiles.addItem(FrameTree.Control(Controls.CompoundHor([chk, Controls.Static('&nbsp;&nbsp;')])));
+                        chk.setOnChanged(function () {
+                            that.channelModifyVisibility(info.id, chk.getValue());
+                        });
+                        return SummChannel;
+                    }
+
+                    //Create the generic summary channels
+                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/GC300', id: 'GC300', title: '[@channelPercentGC]', hasStdev: false, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 15 });
+                    cha.setChangeYScale(true, true);
+                    /*                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Uniqueness', id: 'Uniqueness', title: '[@ChannelNonuniqueness]', hasStdev: false, maxval: 75, active: true, alertZoneMin: 26, alertZoneMax: 199 });
+                    cha.setChangeYScale(false, true);*/
+
+                    /*                    createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/MapQuality2', id: 'MapQuality', title: '[@channelMapQuality]', hasStdev: true, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 40 });
+                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Coverage2', id: 'Coverage', title: '[@channelCoverage]', hasStdev: true, maxval: 3, active: true });
+                    cha.setChangeYScale(false, true);*/
+
+                    /*
+                    //Create the repeats channel
+                    var repeatConfig = {
+                    database: MetaData1.database,
+                    serverURL: serverUrl,
+                    annotTableName: 'tandemrepeats',
+                    chromnrfield: 'chrom'
+                    };
+                    var DataFetcherAnnotation = require(DQXSC("DataFetcher/DataFetcherAnnotation"));
+                    var ChannelAnnotation = require(DQXSC("ChannelPlot/ChannelAnnotation"));
+                    var repeatFetcher = new DataFetcherAnnotation.Fetcher(repeatConfig);
+                    repeatFetcher.ftype = 'repeat';
+                    repeatFetcher.fetchSubFeatures = false;
+                    //repeatFetcher.translateChromoId = translateChromoId;
+                    that.panelBrowser.addDataFetcher(repeatFetcher);
+                    repeatChannel = ChannelAnnotation.Channel("Repeats", repeatFetcher);
+                    repeatChannel.setHeight(120);
+                    repeatChannel.setTitle('[@channelRepeatRegions]');
+                    that.panelBrowser.addChannel(repeatChannel, false);
+
+                    that.addChannelToTree(repeatChannel, '[@channelRepeatRegions]', false, 'Doc/GenomeBrowser/Channels/Repeats.htm');
+                    repeatChannel.handleFeatureClicked = function (id) {
+                    DQX.setProcessing("Downloading...");
+                    repeatFetcher.fetchFullAnnotInfo(id,
+                    that._callBackPointInfoFetched_Repeat,
+                    DQX.createFailFunction("Failed to download data")
+                    );
+                    }
+                    */
+                }
 
 
                 that.updateCallSetViewerQuery = function (callSetViewer) {
