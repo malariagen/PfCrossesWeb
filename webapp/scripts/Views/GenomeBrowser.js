@@ -50,7 +50,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     this.panelBrowser.MaxZoomFactX = 1.0 / 0.2;
                     this.panelBrowser.getNavigator().setMinScrollSize(0.0001);
 
-                    SeqChannel = ChannelSequence.Channel(serverUrl, 'Tracks-Cross/Sequence', 'Summ01',true);
+                    SeqChannel = ChannelSequence.Channel(serverUrl, 'Tracks-Cross/Sequence', 'Summ01', true);
                     this.panelBrowser.addChannel(SeqChannel, true);
 
 
@@ -164,7 +164,8 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
 
                     //A helper function that creates an individual summary channel
                     function createSummaryChannel(info) {
-                        var ID = info.id;
+                        if (!info.idData) info.idData = info.id;
+                        var ID = info.idData;
                         var mydatafetcher_loc = that.dataFetcherProfiles;
                         var minval = 0;
                         if ('minval' in info)
@@ -225,9 +226,16 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Uniqueness', id: 'Uniqueness', title: '[@ChannelNonuniqueness]', hasStdev: false, maxval: 75, active: true, alertZoneMin: 26, alertZoneMax: 199 });
                     cha.setChangeYScale(false, true);
 
-                    /*                    createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/MapQuality2', id: 'MapQuality', title: '[@channelMapQuality]', hasStdev: true, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 40 });
-                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Coverage2', id: 'Coverage', title: '[@channelCoverage]', hasStdev: true, maxval: 3, active: true });
-                    cha.setChangeYScale(false, true);*/
+                    if (true) {
+                        $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
+                            var sampleSet = sampleSetObj.id;
+                            if (sampleSet) {
+                                createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/MapQuality/' + sampleSet, idData: 'MapQuality', id: 'MQ' + sampleSet, title: 'MapQuality ' + sampleSet, hasStdev: true, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 40 });
+                                var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Coverage/' + sampleSet, idData: 'Coverage', id: 'CV' + sampleSet, title: 'Coverage ' + sampleSet, hasStdev: true, maxval: 3, active: true });
+                                cha.setChangeYScale(false, true);
+                            }
+                        });
+                    }
 
                     //Create the repeats channel
                     var repeatConfig = {
@@ -251,7 +259,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     that.addChannelToTree(repeatChannel, '[@channelRepeatRegions]', false, 'Doc/GenomeBrowser/Channels/Repeats.htm');
                     repeatChannel.handleFeatureClicked = function (id) {
                         DQX.setProcessing("Downloading...");
-                        repeatFetcher.fetchFullAnnotInfo(id,that._callBackPointInfoFetched_Repeat,DQX.createFailFunction("Failed to download data"));
+                        repeatFetcher.fetchFullAnnotInfo(id, that._callBackPointInfoFetched_Repeat, DQX.createFailFunction("Failed to download data"));
                     }
                 }
 
