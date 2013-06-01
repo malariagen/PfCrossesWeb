@@ -1,0 +1,44 @@
+{
+
+"SourceFilePattern":"MapQuality_Summ01.cnf.*\\.txt",
+"SourceFileType":"TabDelimitedFile",
+
+"BlockSizeStart":1,
+"BlockSizeIncrFactor":2,
+"BlockSizeMax":20000,
+
+"Properties": [
+
+	{ "ID":"MapQualityCount","Type":"Float"},
+	{ "ID":"MapQualityQ50","Type":"Float"},
+	{ "ID":"MapQualityQ25","Type":"Float"},
+	{ "ID":"MapQualityQ75","Type":"Float"},
+	{ "ID":"MapQualityQ05","Type":"Float"},
+	{ "ID":"MapQualityQ95","Type":"Float"}
+	
+],
+
+"Summarisers": [
+
+{ "PropID":"MapQualityQ50","IDExt":"avg","Method":"Average",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":100}
+},
+{ "PropID":"MapQualityQ75","IDExt":"max","Method":"Max",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":100}
+},
+{ "PropID":"MapQualityQ25","IDExt":"min","Method":"Min",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":100}
+},
+
+{ "PropID":"MapQualityQ95","IDExt":"max","Method":"Max",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":100}
+},
+{ "PropID":"MapQualityQ05","IDExt":"min","Method":"Min",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":100}
+}
+
+
+
+]
+
+}
