@@ -50,7 +50,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     this.panelBrowser.MaxZoomFactX = 1.0 / 0.2;
                     this.panelBrowser.getNavigator().setMinScrollSize(0.0001);
 
-                    SeqChannel = ChannelSequence.Channel(serverUrl, 'Tracks-Cross/Sequence', 'Summ01',true);
+                    SeqChannel = ChannelSequence.Channel(serverUrl, 'Tracks-Cross/Sequence', 'Summ01', true);
                     this.panelBrowser.addChannel(SeqChannel, true);
 
 
@@ -164,7 +164,8 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
 
                     //A helper function that creates an individual summary channel
                     function createSummaryChannel(info) {
-                        var ID = info.id;
+                        if (!info.idData) info.idData = info.id;
+                        var ID = info.idData;
                         var mydatafetcher_loc = that.dataFetcherProfiles;
                         var minval = 0;
                         if ('minval' in info)
@@ -225,9 +226,66 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Uniqueness', id: 'Uniqueness', title: '[@ChannelNonuniqueness]', hasStdev: false, maxval: 75, active: true, alertZoneMin: 26, alertZoneMax: 199 });
                     cha.setChangeYScale(false, true);
 
-                    /*                    createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/MapQuality2', id: 'MapQuality', title: '[@channelMapQuality]', hasStdev: true, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 40 });
-                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Coverage2', id: 'Coverage', title: '[@channelCoverage]', hasStdev: true, maxval: 3, active: true });
-                    cha.setChangeYScale(false, true);*/
+                    if (true) {
+                        $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
+                            var sampleSet = sampleSetObj.id;
+                            if (sampleSet) {
+                                createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/MapQuality/' + sampleSet, idData: 'MapQuality', id: 'MQ' + sampleSet, title: 'MapQuality ' + sampleSet, hasStdev: true, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 40 });
+                            }
+                        });
+                        $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
+                            var sampleSet = sampleSetObj.id;
+                            if (sampleSet) {
+                                var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Coverage/' + sampleSet, idData: 'Coverage', id: 'CV' + sampleSet, title: 'Coverage ' + sampleSet, hasStdev: true, maxval: 3, active: true });
+                                cha.setChangeYScale(false, true);
+                            }
+                        });
+                    }
+                    else {
+                        var channelList = [{ ID: 'Coverage', maxVal: 3 }, { ID: 'MapQuality', maxVal: 60}];
+                        $.each(channelList, function (idxChannel, channelInfo) {
+                            var ID = channelInfo.ID;
+                            var SummChannel = ChannelYVals.Channel(ID, { minVal: 0, maxVal: channelInfo.maxVal });
+                            SummChannel.setTitle(ID);
+                            SummChannel.setHeight(180, true);
+                            that.panelBrowser.addChannel(SummChannel);
+                            SummChannel.setChangeYScale(false, true);
+                            for (var compNr = 0; compNr <= 2; compNr++) {
+                                $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
+                                    var sampleSet = sampleSetObj.id;
+                                    if (sampleSet) {
+                                        var folder = 'Tracks-Cross/' + ID + '/' + sampleSet;
+                                        var color = sampleSetObj.color;
+
+                                        if (compNr == 0) {
+                                            var colinfo_min = that.dataFetcherProfiles.addFetchColumn(folder, 'Summ01', ID + "Q05_min", DQX.Color(1, 0, 0));
+                                            var colinfo_max = that.dataFetcherProfiles.addFetchColumn(folder, 'Summ01', ID + "Q95_max", DQX.Color(1, 0, 0));
+                                            SummChannel.addComponent(ChannelYVals.YRange(ID + sampleSet + "_minmax2", that.dataFetcherProfiles, colinfo_min.myID, colinfo_max.myID, color.changeOpacity(0.2)));
+                                        }
+
+                                        if (compNr == 1) {
+                                            //var colinfo_min = that.dataFetcherProfiles.addFetchColumn(folder, 'Summ01', ID + "Q25_min", DQX.Color(1, 0, 0));
+                                            //var colinfo_max = that.dataFetcherProfiles.addFetchColumn(folder, 'Summ01', ID + "Q75_max", DQX.Color(1, 0, 0));
+                                            //SummChannel.addComponent(ChannelYVals.YRange(ID + sampleSet + "_minmax", that.dataFetcherProfiles, colinfo_min.myID, colinfo_max.myID, color.changeOpacity(0.2)));
+                                        }
+
+                                        if (compNr == 2) {
+                                            var colinfo_avg = that.dataFetcherProfiles.addFetchColumn(folder, 'Summ01', ID + "Q50_avg");
+                                            var comp = SummChannel.addComponent(ChannelYVals.Comp(ID + sampleSet + "_avg", that.dataFetcherProfiles, colinfo_avg.myID));
+                                            comp.setColor(color);
+                                            comp.myPlotHints.makeDrawLines(3000000.0); //This causes the points to be connected with lines
+                                            comp.myPlotHints.interruptLineAtAbsent = true;
+                                            comp.myPlotHints.drawPoints = false;
+                                            SummChannel.modifyComponentActiveStatus(ID + sampleSet + "_avg", true, false);
+                                            SummChannel.modifyComponentActiveStatus(ID + sampleSet + "_minmax2", true, false);
+                                            //SummChannel.modifyComponentActiveStatus(ID + sampleSet + "_minmax", true, false);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+
 
                     //Create the repeats channel
                     var repeatConfig = {
@@ -251,7 +309,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     that.addChannelToTree(repeatChannel, '[@channelRepeatRegions]', false, 'Doc/GenomeBrowser/Channels/Repeats.htm');
                     repeatChannel.handleFeatureClicked = function (id) {
                         DQX.setProcessing("Downloading...");
-                        repeatFetcher.fetchFullAnnotInfo(id,that._callBackPointInfoFetched_Repeat,DQX.createFailFunction("Failed to download data"));
+                        repeatFetcher.fetchFullAnnotInfo(id, that._callBackPointInfoFetched_Repeat, DQX.createFailFunction("Failed to download data"));
                     }
                 }
 

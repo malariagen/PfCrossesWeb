@@ -1,0 +1,44 @@
+{
+
+"SourceFilePattern":"Pf3D7_.*\\.txt",
+"SourceFileType":"TabDelimitedFile",
+
+"BlockSizeStart":1,
+"BlockSizeIncrFactor":2,
+"BlockSizeMax":20000,
+
+"Properties": [
+
+	{ "ID":"CoverageCount","Type":"Float"},
+	{ "ID":"CoverageQ50","Type":"Float"},
+	{ "ID":"CoverageQ25","Type":"Float"},
+	{ "ID":"CoverageQ75","Type":"Float"},
+	{ "ID":"CoverageQ05","Type":"Float"},
+	{ "ID":"CoverageQ95","Type":"Float"}
+	
+],
+
+"Summarisers": [
+
+{ "PropID":"CoverageQ50","IDExt":"avg","Method":"Average",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":15}
+},
+{ "PropID":"CoverageQ75","IDExt":"max","Method":"Max",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":15}
+},
+{ "PropID":"CoverageQ25","IDExt":"min","Method":"Min",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":15}
+},
+
+{ "PropID":"CoverageQ95","IDExt":"max","Method":"Max",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":15}
+},
+{ "PropID":"CoverageQ05","IDExt":"min","Method":"Min",
+	"Encoder":{"ID":"Float2B64", "Len":2, "Min":0, "Max":15}
+}
+
+
+
+]
+
+}

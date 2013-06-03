@@ -9,9 +9,10 @@ define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
         CrossesMetaData.callMethods = ['gatk', 'cortex'];
 
         CrossesMetaData.sampleSets = [{ id: '', name: '' },
-                                      { id: '3d7_hb3', name: resources.x3d7_hb3 },
-                                      { id: 'hb3_dd2', name: resources.xhb3_dd2 },
-                                      { id: '7g8_gb4', name: resources.x7g8_gb4}];
+                                      { id: '3d7_hb3', name: resources.x3d7_hb3, color:DQX.Color(0.7,  0.3,0.0) },
+                                      { id: 'hb3_dd2', name: resources.xhb3_dd2, color: DQX.Color(0.0, 0.6, 0.3) },
+                                      { id: '7g8_gb4', name: resources.x7g8_gb4, color: DQX.Color(0.6, 0.2, 0.6) }
+                                      ];
         CrossesMetaData.variants = [
                                     { id: '', name: '' },
 
