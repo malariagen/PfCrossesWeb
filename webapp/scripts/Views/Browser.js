@@ -74,10 +74,10 @@ DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "Page", 
                     this.SnpChannel.setAutoFillHeight();
                     this.panelBrowser.addChannel(this.SnpChannel, true);
 
-                    if (this.refVersion == 2)
-                        this.createChromosomesPFV2();
-                    if (this.refVersion == 3)
-                        this.createChromosomesPFV3();
+                    //Define the chromosomes
+                    $.each(CrossesMetaData.chromosomes, function (idx, chromo) {
+                        that.panelBrowser.addChromosome(chromo.id, chromo.id, chromo.len + 0.01);
+                    });
 
 
                     //Set some default properties
@@ -253,27 +253,6 @@ DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "Page", 
                     this.panelControls.render();
                 }
 
-
-                that.createChromosomesPFV2 = function () {
-                    //Define chromosomes for version 3 of the reference genome
-                    var chromoids = ['Pf3D7_01', 'Pf3D7_02', 'Pf3D7_03', 'Pf3D7_04', 'Pf3D7_05', 'Pf3D7_06', 'Pf3D7_07', 'Pf3D7_08', 'Pf3D7_09', 'Pf3D7_10', 'Pf3D7_11', 'Pf3D7_12', 'Pf3D7_13', 'Pf3D7_14'];
-                    var chromosizes = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4];
-                    for (var chromnr = 0; chromnr < chromoids.length; chromnr++) {
-                        this.panelBrowser.addChromosome(chromoids[chromnr], chromoids[chromnr], chromosizes[chromnr]);
-                    }
-                    //Startup the browser with a start region
-                    this.panelBrowser.showRegion("Pf3D7_01", 0, 100000);
-                }
-
-                that.createChromosomesPFV3 = function () {
-                    //Define chromosomes for version 3 of the reference genome
-                    var chromoids = ['Pf3D7_01', 'Pf3D7_02', 'Pf3D7_03', 'Pf3D7_04', 'Pf3D7_05', 'Pf3D7_06', 'Pf3D7_07', 'Pf3D7_08', 'Pf3D7_09', 'Pf3D7_10', 'Pf3D7_11', 'Pf3D7_12', 'Pf3D7_13', 'Pf3D7_14'];
-                    var chromosizes = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4];
-                    for (var chromnr = 0; chromnr < chromoids.length; chromnr++) {
-                        chromoids[chromnr] += '_v3';
-                        this.panelBrowser.addChromosome(chromoids[chromnr], chromoids[chromnr], chromosizes[chromnr]);
-                    }
-                }
 
 
                 //Call this function to jump to & highlight a specific region on the genome
