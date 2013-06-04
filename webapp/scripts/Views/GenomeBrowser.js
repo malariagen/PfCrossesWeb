@@ -1,5 +1,5 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("Popup"), DQXSC("FrameTree"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelYVals"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), DQXSC("DataFetcher/DataFetcherSummary"), "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources.js"],
+define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Utils", "DQX/Popup", "DQX/FrameTree", "DQX/FrameList", "DQX/ChannelPlot/GenomePlotter", "DQX/ChannelPlot/ChannelYVals", "DQX/ChannelPlot/ChannelSequence", "DQX/ChannelPlot/ChannelSnps", "DQX/DataFetcher/DataFetcherFile", "DQX/DataFetcher/DataFetchers", "DQX/DataFetcher/DataFetcherSummary", "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources"],
     function (require, Framework, Controls, Msg, SQL, DocEl, DQX, Popup, FrameTree, FrameList, GenomePlotter, ChannelYVals, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, DataFetcherSummary, GenomeBrowserSNPChannel, CrossesMetaData, VariantFilters, resources) {
 
         var GenomeBrowserModule = {
@@ -294,8 +294,8 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         annotTableName: 'tandemrepeats',
                         chromnrfield: 'chrom'
                     };
-                    var DataFetcherAnnotation = require(DQXSC("DataFetcher/DataFetcherAnnotation"));
-                    var ChannelAnnotation = require(DQXSC("ChannelPlot/ChannelAnnotation"));
+                    var DataFetcherAnnotation = require("DQX/DataFetcher/DataFetcherAnnotation");
+                    var ChannelAnnotation = require("DQX/ChannelPlot/ChannelAnnotation");
                     var repeatFetcher = new DataFetcherAnnotation.Fetcher(repeatConfig);
                     repeatFetcher.ftype = 'repeat';
                     repeatFetcher.fetchSubFeatures = false;

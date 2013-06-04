@@ -1,4 +1,4 @@
-define([DQXSC("Utils"), "i18n!nls/PfCrossesWebResources.js"],
+define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
     function (DQX, resources) {
         var CrossesMetaData = {};
 

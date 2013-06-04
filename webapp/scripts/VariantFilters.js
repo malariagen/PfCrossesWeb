@@ -1,4 +1,4 @@
-define([DQXSCJQ(), DQXSC('Controls'), DQXSC('Utils'), "i18n!nls/PfCrossesWebResources.js"],
+define(["jquery", "DQX/Controls", "DQX/Utils", "i18n!nls/PfCrossesWebResources"],
     function ($, Controls, Utils, resources) {
         var VariantFilters = function(filters, model) {
             var that = {};
@@ -48,4 +48,3 @@ define([DQXSCJQ(), DQXSC('Controls'), DQXSC('Utils'), "i18n!nls/PfCrossesWebReso
         return VariantFilters;
     }
 );
-

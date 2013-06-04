@@ -1,4 +1,4 @@
-﻿define([DQXSCRQ(), DQXSC("SVG"), DQXSC("Framework"), DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("QueryBuilder"), DQXSC("SQL"), DQXSC("Msg"), DQXSC("DocEl"), "Page", DQXSC("Controls"), DQXSC("Popup"), "CrossesMetaData", "i18n!nls/PfCrossesWebResources.js"],
+﻿define(["require", "DQX/SVG", "DQX/Framework", "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/QueryBuilder", "DQX/SQL", "DQX/Msg", "DQX/DocEl", "Page", "DQX/Controls", "DQX/Popup", "CrossesMetaData", "i18n!nls/PfCrossesWebResources"],
     function (require, SVG, Framework, DataFetcher, QueryTable, QueryBuilder, SQL, Msg, DocEl, thePage, Controls, Popup, CrossesMetaData, resources) {
 
         var SamplesModule = {

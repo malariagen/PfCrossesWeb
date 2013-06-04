@@ -1,6 +1,6 @@
-﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("SQL"), DQXSC("Msg"), DQXSC("Controls"), DQXSC("Model"),
+﻿define(["require", "DQX/Framework", "DQX/SQL", "DQX/Msg", "DQX/Controls", "DQX/Model",
     "CrossesMetaData", "TableCortex", "TableGATK", "VariantFilters",
-    "i18n!nls/PfCrossesWebResources.js"],
+    "i18n!nls/PfCrossesWebResources"],
     function (require, Framework, SQL, Msg, Controls, Model,
               CrossesMetaData, TableCortex, TableGATK, VariantFilters,
               resources) {

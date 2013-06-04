@@ -1,4 +1,4 @@
-﻿define([DQXSC("Framework"), DQXSC("Model"), DQXSC("HistoryManager"), DQXSC("DocEl"), DQXSC("Msg"), "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "Views/LookSeq", "Views/Downloads", "i18n!nls/PfCrossesWebResources.js", "CrossesMetaData"],
+﻿define(["DQX/Framework", "DQX/Model", "DQX/HistoryManager", "DQX/DocEl", "DQX/Msg", "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "Views/LookSeq", "Views/Downloads", "i18n!nls/PfCrossesWebResources", "CrossesMetaData"],
     function (Framework, Model, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule, LookSeqModule, DownloadsModule, resources, CrossesMetaData) {
         thePage = {
 

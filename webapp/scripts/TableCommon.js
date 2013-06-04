@@ -1,4 +1,4 @@
-define([  DQXSC("DataFetcher/DataFetchers"), DQXSC("QueryTable"), DQXSC("Controls"), DQXSC("Popup"), DQXSC("SQL"), DQXSC("Msg"),"CrossesMetaData" ], 
+define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX/Popup", "DQX/SQL", "DQX/Msg","CrossesMetaData" ],
 		function(DataFetcher, QueryTable, Controls, Popup, SQL, Msg, CrossesMetaData) {
 	function TableCommon() {};
 	

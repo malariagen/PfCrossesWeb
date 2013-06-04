@@ -1,7 +1,7 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("PopupFrame"), DQXSC("Msg"), DQXSC("DocEl"),
-DQXSC("Utils"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelSequence"),
-DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "Page", "CrossesMetaData", "VariantFilters"],
+define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg", "DQX/DocEl",
+"DQX/Utils", "DQX/FrameList", "DQX/ChannelPlot/GenomePlotter", "DQX/ChannelPlot/ChannelSequence",
+"DQX/ChannelPlot/ChannelSnps", "DQX/DataFetcher/DataFetcherFile", "Page", "CrossesMetaData", "VariantFilters"],
     function (require, Framework, Controls, PopupFrame, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence,
               ChannelSnps, DataFetcherFile, Page, CrossesMetaData, VariantFilters) {
 
