@@ -226,7 +226,35 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Uniqueness', id: 'Uniqueness', title: '[@ChannelNonuniqueness]', hasStdev: false, maxval: 75, active: true, alertZoneMin: 26, alertZoneMax: 199 });
                     cha.setChangeYScale(false, true);
 
-                    if (true) {
+
+                    //Create the repeats channel
+                    var repeatConfig = {
+                        database: CrossesMetaData.database,
+                        serverURL: serverUrl,
+                        annotTableName: 'tandemrepeats',
+                        chromnrfield: 'chrom'
+                    };
+                    var DataFetcherAnnotation = require("DQX/DataFetcher/DataFetcherAnnotation");
+                    var ChannelAnnotation = require("DQX/ChannelPlot/ChannelAnnotation");
+                    var repeatFetcher = new DataFetcherAnnotation.Fetcher(repeatConfig);
+                    repeatFetcher.ftype = 'repeat';
+                    repeatFetcher.fetchSubFeatures = false;
+                    //repeatFetcher.translateChromoId = translateChromoId;
+                    that.panelBrowser.addDataFetcher(repeatFetcher);
+                    repeatChannel = ChannelAnnotation.Channel("Repeats", repeatFetcher);
+                    repeatChannel.setHeight(120);
+                    repeatChannel.setTitle('[@channelRepeatRegions]');
+                    that.panelBrowser.addChannel(repeatChannel, false);
+
+                    that.addChannelToTree(repeatChannel, '[@channelRepeatRegions]', true, 'Doc/GenomeBrowser/Channels/Repeats.htm');
+                    repeatChannel.handleFeatureClicked = function (id) {
+                        DQX.setProcessing("Downloading...");
+                        repeatFetcher.fetchFullAnnotInfo(id, that._callBackPointInfoFetched_Repeat, DQX.createFailFunction("Failed to download data"));
+                    }
+
+                    
+                    //Show coverage & mapping quality tracks
+                    if (true) {//alternative 1: channel per cross
                         $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
                             var sampleSet = sampleSetObj.id;
                             if (sampleSet) {
@@ -241,7 +269,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                             }
                         });
                     }
-                    else {
+                    else {//alternative 2: multi-color in single channel
                         var channelList = [{ ID: 'Coverage', maxVal: 3 }, { ID: 'MapQuality', maxVal: 60}];
                         $.each(channelList, function (idxChannel, channelInfo) {
                             var ID = channelInfo.ID;
@@ -287,30 +315,6 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     }
 
 
-                    //Create the repeats channel
-                    var repeatConfig = {
-                        database: CrossesMetaData.database,
-                        serverURL: serverUrl,
-                        annotTableName: 'tandemrepeats',
-                        chromnrfield: 'chrom'
-                    };
-                    var DataFetcherAnnotation = require("DQX/DataFetcher/DataFetcherAnnotation");
-                    var ChannelAnnotation = require("DQX/ChannelPlot/ChannelAnnotation");
-                    var repeatFetcher = new DataFetcherAnnotation.Fetcher(repeatConfig);
-                    repeatFetcher.ftype = 'repeat';
-                    repeatFetcher.fetchSubFeatures = false;
-                    //repeatFetcher.translateChromoId = translateChromoId;
-                    that.panelBrowser.addDataFetcher(repeatFetcher);
-                    repeatChannel = ChannelAnnotation.Channel("Repeats", repeatFetcher);
-                    repeatChannel.setHeight(120);
-                    repeatChannel.setTitle('[@channelRepeatRegions]');
-                    that.panelBrowser.addChannel(repeatChannel, false);
-
-                    that.addChannelToTree(repeatChannel, '[@channelRepeatRegions]', false, 'Doc/GenomeBrowser/Channels/Repeats.htm');
-                    repeatChannel.handleFeatureClicked = function (id) {
-                        DQX.setProcessing("Downloading...");
-                        repeatFetcher.fetchFullAnnotInfo(id, that._callBackPointInfoFetched_Repeat, DQX.createFailFunction("Failed to download data"));
-                    }
                 }
 
 
