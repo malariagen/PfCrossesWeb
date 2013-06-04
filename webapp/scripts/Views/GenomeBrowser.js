@@ -332,7 +332,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                 that.createChromosomesPFV3 = function () {
                     $.each(CrossesMetaData.chromosomes, function (idx, chromo) {
-                        that.panelBrowser.addChromosome(chromo.id, chromo.id, chromo.len);
+                        that.panelBrowser.addChromosome(chromo.id, chromo.id, chromo.len+0.01);
                     });
                 }
 

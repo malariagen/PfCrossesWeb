@@ -139,20 +139,20 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
 
         //////// Information about the chromosomes
         CrossesMetaData.chromosomes = [
-            { id: 'Pf3D7_01_v3', len: 0.7 },
-            { id: 'Pf3D7_02_v3', len: 1 },
-            { id: 'Pf3D7_03_v3', len: 1 },
-            { id: 'Pf3D7_04_v3', len: 2 },
-            { id: 'Pf3D7_05_v3', len: 2 },
-            { id: 'Pf3D7_06_v3', len: 2 },
-            { id: 'Pf3D7_07_v3', len: 2 },
-            { id: 'Pf3D7_08_v3', len: 2 },
-            { id: 'Pf3D7_09_v3', len: 2 },
-            { id: 'Pf3D7_10_v3', len: 2 },
-            { id: 'Pf3D7_11_v3', len: 4 },
-            { id: 'Pf3D7_12_v3', len: 4 },
-            { id: 'Pf3D7_13_v3', len: 4 },
-            { id: 'Pf3D7_14_v3', len: 4 }
+            { id: 'Pf3D7_01_v3', len: 0.640851 },
+            { id: 'Pf3D7_02_v3', len: 0.947102 },
+            { id: 'Pf3D7_03_v3', len: 1.067971 },
+            { id: 'Pf3D7_04_v3', len: 1.200490 },
+            { id: 'Pf3D7_05_v3', len: 1.343557 },
+            { id: 'Pf3D7_06_v3', len: 1.418242 },
+            { id: 'Pf3D7_07_v3', len: 1.445207 },
+            { id: 'Pf3D7_08_v3', len: 1.472805 },
+            { id: 'Pf3D7_09_v3', len: 1.541735 },
+            { id: 'Pf3D7_10_v3', len: 1.687656 },
+            { id: 'Pf3D7_11_v3', len: 2.038340 },
+            { id: 'Pf3D7_12_v3', len: 2.271494 },
+            { id: 'Pf3D7_13_v3', len: 2.925236 },
+            { id: 'Pf3D7_14_v3', len: 3.291936 }
         ];
         $.each(CrossesMetaData.chromosomes, function (idx, chr) { chr.name = chr.id; });
 
