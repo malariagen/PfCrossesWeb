@@ -1,5 +1,7 @@
-﻿define(["require", "DQX/Framework", "DQX/HistoryManager", "DQX/Controls", "DQX/Msg", "DQX/DocEl", "DQX/Utils", "i18n!nls/PfCrossesWebResources"],
-    function (require, Framework, HistoryManager, Controls, Msg, DocEl, DQX, resources) {
+﻿define(["require", "DQX/Framework", "DQX/HistoryManager", "DQX/Controls", "DQX/Msg", "DQX/DocEl",
+    "DQX/Utils", "Wizards/WizardFindGene", "Common", "i18n!nls/PfCrossesWebResources"],
+    function (require, Framework, HistoryManager, Controls, Msg, DocEl,
+              DQX, WizardFindGene, Common, resources) {
 
         var IntroModule = {
 
@@ -27,10 +29,6 @@
 
                 that.createFramework = function () {
                     HistoryManager.setCallBackChangeState(function (stateKeys) {
-                        if ('start' in stateKeys)
-                            disableHomeButton();
-                        else
-                            enableHomeButton();
                     });
                 };
 
@@ -46,22 +44,19 @@
                     navSectionDiv.addStyle("position", "absolute");
                     navSectionDiv.addStyle("right", "0px");
                     navSectionDiv.addStyle("top", "0px");
-                    this.createNavigationButton("HeaderHome", navSectionDiv, 'Bitmaps/Icons/Small/Home.png', resources.navButtonIntro, "DQXToolButton3", 100, function () { Msg.send({ type: 'Home' }) });
-                    this.createNavigationButton("HeaderFindGene", navSectionDiv, 'Bitmaps/Icons/Small/MagGlassG.png', resources.navButtonFindGene, "DQXToolButton1", 100, function () {});//executeWizardFindGene);
-
+                    this.createNavigationButton("HeaderHome", navSectionDiv, 'Bitmaps/Icons/Small/Home.png',
+                        resources.navButtonIntro, "DQXToolButton3", 100,
+                        function () { Msg.send({ type: 'Home' }) });
+                    this.createNavigationButton("HeaderFindGene", navSectionDiv, 'Bitmaps/Icons/Small/MagGlassG.png',
+                        resources.navButtonFindGene, "DQXToolButton1", 100,
+                        function () {
+                            console.log('c')
+                            WizardFindGene.execute(function () {
+                                Common.showGenePopup(WizardFindGene.resultGeneID);
+                            })
+                        });
                     $('#' + this.myHeaderFrame.getClientDivID()).append(navSectionDiv.toString());
-                    $('#HeaderHome').mousedown(function () { Msg.send({ type: 'Home' }) });
-                   
-                    disableHomeButton();
                 };
-
-                disableHomeButton = function () {
-                    $('#HeaderHome').css('opacity', 0.3);
-                }
-                enableHomeButton = function () {
-                    $('#HeaderHome').css('opacity', 1.0);
-                }
-
 
                 that.createButton = function (id, parentDiv, bitmap, content, style, handlerFunction) {
                     if (true) {
@@ -167,7 +162,6 @@
                 };
 
                 that.activateState = function () {
-                    disableHomeButton();
                     var tabswitched = this.myFrame.makeVisible();
                     //that.panelBrowser.handleResize(); //force immediate calculation of size
                 };
