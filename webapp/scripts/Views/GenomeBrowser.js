@@ -274,7 +274,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                                     folder: 'Tracks-Cross/MapQuality/' + sampleSet,
                                     idData: 'MapQuality',
                                     id: 'MQ' + sampleSet,
-                                    title: 'MapQuality ' + sampleSetObj.name,
+                                    title: 'Mapping quality ' + sampleSetObj.name,
                                     hasStdev: true,
                                     maxval: 60,
                                     active: true,
