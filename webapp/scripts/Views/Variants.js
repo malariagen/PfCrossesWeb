@@ -151,11 +151,18 @@
                     this.region_ctrls.addControl(
                         Controls.Edit('SearchRegionEnd', { label: resources.genomeSearchEnd, size: 10 }))
                         .bindToModel(this.region_search, 'stop');
-                    this.region_ctrls.addControl(
+                    var buttons = this.region_ctrls.addControl(Controls.CompoundHor());
+                    buttons.addControl(
                         Controls.Button('Search', { content: resources.genomeSearch, width: 50 }))
                             .setOnChanged(function (id) {
                                 that.changeFunction();
                             });
+                    buttons.addControl(
+                        Controls.Button('Clear', { content: resources.genomeSearchClear, width: 50 }))
+                            .setOnChanged(function (id) {
+                                that.region_search.set({'start': '', 'stop':''});
+                        });
+
 
                     //Variant type controls
                     this.type_search = Model({snp: true, indel: true});
