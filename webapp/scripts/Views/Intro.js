@@ -138,6 +138,7 @@
                             id: 'IntroLookSeq',
                             name: buttonFormatter.DQXformat({title:resources.lookseqPageHeader, description:resources.lookseqButton }),
                             location: buttondiv2,
+                            bitmap: 'Bitmaps/Icons/Medium/Assembly.png',
                             handler: function () {
                                 DQX.executeProcessing(function () {
                                     that.myPage.frameLookSeq.makeVisible();
