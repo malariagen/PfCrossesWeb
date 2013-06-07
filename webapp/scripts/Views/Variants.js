@@ -161,6 +161,7 @@
                         Controls.Button('Clear', { content: resources.genomeSearchClear, width: 50 }))
                             .setOnChanged(function (id) {
                                 that.region_search.set({'start': '', 'stop':''});
+                                that.changeFunction();
                         });
 
 
