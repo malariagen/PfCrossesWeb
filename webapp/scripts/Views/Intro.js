@@ -50,7 +50,6 @@
                     this.createNavigationButton("HeaderFindGene", navSectionDiv, 'Bitmaps/Icons/Small/MagGlassG.png',
                         resources.navButtonFindGene, "DQXToolButton1", 100,
                         function () {
-                            console.log('c')
                             WizardFindGene.execute(function () {
                                 Common.showGenePopup(WizardFindGene.resultGeneID);
                             })
