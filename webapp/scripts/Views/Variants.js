@@ -162,7 +162,7 @@
                     this.type_ctrls = theForm.addControl(Controls.CompoundHor())
                         .setLegend(resources.variantTypeOptions);
                     this.type_ctrls.addControl(
-                        Controls.Check('SearchSNP', {label: 'Snp', value: true, hint: 'Show all SNPs'}))
+                        Controls.Check('SearchSNP', {label: 'SNP', value: true, hint: 'Show all SNPs'}))
                         .bindToModel(this.type_search, 'snp');
                     this.type_ctrls.addControl(
                         Controls.Check('SearchInDel', {label: 'InDel', value: true, hint: 'Show all InDels'}))
