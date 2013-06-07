@@ -30,7 +30,7 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/Utils", "DQX/DocEl",
                         return;
                     }
                     var pattern = keylist['pattern'];
-                    var vallistdecoder = require(DQXSC("DataDecoders")).ValueListDecoder();
+                    var vallistdecoder = require("DQX/DataDecoders").ValueListDecoder();
                     var genelist = vallistdecoder.doDecode(keylist['Hits']);
                     var chromidlist = vallistdecoder.doDecode(keylist['Chroms']);
                     var startlist = vallistdecoder.doDecode(keylist['Starts']);

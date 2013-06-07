@@ -48,7 +48,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     var browserConfig = {
                         serverURL: serverUrl,
                         chromoIdField: 'chrom',
-                        annotTableName: 'pf3annot',
+                        annotTableName: CrossesMetaData.tableAnnotation,
                         viewID: 'GenomeBrowser',
                         database: CrossesMetaData.database,
                         leftWidth: 187
