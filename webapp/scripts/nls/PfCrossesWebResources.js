@@ -27,16 +27,12 @@ define({
 	 lookseqPageHeader: "Sequence Alignments",
 	 downloadsPageHeader: "Downloads",
 	 introPageHeader: "Introduction",
-	 introTitle: "<h2>Welcome to Pf Crosses 2013</h2>",
-	 introText: "This web application provides access to data released by the <a href='http://www.malariagen.net/projects/parasite/pf-crosses'>MalariaGEN P.falciparum Genetic Crosses Project</a> which is working to establish a shared resource of data on genetic variation in the three <i>P. falciparum</i> crosses 3D7 x HB3, HB3 x Dd2 and 7G8 x GB4." +
-	 		"<p>If you use these data, please cite the following publication: <b>High density analysis of recombination in P. falciparum using deep sequencing</b> (in preparation)</p>" +
-	 		"To begin, please choose one of the options below:",
-	 samplesButton: " - view samples and download sequence data",
-	 variantsButton: " - find SNPs &amp; indels discovered in the crosses",
-	 genotypeButton: " - browse genotypes &amp; recombination patterns for individual samples",
-	 genomeButton: " - explore the accessibility of different genome regions",
-	 lookseqButton: " - browse sequence alignments for individual samples",
-	 downloadsButton: " - download VCF and other data files",
+	 samplesButton: "View samples and download sequence data",
+	 variantsButton: "Find SNPs &amp; indels discovered in the crosses",
+	 genotypeButton: "Browse genotypes &amp; recombination patterns of samples",
+	 genomeButton: "Explore the accessibility of different genome regions",
+	 lookseqButton: "Browse sequence alignments for individual samples",
+	 downloadsButton: "Download VCF and other data files",
 	 downloadsText: "<h3>Sequence reads</h3>" +
 	 		"<p>To download sequence reads for an individual sample, go to the <a href=\"#samples\">sample metadata</a> page " +
 	 		"and click on the Run accession for a sample, which will take you to the European Nucleotide Archive page for that sequencing run." +
@@ -45,9 +41,13 @@ define({
 	 downloadsGenomeText: "<h3>Genome region classification</h3>" +
 	 		"<p>The file below is a BED file containing the classification of genome regions into Core, SubtelomericHypervariable, InternalHypervariable, SubtelomericRepeat and Centromere</p>" +
 	 		"<ul><li><a href=\"\">Genome region classification</a></li></ul>",
-      select_cross: "<center><em>Please select a sample set from the left</em></center>",
-      select_call_set: "<center><em>Please select a call set from the left</em></center>"
+     select_cross: "<center><em>Please select a sample set from the left</em></center>",
+     select_call_set: "<center><em>Please select a call set from the left</em></center>",
+     navButtonIntro: "Intro<br>page",
+     navButtonPrevious: "Previous<br>view",
+     navButtonFindGene: "Find<br><b>Gene</b>"
 
 
-  }
+
+}
 });

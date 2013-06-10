@@ -1,4 +1,4 @@
-﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("HistoryManager"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("DocEl"), DQXSC("Utils"), "CrossesMetaData", "i18n!nls/PfCrossesWebResources.js"],
+﻿define(["require", "DQX/Framework", "DQX/HistoryManager", "DQX/Controls", "DQX/Msg", "DQX/DocEl", "DQX/Utils", "CrossesMetaData", "i18n!nls/PfCrossesWebResources"],
     function (require, Framework, HistoryManager, Controls, Msg, DocEl, DQX, CrossesMetaData, resources) {
 
         var LookSeqModule = {

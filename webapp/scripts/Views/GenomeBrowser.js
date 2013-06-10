@@ -1,6 +1,15 @@
 ﻿
-define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("SQL"), DQXSC("DocEl"), DQXSC("Utils"), DQXSC("Popup"), DQXSC("FrameTree"), DQXSC("FrameList"), DQXSC("ChannelPlot/GenomePlotter"), DQXSC("ChannelPlot/ChannelYVals"), DQXSC("ChannelPlot/ChannelSequence"), DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), DQXSC("DataFetcher/DataFetchers"), DQXSC("DataFetcher/DataFetcherSummary"), "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources.js"],
-    function (require, Framework, Controls, Msg, SQL, DocEl, DQX, Popup, FrameTree, FrameList, GenomePlotter, ChannelYVals, ChannelSequence, ChannelSnps, DataFetcherFile, DataFetchers, DataFetcherSummary, GenomeBrowserSNPChannel, CrossesMetaData, VariantFilters, resources) {
+define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Utils",
+    "DQX/Popup", "DQX/FrameTree", "DQX/FrameList", "DQX/ChannelPlot/GenomePlotter",
+    "DQX/ChannelPlot/ChannelYVals", "DQX/ChannelPlot/ChannelSequence", "DQX/ChannelPlot/ChannelSnps",
+    "DQX/DataFetcher/DataFetcherFile", "DQX/DataFetcher/DataFetchers", "DQX/DataFetcher/DataFetcherSummary",
+    "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources"],
+    function (require, Framework, Controls, Msg, SQL, DocEl, DQX,
+              Popup, FrameTree, FrameList, GenomePlotter,
+              ChannelYVals, ChannelSequence, ChannelSnps,
+              DataFetcherFile, DataFetchers, DataFetcherSummary,
+              GenomeBrowserSNPChannel,
+              CrossesMetaData, VariantFilters, resources) {
 
         var GenomeBrowserModule = {
 
@@ -39,9 +48,10 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                     var browserConfig = {
                         serverURL: serverUrl,
                         chromoIdField: 'chrom',
-                        annotTableName: 'pf3annot',
+                        annotTableName: CrossesMetaData.tableAnnotation,
                         viewID: 'GenomeBrowser',
-                        database: CrossesMetaData.database
+                        database: CrossesMetaData.database,
+                        leftWidth: 187
                     };
 
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
@@ -102,14 +112,15 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                 that.createSNPChannels = function () {
                     var channelValues = [];
 
-                    var callsetList = [
-                        { Id: '3d7_hb3', callMethod: 'gatk' },
-                        { Id: '3d7_hb3', callMethod: 'cortex' },
-                        { Id: '7g8_gb4', callMethod: 'gatk' },
-                        { Id: '7g8_gb4', callMethod: 'cortex' },
-                        { Id: 'hb3_dd2', callMethod: 'gatk' },
-                        { Id: 'hb3_dd2', callMethod: 'cortex' }
-                        ];
+                    var callsetList = [];
+                    $.each(CrossesMetaData.variants, function(i, variant) {
+                        if (variant.id)
+                            callsetList.push({
+                                Id: variant.id.split(':')[0],
+                                name: variant.name,
+                                callMethod: variant.id.split(':')[1]
+                            });
+                    });
 
                     this.callSetViewers = [];
                     $.each(callsetList, function (idx, callSet) {
@@ -119,7 +130,7 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         that.panelBrowser.addDataFetcher(callSetViewer.dataFetcherSNPs);
                         callSetViewer.dataFetcherSNPs.addFetchColumn("id", "Int");
                         callSetViewer.dataFetcherSNPs.activateFetchColumn("id");
-                        that.channelSNPs = GenomeBrowserSNPChannel.SNPChannel(callSetViewer.dataFetcherSNPs, callSet.Id + '_' + callSet.callMethod);
+                        that.channelSNPs = GenomeBrowserSNPChannel.SNPChannel(callSetViewer.dataFetcherSNPs, callSet.Id + '_' + callSet.callMethod, callSet.name);
                         that.panelBrowser.addChannel(that.channelSNPs, false);
                         that.callSetViewers.push(callSetViewer);
                     });
@@ -234,8 +245,8 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         annotTableName: 'tandemrepeats',
                         chromnrfield: 'chrom'
                     };
-                    var DataFetcherAnnotation = require(DQXSC("DataFetcher/DataFetcherAnnotation"));
-                    var ChannelAnnotation = require(DQXSC("ChannelPlot/ChannelAnnotation"));
+                    var DataFetcherAnnotation = require("DQX/DataFetcher/DataFetcherAnnotation");
+                    var ChannelAnnotation = require("DQX/ChannelPlot/ChannelAnnotation");
                     var repeatFetcher = new DataFetcherAnnotation.Fetcher(repeatConfig);
                     repeatFetcher.ftype = 'repeat';
                     repeatFetcher.fetchSubFeatures = false;
@@ -258,13 +269,31 @@ define([DQXSCRQ(), DQXSC("Framework"), DQXSC("Controls"), DQXSC("Msg"), DQXSC("S
                         $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
                             var sampleSet = sampleSetObj.id;
                             if (sampleSet) {
-                                createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/MapQuality/' + sampleSet, idData: 'MapQuality', id: 'MQ' + sampleSet, title: 'MapQuality ' + sampleSet, hasStdev: true, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 40 });
+                                createSummaryChannel({
+                                    config: 'Summ01',
+                                    folder: 'Tracks-Cross/MapQuality/' + sampleSet,
+                                    idData: 'MapQuality',
+                                    id: 'MQ' + sampleSet,
+                                    title: 'Mapping quality ' + sampleSetObj.name,
+                                    hasStdev: true,
+                                    maxval: 60,
+                                    active: true,
+                                    alertZoneMin: 0,
+                                    alertZoneMax: 40 });
                             }
                         });
                         $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
                             var sampleSet = sampleSetObj.id;
                             if (sampleSet) {
-                                var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Coverage/' + sampleSet, idData: 'Coverage', id: 'CV' + sampleSet, title: 'Coverage ' + sampleSet, hasStdev: true, maxval: 3, active: true });
+                                var cha = createSummaryChannel({
+                                    config: 'Summ01',
+                                    folder: 'Tracks-Cross/Coverage/' + sampleSet,
+                                    idData: 'Coverage',
+                                    id: 'CV' + sampleSet,
+                                    title: 'Coverage ' + sampleSetObj.name,
+                                    hasStdev: true,
+                                    maxval: 3,
+                                    active: true });
                                 cha.setChangeYScale(false, true);
                             }
                         });

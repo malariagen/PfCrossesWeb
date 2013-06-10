@@ -1,6 +1,6 @@
-﻿define([DQXSCRQ(), DQXSC("Framework"), DQXSC("SQL"), DQXSC("Msg"), DQXSC("Controls"), DQXSC("Model"),
+﻿define(["require", "DQX/Framework", "DQX/SQL", "DQX/Msg", "DQX/Controls", "DQX/Model",
     "CrossesMetaData", "TableCortex", "TableGATK", "VariantFilters",
-    "i18n!nls/PfCrossesWebResources.js"],
+    "i18n!nls/PfCrossesWebResources"],
     function (require, Framework, SQL, Msg, Controls, Model,
               CrossesMetaData, TableCortex, TableGATK, VariantFilters,
               resources) {
@@ -151,18 +151,26 @@
                     this.region_ctrls.addControl(
                         Controls.Edit('SearchRegionEnd', { label: resources.genomeSearchEnd, size: 10 }))
                         .bindToModel(this.region_search, 'stop');
-                    this.region_ctrls.addControl(
+                    var buttons = this.region_ctrls.addControl(Controls.CompoundHor());
+                    buttons.addControl(
                         Controls.Button('Search', { content: resources.genomeSearch, width: 50 }))
                             .setOnChanged(function (id) {
                                 that.changeFunction();
                             });
+                    buttons.addControl(
+                        Controls.Button('Clear', { content: resources.genomeSearchClear, width: 50 }))
+                            .setOnChanged(function (id) {
+                                that.region_search.set({'start': '', 'stop':''});
+                                that.changeFunction();
+                        });
+
 
                     //Variant type controls
                     this.type_search = Model({snp: true, indel: true});
                     this.type_ctrls = theForm.addControl(Controls.CompoundHor())
                         .setLegend(resources.variantTypeOptions);
                     this.type_ctrls.addControl(
-                        Controls.Check('SearchSNP', {label: 'Snp', value: true, hint: 'Show all SNPs'}))
+                        Controls.Check('SearchSNP', {label: 'SNP', value: true, hint: 'Show all SNPs'}))
                         .bindToModel(this.type_search, 'snp');
                     this.type_ctrls.addControl(
                         Controls.Check('SearchInDel', {label: 'InDel', value: true, hint: 'Show all InDels'}))
