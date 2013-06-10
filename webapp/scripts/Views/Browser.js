@@ -67,6 +67,10 @@ DQXSC("ChannelPlot/ChannelSnps"), DQXSC("DataFetcher/DataFetcherFile"), "Page", 
                     this.panelBrowser.MaxZoomFactX = 1.0 / 0.2;
                     this.panelBrowser.getNavigator().setMinScrollSize(0.0001);
 
+                    SeqChannel = ChannelSequence.Channel(serverUrl, 'Tracks-Cross/Sequence', 'Summ01', true);
+                    this.panelBrowser.addChannel(SeqChannel, true);
+
+
                     //Create snp view channel
                     this.SnpChannel = ChannelSnps.Channel('snps1', serverUrl);
                     this.SnpChannel.setTitle('Snps1');
