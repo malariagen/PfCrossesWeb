@@ -196,7 +196,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         that.SnpChannel.fillBlocks = ctrl.getValue();
                         that.panelBrowser.render();
                     });
-                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlSmallBlocks', { label: 'Allow small blocks', value: true })).setOnChanged(function (id, ctrl) {
+                    this.groupDispSettingsControls.addControl(Controls.Check('CtrlSmallBlocks', { label: 'Allow subsampled SNP display', value: true })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.allowSmallBlocks = ctrl.getValue();
                         that.panelBrowser.render();
                     });
