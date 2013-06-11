@@ -181,6 +181,8 @@
     <Content Include="scripts\main.js" />
     <Content Include="scripts\page.js" />
     <Content Include="scripts\Views\Browser.js" />
+    <Content Include="webapp\scripts\DQX\ChannelPlot\ChannelSnps2.js" />
+    <Content Include="webapp\scripts\DQX\DataFetcher\DataFetcherSnp2.js" />
     <Content Include="webapp\Specifics.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

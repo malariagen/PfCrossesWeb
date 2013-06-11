@@ -19,7 +19,6 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                 that.myPage = iPage;
                 that.registerView();
                 that.refVersion = 3;
-                that.dataLocation = "SnpDataCross";
 
 
                 that.createFramework = function () {

@@ -1,7 +1,7 @@
 ﻿
 define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg", "DQX/DocEl",
 "DQX/Utils", "DQX/FrameList", "DQX/ChannelPlot/GenomePlotter", "DQX/ChannelPlot/ChannelSequence",
-"DQX/ChannelPlot/ChannelSnps", "DQX/DataFetcher/DataFetcherFile", "Page", "CrossesMetaData", "VariantFilters"],
+"DQX/ChannelPlot/ChannelSnps2", "DQX/DataFetcher/DataFetcherFile", "Page", "CrossesMetaData", "VariantFilters"],
     function (require, Framework, Controls, PopupFrame, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence,
               ChannelSnps, DataFetcherFile, Page, CrossesMetaData, VariantFilters) {
 
@@ -13,7 +13,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                 that.myPage = iPage;
                 that.registerView();
                 that.refVersion = 3;
-                that.dataLocation = "SnpDataCross";
+                that.dataLocation = "SnpDataCross2";
 
 
                 that.createFramework = function () {
@@ -240,18 +240,6 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.groupDispSettingsControls.addControl(Controls.ValueSlider('CtrlCoverage', { label: 'Coverage scale', width: sliderWidth, minval: 0, maxval: 200, value: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.setCoverageRange(ctrl.getValue());
                     });
-
-                    /*this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinAvgCov', { label: 'Min. avg. coverage', width: sliderWidth, minval: 0, maxval: 200, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
-                    that.SnpChannel.setMinAvgCoverage(ctrl.getValue());
-                    });*/
-
-                    /*this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinSnpPurity', { label: 'Min. SNP purity', width: sliderWidth, minval: 0, maxval: 1, startval: 0, digits: 2 })).setOnChanged(function (id, ctrl) {
-                    that.SnpChannel.setMinSnpPurity(ctrl.getValue());
-                    });*/
-
-                    /*this.groupClientFilterControls.addControl(Controls.ValueSlider('CtrlMinAvgPurity', { label: 'Min. avg. purity', width: sliderWidth, minval: 0, maxval: 1, startval: 0, digits: 2 })).setOnChanged(function (id, ctrl) {
-                    that.SnpChannel.setMinAvgPurity(ctrl.getValue());
-                    });*/
 
 
                     this.panelControls.render();
