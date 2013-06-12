@@ -223,6 +223,13 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     ctrlShowINDELs.bindToModel(that.myPage.type_search, 'indel');
                     this.groupVariantOtherFilterControls.addControl(Controls.CompoundHor([ctrlShowSNPs, Controls.HorizontalSeparator(8), ctrlShowINDELs]));
 
+                    var ctrlHideNonSegregating = Controls.Check('', { label: 'Hide non-segregating variants', value: true });
+                    ctrlHideNonSegregating.setOnChanged(function () {
+                        that.SnpChannel.filter.hideNonSegregating = ctrlHideNonSegregating.getValue();
+                        that.panelBrowser.render();
+                    });
+                    this.groupVariantOtherFilterControls.addControl(ctrlHideNonSegregating);
+
                     that.myPage.type_search.on({ change: true }, function () {
                         that.SnpChannel.filter.showSNPs = that.myPage.type_search.get('snp');
                         that.SnpChannel.filter.showINDELs = that.myPage.type_search.get('indel');
