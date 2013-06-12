@@ -230,6 +230,13 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     });
                     this.groupVariantOtherFilterControls.addControl(ctrlHideNonSegregating);
 
+                    var ctrlHideMissingParentCalls = Controls.Check('', { label: 'Parent calls not missing', value: true });
+                    ctrlHideMissingParentCalls.setOnChanged(function () {
+                        that.SnpChannel.filter.requireParentsPresent = ctrlHideMissingParentCalls.getValue();
+                        that.panelBrowser.render();
+                    });
+                    this.groupVariantOtherFilterControls.addControl(ctrlHideMissingParentCalls);
+
                     that.myPage.type_search.on({ change: true }, function () {
                         that.SnpChannel.filter.showSNPs = that.myPage.type_search.get('snp');
                         that.SnpChannel.filter.showINDELs = that.myPage.type_search.get('indel');
