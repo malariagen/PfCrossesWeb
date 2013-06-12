@@ -98,8 +98,8 @@
                     if (that.region_search.get('stop') != '')
                         options.push(SQL.WhereClause.CompareFixed('pos','<',that.region_search.get('stop')));
                     //Type params
-                    var snp = that.type_search.get('snp');
-                    var indel = that.type_search.get('indel');
+                    var snp = that.myPage.type_search.get('snp');
+                    var indel = that.myPage.type_search.get('indel');
                     if (snp != indel) {
                         options.push(SQL.WhereClause.CompareFixed('snp','=', snp));
                         options.push(SQL.WhereClause.CompareFixed('indel','=', indel));
@@ -166,16 +166,15 @@
 
 
                     //Variant type controls
-                    this.type_search = Model({snp: true, indel: true});
                     this.type_ctrls = theForm.addControl(Controls.CompoundHor())
                         .setLegend(resources.variantTypeOptions);
                     this.type_ctrls.addControl(
                         Controls.Check('SearchSNP', {label: 'SNP', value: true, hint: 'Show all SNPs'}))
-                        .bindToModel(this.type_search, 'snp');
+                        .bindToModel(that.myPage.type_search, 'snp');
                     this.type_ctrls.addControl(
                         Controls.Check('SearchInDel', {label: 'InDel', value: true, hint: 'Show all InDels'}))
-                        .bindToModel(this.type_search, 'indel');
-                    this.type_search.on({change: true}, this.changeFunction);
+                        .bindToModel(that.myPage.type_search, 'indel');
+                    that.myPage.type_search.on({ change: true }, this.changeFunction);
 
                     var pane = Controls.CompoundVert();
                     pane.setLegend(resources.variant_filters);

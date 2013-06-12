@@ -43,7 +43,10 @@
                     filters[id] = true;
                 });
                 thePage.variant_filters = Model(filters);
-                thePage.current_call_set = Model({'call_set': CrossesMetaData.variants[0].id});
+                thePage.current_call_set = Model({ 'call_set': CrossesMetaData.variants[0].id });
+
+                this.type_search = Model({ snp: true, indel: true });
+
 
                 //Create the views
                 

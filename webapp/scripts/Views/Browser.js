@@ -28,12 +28,12 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     Msg.listen("", { type: 'JumpgenomeRegionGenotypeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
                 };
                 that.lookseq_img_url = function (args) {
-                    var defaults = {base_url: 'http://panoptes.cggh.org/lookseq',
-                     start_pos: 0,
-                     end_pos: 0,
-                     chrom: '',
-                     sample: '',
-                     width: 800
+                    var defaults = { base_url: 'http://panoptes.cggh.org/lookseq',
+                        start_pos: 0,
+                        end_pos: 0,
+                        chrom: '',
+                        sample: '',
+                        width: 800
                     };
                     $.extend(defaults, args);
                     return Handlebars.compile("{{base_url}}/cgi-bin/index.pl?action=render_image&alg=bwa&from={{start_pos}}&to={{end_pos}}&chr={{chrom}}&sample={{sample}}&width={{width}}&height=0&maxdist=500&view=pileup&output=image&display=|noscale|perfect|snps|single|inversions|pairlinks|faceaway|basequal|&debug=0")(defaults);
@@ -78,6 +78,11 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.SnpChannel.setAutoFillHeight();
                     this.panelBrowser.addChannel(this.SnpChannel, true);
 
+                    //Initialise some settings
+                    that.SnpChannel.filter.showSNPs = that.myPage.type_search.get('snp');
+                    that.SnpChannel.filter.showINDELs = that.myPage.type_search.get('indel');
+
+
                     //Define the chromosomes
                     $.each(CrossesMetaData.chromosomes, function (idx, chromo) {
                         that.panelBrowser.addChromosome(chromo.id, chromo.id, chromo.len + 0.01);
@@ -99,28 +104,28 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     Msg.listen('', { type: 'SnpClicked', id: this.SnpChannel.getID() }, function (scope, content) {
                         var snp = content.snp;
                         var seq = content.seq;
-                        var popup = PopupFrame.PopupFrame('LookseqPopupFrame', Framework.FrameFinal('LookseqPic'), { title: seq.replace(/__/g,'/') + snp.position, sizeX: 830, sizeY: 800 });
+                        var popup = PopupFrame.PopupFrame('LookseqPopupFrame', Framework.FrameFinal('LookseqPic'), { title: seq.replace(/__/g, '/') + snp.position, sizeX: 830, sizeY: 800 });
                         var frameRoot = popup.getFrameRoot();
                         popup.render();
                         var uid = DQX.getNextUniqueID();
-                        frameRoot.setContentHtml("<img id='"+ uid +"' style='position:absolute; top=0px; left=0px;' src='"+that.lookseq_img_url({
-                            width:800,
+                        frameRoot.setContentHtml("<img id='" + uid + "' style='position:absolute; top=0px; left=0px;' src='" + that.lookseq_img_url({
+                            width: 800,
                             start_pos: snp.position - 50,
                             end_pos: snp.position + 50,
-                            sample: seq.replace(/__/g,'/'),
+                            sample: seq.replace(/__/g, '/'),
                             chrom: content.chrom
-                        })+"'>");
-                        $('#'+ uid).load(function() {
+                        }) + "'>");
+                        $('#' + uid).load(function () {
                             var img = $('#' + uid);
-                            var canvas = $("<canvas id='canvas"+uid+"' style='position:absolute; top=0px; left=0px;'></canvas>");
+                            var canvas = $("<canvas id='canvas" + uid + "' style='position:absolute; top=0px; left=0px;'></canvas>");
                             canvas.insertAfter(img);
                             canvas.attr('height', img.height());
                             canvas.attr('width', img.width());
                             var c = canvas.get(0).getContext('2d');
                             c.strokeStyle = '#F00';
                             c.beginPath();
-                            c.moveTo(395,0);
-                            c.lineTo(395,canvas.height());
+                            c.moveTo(395, 0);
+                            c.lineTo(395, canvas.height());
                             c.lineWidth = 1;
                             c.stroke();
                         })
@@ -165,20 +170,22 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     var group1 = this.panelControls.addControl(Controls.CompoundVert());
 
                     this.callSetControl = Controls.Combo('', { label: 'Call set',
-                                                               states: CrossesMetaData.variants,
-                                                               value: that.myPage.current_call_set.get('call_set')});
+                        states: CrossesMetaData.variants,
+                        value: that.myPage.current_call_set.get('call_set')
+                    });
                     this.callSetControl.bindToModel(that.myPage.current_call_set, 'call_set');
-                    that.myPage.current_call_set.on({change: true}, $.proxy(that.changeDataSource, that));
+                    that.myPage.current_call_set.on({ change: true }, $.proxy(that.changeDataSource, that));
                     group1.addControl(this.callSetControl);
 
-                    this.groupVariantFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Variant filters');
+                    this.groupVariantFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Variant VCF filters (check to exclude)');
+                    this.groupVariantOtherFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Other Variant filters');
                     this.groupCallFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Call filters');
                     this.groupDispSettingsControls = group1.addControl(Controls.CompoundVert()).setLegend('Display settings');
 
                     that.variant_filter_controls = VariantFilters(CrossesMetaData.variant_filters, that.myPage.variant_filters);
                     that.groupVariantFilterControls.addControl(that.variant_filter_controls.grid);
 
-                    that.myPage.variant_filters.on({change: true}, function () {
+                    that.myPage.variant_filters.on({ change: true }, function () {
                         //Context is new model
                         $.each(this.attributes, function (filter, value) {
                             if ($.inArray(that.currentCallMethod, CrossesMetaData.variant_filters[filter].call_methods) != -1) {
@@ -201,18 +208,6 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         that.panelBrowser.render();
                     });
 
-                    /*this.groupDispSettingsControls.addControl(Controls.Check('CtrlFilterVCF', { label: 'Filter by VCF data', value: false })).setOnChanged(function (id, ctrl) {
-                    that.SnpChannel.filter.applyVCFFilter = ctrl.getValue();
-                    that.panelBrowser.render();
-                    });*/
-                    /*this.groupDispSettingsControls.addControl(Controls.Check('CtrlHideFiltered', { label: 'Hide filtered SNPs', value: true })).setOnChanged(function (id, ctrl) {
-                    that.SnpChannel.hideFiltered = ctrl.getValue();
-                    that.panelBrowser.render();
-                    });*/
-                    /*this.groupDispSettingsControls.addControl(Controls.Check('CtrlRequireParents', { label: 'Require parents' })).setOnChanged(function (id, ctrl) {
-                    that.SnpChannel.filter.requireParentsPresent = ctrl.getValue();
-                    that.panelBrowser.render();
-                    });*/
                     this.groupDispSettingsControls.addControl(Controls.Check('CtrlShowInheritance', { label: 'Show inheritance', value: true })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.colorByParent = ctrl.getValue();
                         that.panelBrowser.render();
@@ -221,11 +216,25 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         that.SnpChannel.sortByParents();
                     });
 
+                    //Control inclusion of SNPS and INDELS in view
+                    var ctrlShowSNPs = Controls.Check('', { label: 'Show SNPs', value: true });
+                    ctrlShowSNPs.bindToModel(that.myPage.type_search, 'snp');
+                    var ctrlShowINDELs = Controls.Check('', { label: 'Show INDELs', value: true });
+                    ctrlShowINDELs.bindToModel(that.myPage.type_search, 'indel');
+                    this.groupVariantOtherFilterControls.addControl(Controls.CompoundHor([ctrlShowSNPs, Controls.HorizontalSeparator(8), ctrlShowINDELs]));
+
+                    that.myPage.type_search.on({ change: true }, function () {
+                        that.SnpChannel.filter.showSNPs = that.myPage.type_search.get('snp');
+                        that.SnpChannel.filter.showINDELs = that.myPage.type_search.get('indel');
+                        that.panelBrowser.render();
+                    });
+
+
                     var sliderWidth = 300;
 
                     //Some slider-type per-variant filters
-                    that.groupVariantFilterControls.addControl(Controls.VerticalSeparator(10));
-                    that.groupVariantFilterControls.addControl(Controls.ValueSlider('CtrlPresence', { label: 'Min. % presence on samples', width: sliderWidth, minval: 0, maxval: 100, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
+                    that.groupVariantOtherFilterControls.addControl(Controls.VerticalSeparator(10));
+                    that.groupVariantOtherFilterControls.addControl(Controls.ValueSlider('CtrlPresence', { label: 'Min. % presence on samples', width: sliderWidth, minval: 0, maxval: 100, startval: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.setMinPresence(ctrl.getValue());
                     });
 
