@@ -189,7 +189,7 @@
 
                 //Call this function to activate the catalog of variation panel
                 that.activateState = function () {
-                    enableHomeButton();
+                    //enableHomeButton();
                     var tabswitched = that.myPage.frameVariants.makeVisible();
                     setTimeout(function () {
                         that.tablecortex.panelTable.handleResize(); //force immediate calculation of size
