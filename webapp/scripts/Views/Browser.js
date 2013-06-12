@@ -252,9 +252,54 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         that.SnpChannel.setMinPresence(ctrl.getValue());
                     });
 
+                    var modifyVisible_Cortex = function (control) {
+                        var callset = that.myPage.current_call_set.get('call_set');
+                        control.setVisible(callset.indexOf('cortex') > 0);
+                    }
+
+                    var modifyVisible_GATK = function (control) {
+                        var callset = that.myPage.current_call_set.get('call_set');
+                        control.setVisible(callset.indexOf('gatk') > 0);
+                    }
+
+                    //Per-variant value filters specific for Cortex
+                    var ctrl_Variant_SITE_CONF = Controls.ValueSlider('CtrlVariantSITE_CONF', { label: 'Min. SITE_CONF', width: sliderWidth, minval: 0, maxval: 2000, value: 0, digits: 0 }).setOnChanged(function (id, ctrl) {
+                        alert('not implemented');
+                    });
+                    var showHide_ctrl_Variant_SITE_CONF = Controls.ShowHide(ctrl_Variant_SITE_CONF);
+                    modifyVisible_Cortex(showHide_ctrl_Variant_SITE_CONF);
+                    that.myPage.current_call_set.on({ change: true }, function () {
+                        modifyVisible_Cortex(showHide_ctrl_Variant_SITE_CONF);
+                    });
+                    that.groupVariantOtherFilterControls.addControl(showHide_ctrl_Variant_SITE_CONF);
 
 
-                    that.groupCallFilterControls.addControl(Controls.ValueSlider('CtrlMinSNPCov', { label: 'Min. SNP coverage', width: sliderWidth, minval: 1, maxval: 50, startval: 1, digits: 0 })).setOnChanged(function (id, ctrl) {
+
+                    //Per-variant value filters specific for GATK
+                    var ctrl_Variant_VQSLODSNP = Controls.ValueSlider('CtrlVariantVQSLODSNP', { label: 'Min. VQSLOD (SNPs)', width: sliderWidth, minval: -5, maxval: 20, value: -5, digits: 1 }).setOnChanged(function (id, ctrl) {
+                        //alert('not implemented');
+                    });
+                    var showHide_ctrl_Variant_VQSLODSNP = Controls.ShowHide(ctrl_Variant_VQSLODSNP);
+                    modifyVisible_GATK(showHide_ctrl_Variant_VQSLODSNP);
+                    that.myPage.current_call_set.on({ change: true }, function () {
+                        modifyVisible_GATK(showHide_ctrl_Variant_VQSLODSNP);
+                    });
+                    that.groupVariantOtherFilterControls.addControl(showHide_ctrl_Variant_VQSLODSNP);
+
+                    var ctrl_Variant_VQSLODINDEL = Controls.ValueSlider('CtrlVariantVQSLODINDEL', { label: 'Min. VQSLOD (INDELs)', width: sliderWidth, minval: -5, maxval: 20, value: -5, digits: 1 }).setOnChanged(function (id, ctrl) {
+                        //alert('not implemented');
+                    });
+                    var showHide_ctrl_Variant_VQSLODINDEL = Controls.ShowHide(ctrl_Variant_VQSLODINDEL);
+                    modifyVisible_GATK(showHide_ctrl_Variant_VQSLODINDEL);
+                    that.myPage.current_call_set.on({ change: true }, function () {
+                        modifyVisible_GATK(showHide_ctrl_Variant_VQSLODINDEL);
+                    });
+                    that.groupVariantOtherFilterControls.addControl(showHide_ctrl_Variant_VQSLODINDEL);
+
+
+
+                    //Per-variant value filters common for both
+                    that.groupCallFilterControls.addControl(Controls.ValueSlider('CtrlMinSNPCov', { label: 'Min. SNP coverage', width: sliderWidth, minval: 1, maxval: 50, value: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.setMinSnpCoverage(ctrl.getValue());
                     });
 
