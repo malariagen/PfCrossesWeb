@@ -263,8 +263,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     }
 
                     //Per-variant value filters specific for Cortex
-                    var ctrl_Variant_SITE_CONF = Controls.ValueSlider('CtrlVariantSITE_CONF', { label: 'Min. SITE_CONF', width: sliderWidth, minval: 0, maxval: 2000, value: 0, digits: 0 }).setOnChanged(function (id, ctrl) {
-                        alert('not implemented');
+                    var ctrl_Variant_SITE_CONF = Controls.ValueSlider('CtrlVariantSITE_CONF', { label: 'Min. SITE_CONF', width: sliderWidth, minval: 0, maxval: 2000, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.filter.setCustomVariantFilter('SITE_CONF','SITE_CONF', ctrl_Variant_SITE_CONF.getValue(), true, true)
+                        that.panelBrowser.render();
                     });
                     var showHide_ctrl_Variant_SITE_CONF = Controls.ShowHide(ctrl_Variant_SITE_CONF);
                     modifyVisible_Cortex(showHide_ctrl_Variant_SITE_CONF);
@@ -276,8 +277,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
 
                     //Per-variant value filters specific for GATK
-                    var ctrl_Variant_VQSLODSNP = Controls.ValueSlider('CtrlVariantVQSLODSNP', { label: 'Min. VQSLOD (SNPs)', width: sliderWidth, minval: -5, maxval: 20, value: -5, digits: 1 }).setOnChanged(function (id, ctrl) {
-                        //alert('not implemented');
+                    var ctrl_Variant_VQSLODSNP = Controls.ValueSlider('CtrlVariantVQSLODSNP', { label: 'Min. VQSLOD (SNPs)', width: sliderWidth, minval: -5, maxval: 20, value: -5, digits: 1, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.filter.setCustomVariantFilter('VQSLOD_SNP','VQSLOD', ctrl_Variant_VQSLODSNP.getValue(), true, false)
+                        that.panelBrowser.render();
                     });
                     var showHide_ctrl_Variant_VQSLODSNP = Controls.ShowHide(ctrl_Variant_VQSLODSNP);
                     modifyVisible_GATK(showHide_ctrl_Variant_VQSLODSNP);
@@ -286,8 +288,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     });
                     that.groupVariantOtherFilterControls.addControl(showHide_ctrl_Variant_VQSLODSNP);
 
-                    var ctrl_Variant_VQSLODINDEL = Controls.ValueSlider('CtrlVariantVQSLODINDEL', { label: 'Min. VQSLOD (INDELs)', width: sliderWidth, minval: -5, maxval: 20, value: -5, digits: 1 }).setOnChanged(function (id, ctrl) {
-                        //alert('not implemented');
+                    var ctrl_Variant_VQSLODINDEL = Controls.ValueSlider('CtrlVariantVQSLODINDEL', { label: 'Min. VQSLOD (INDELs)', width: sliderWidth, minval: -5, maxval: 20, value: -5, digits: 1, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.filter.setCustomVariantFilter('VQSLOD_INDEL','VQSLOD', ctrl_Variant_VQSLODINDEL.getValue(), false, true)
+                        that.panelBrowser.render();
                     });
                     var showHide_ctrl_Variant_VQSLODINDEL = Controls.ShowHide(ctrl_Variant_VQSLODINDEL);
                     modifyVisible_GATK(showHide_ctrl_Variant_VQSLODINDEL);
