@@ -301,10 +301,41 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
 
 
-                    //Per-variant value filters common for both
-                    that.groupCallFilterControls.addControl(Controls.ValueSlider('CtrlMinSNPCov', { label: 'Min. SNP coverage', width: sliderWidth, minval: 1, maxval: 50, value: 0, digits: 0 })).setOnChanged(function (id, ctrl) {
-                        that.SnpChannel.setMinSnpCoverage(ctrl.getValue());
+                    //Per-call filters for both
+                    var ctrl_Call_COV = Controls.ValueSlider('CtrlCallCOV', { label: 'Min. Coverage', width: sliderWidth, minval: 0, maxval: 200, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.filter.setCustomCallFilter('DP', 'DP', ctrl_Call_COV.getValue(), true, true)
+                        that.panelBrowser.render();
                     });
+                    var showHide_ctrl_Call_COV = Controls.ShowHide(ctrl_Call_COV);
+                    that.groupCallFilterControls.addControl(showHide_ctrl_Call_COV);
+
+
+
+                    //Per-call filters specific for GATK
+                    var ctrl_Call_GQ = Controls.ValueSlider('CtrlCallGQ', { label: 'Min. GQ', width: sliderWidth, minval: 0, maxval: 101, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.filter.setCustomCallFilter('GQ', 'GQ', ctrl_Call_GQ.getValue(), true, true)
+                        that.panelBrowser.render();
+                    });
+                    var showHide_ctrl_Call_GQ = Controls.ShowHide(ctrl_Call_GQ);
+                    modifyVisible_GATK(showHide_ctrl_Call_GQ);
+                    that.myPage.current_call_set.on({ change: true }, function () {
+                        modifyVisible_GATK(showHide_ctrl_Call_GQ);
+                    });
+                    that.groupCallFilterControls.addControl(showHide_ctrl_Call_GQ);
+
+
+                    //Per-call filters specific for Cortex
+                    var ctrl_Call_GT_CONF = Controls.ValueSlider('CtrlCallGT_CONF', { label: 'Min. GT_CONF', width: sliderWidth, minval: 0, maxval: 1000, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                        that.SnpChannel.filter.setCustomCallFilter('GT_CONF', 'GT_CONF', ctrl_Call_GT_CONF.getValue(), true, true)
+                        that.panelBrowser.render();
+                    });
+                    var showHide_ctrl_Call_GT_CONF = Controls.ShowHide(ctrl_Call_GT_CONF);
+                    modifyVisible_Cortex(showHide_ctrl_Call_GT_CONF);
+                    that.myPage.current_call_set.on({ change: true }, function () {
+                        modifyVisible_Cortex(showHide_ctrl_Call_GT_CONF);
+                    });
+                    that.groupCallFilterControls.addControl(showHide_ctrl_Call_GT_CONF);
+
 
 
                     that.groupDispSettingsControls.addControl(Controls.VerticalSeparator(10));
