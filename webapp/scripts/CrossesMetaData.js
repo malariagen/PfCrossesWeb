@@ -20,31 +20,37 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
                                     {
                                         id: '3d7_hb3:gatk',
                                         name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (GATK)',
+                                        vcf: '3d7_hb3.gatk.both.final',
                                         download_href: 'downloads/3d7_hb3.gatk.both.final.vcf.gz'
                                     },
                                     {
                                         id: '3d7_hb3:cortex',
                                         name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (Cortex)',
+                                        vcf: '3d7_hb3.cortex.final',
                                         download_href: 'downloads/3d7_hb3.cortex.final.vcf.gz'
                                     },
                                     {
                                         id: 'hb3_dd2:gatk',
                                         name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (GATK)',
+                                        vcf:'hb3_dd2.gatk.both.final',
                                         download_href: 'downloads/hb3_dd2.gatk.both.final.vcf.gz'
                                     },
                                     {
                                         id: 'hb3_dd2:cortex',
                                         name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (Cortex)',
+                                        vcf:'hb3_dd2.cortex.final',
                                         download_href: 'downloads/hb3_dd2.cortex.final.vcf.gz'
                                     },
                                     {
                                         id: '7g8_gb4:gatk',
                                         name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (GATK)',
+                                        vcf:'7g8_gb4.gatk.both.final',
                                         download_href: 'downloads/7g8_gb4.gatk.both.final.vcf.gz'
                                     },
                                     {
                                         id: '7g8_gb4:cortex',
                                         name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (Cortex)',
+                                        vcf:'7g8_gb4.cortex.final',
                                         download_href: 'downloads/7g8_gb4.cortex.final.vcf.gz'
                                     },
         ];

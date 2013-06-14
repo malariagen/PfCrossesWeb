@@ -91,7 +91,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         that.details.modifyValue(content);
                     });
                     Msg.listen('', { type: 'SnpClicked', id: this.SnpChannel.getID() }, function (scope, content) {
-                        SnpCallPopup.create(content.snp,content.seq,content.chrom)
+                        var callSetID = that.myPage.current_call_set.get('call_set');
+                        var vcf = CrossesMetaData.variantsMap[callSetID].vcf;
+                        SnpCallPopup.create(callSetID,that.dataLocation,vcf,content.snp,content.seq,content.chrom)
                     });
 
                     //Causes the browser to start with a start region
