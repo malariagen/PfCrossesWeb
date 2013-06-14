@@ -42,8 +42,14 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                 that.createInfoPanel = function() {
                     that.frameInfo.setContentHtml("<h2>Fetching the information...</h2>");
                     var infoFetcher = DataFetcherSnp.FetcherSnpDetails(serverUrl);
-                    infoFetcher.getSnpInfo(that.dataLocation+'/'+that.vcf,chrom,snpInfo.position,function(content) {
-                        that.frameInfo.setContentHtml(content);
+                    infoFetcher.getSnpInfo(that.dataLocation+'/'+that.vcf,chrom,snpInfo.position,function(header,content) {
+                        var headerComps=header.split('\t');
+                        var contentComps=content.split('\t');
+                        var st='';
+                        for (i=0; i<headerComps.length; i++) {
+                            st+=headerComps[i]+' = '+contentComps[i]+'<br>';
+                        }
+                        that.frameInfo.setContentHtml(st);
                     })
                 }
 
