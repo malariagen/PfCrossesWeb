@@ -1,9 +1,9 @@
 ﻿
 define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg", "DQX/DocEl",
 "DQX/Utils", "DQX/FrameList", "DQX/ChannelPlot/GenomePlotter", "DQX/ChannelPlot/ChannelSequence",
-"DQX/ChannelPlot/ChannelSnps2", "DQX/DataFetcher/DataFetcherFile", "Page", "CrossesMetaData", "VariantFilters"],
+"DQX/ChannelPlot/ChannelSnps2", "DQX/DataFetcher/DataFetcherFile", "Page", "CrossesMetaData", "VariantFilters", "SnpCallPopup"],
     function (require, Framework, Controls, PopupFrame, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence,
-              ChannelSnps, DataFetcherFile, Page, CrossesMetaData, VariantFilters) {
+              ChannelSnps, DataFetcherFile, Page, CrossesMetaData, VariantFilters, SnpCallPopup) {
 
         var BrowserModule = {
 
@@ -26,17 +26,6 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
                     Msg.listen("", { type: 'JumpgenomeRegionGenotypeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
-                };
-                that.lookseq_img_url = function (args) {
-                    var defaults = { base_url: 'http://panoptes.cggh.org/lookseq',
-                        start_pos: 0,
-                        end_pos: 0,
-                        chrom: '',
-                        sample: '',
-                        width: 800
-                    };
-                    $.extend(defaults, args);
-                    return Handlebars.compile("{{base_url}}/cgi-bin/index.pl?action=render_image&alg=bwa&from={{start_pos}}&to={{end_pos}}&chr={{chrom}}&sample={{sample}}&width={{width}}&height=0&maxdist=500&view=pileup&output=image&display=|noscale|perfect|snps|single|inversions|pairlinks|faceaway|basequal|&debug=0")(defaults);
                 };
                 that.createPanels = function () {
 
@@ -102,33 +91,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         that.details.modifyValue(content);
                     });
                     Msg.listen('', { type: 'SnpClicked', id: this.SnpChannel.getID() }, function (scope, content) {
-                        var snp = content.snp;
-                        var seq = content.seq;
-                        var popup = PopupFrame.PopupFrame('LookseqPopupFrame', Framework.FrameFinal('LookseqPic'), { title: seq.replace(/__/g, '/') + snp.position, sizeX: 830, sizeY: 800 });
-                        var frameRoot = popup.getFrameRoot();
-                        popup.render();
-                        var uid = DQX.getNextUniqueID();
-                        frameRoot.setContentHtml("<img id='" + uid + "' style='position:absolute; top=0px; left=0px;' src='" + that.lookseq_img_url({
-                            width: 800,
-                            start_pos: snp.position - 50,
-                            end_pos: snp.position + 50,
-                            sample: seq.replace(/__/g, '/'),
-                            chrom: content.chrom
-                        }) + "'>");
-                        $('#' + uid).load(function () {
-                            var img = $('#' + uid);
-                            var canvas = $("<canvas id='canvas" + uid + "' style='position:absolute; top=0px; left=0px;'></canvas>");
-                            canvas.insertAfter(img);
-                            canvas.attr('height', img.height());
-                            canvas.attr('width', img.width());
-                            var c = canvas.get(0).getContext('2d');
-                            c.strokeStyle = '#F00';
-                            c.beginPath();
-                            c.moveTo(395, 0);
-                            c.lineTo(395, canvas.height());
-                            c.lineWidth = 1;
-                            c.stroke();
-                        })
+                        SnpCallPopup.create(content.snp,content.seq,content.chrom)
                     });
 
                     //Causes the browser to start with a start region
