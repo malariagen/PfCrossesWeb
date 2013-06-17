@@ -27,7 +27,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                 that.vcf=vcf;
                 that.seqID = seqID;
                 that.createFramework = function() {
-                    that.popup = PopupFrame.PopupFrame('SnpCallPopupFrame', Framework.FrameGroupTab(''), { title: seqID.replace(/__/g, '/') + snpInfo.position, sizeX: 830, sizeY: 600 });
+                    that.popup = PopupFrame.PopupFrame('SnpCallPopupFrame', Framework.FrameGroupTab(''), { title: seqID.replace(/__/g, ' / ') + snpInfo.position, sizeX: 830, sizeY: 600 });
                     that.frameRoot = that.popup.getFrameRoot();
                     that.frameRoot.setFrameClass('DQXDarkFrame');
                     that.frameRoot.setFrameClassClient('DQXDarkFrame');
@@ -36,7 +36,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     var frameInfo = that.frameRoot.addMemberFrame(Framework.FrameGroupHor('', 1)).setMarginsIndividual(0,4,0,0).setDisplayTitle('VCF info')/*.setFrameClassClient('DQXForm')*/;
 
                     that.frameInfoVariant = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle('Variant info').setFrameClassClient('DQXForm');
-                    that.frameInfoCall = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle(that.seqID.replace(/__/g, '/')+' call info').setFrameClassClient('DQXForm');
+                    that.frameInfoCall = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle(that.seqID.replace(/__/g, ' / ')+' call info').setFrameClassClient('DQXForm');
 
                     that.frameLookSeq = that.frameRoot.addMemberFrame(Framework.FrameFinal('', 1)).setMargins(5).setDisplayTitle('Pileup').setFrameClassClient('DQXForm');
 

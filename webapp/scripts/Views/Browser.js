@@ -93,16 +93,15 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     Msg.listen('', { type: 'SnpClicked', id: this.SnpChannel.getID() }, function (scope, content) {
                         var callSetID = that.myPage.current_call_set.get('call_set');
                         var vcf = CrossesMetaData.variantsMap[callSetID].vcf;
-                        SnpCallPopup.create(callSetID,that.dataLocation,vcf,content.snp,content.seq,content.chrom)
+                        if (vcf&&content.seq) {
+                            SnpCallPopup.create(callSetID,that.dataLocation,vcf,content.snp,content.seq,content.chrom)
+                        }
                     });
 
                     //Causes the browser to start with a start region
                     this.panelBrowser.setPostInitialiseHandler(function () {
                         that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 100000);
                     });
-
-                    //Act like we just changed the callset so that we load the SNPs when we first open
-                    that.changeDataSource();
 
                 };
 
