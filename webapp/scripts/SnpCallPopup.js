@@ -25,13 +25,19 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                 that.callSetID=callSetID;
                 that.dataLocation = dataLocation;
                 that.vcf=vcf;
+                that.seqID = seqID;
                 that.createFramework = function() {
-                    that.popup = PopupFrame.PopupFrame('SnpCallPopupFrame', Framework.FrameGroupTab(''), { title: seqID.replace(/__/g, '/') + snpInfo.position, sizeX: 830, sizeY: 800 });
+                    that.popup = PopupFrame.PopupFrame('SnpCallPopupFrame', Framework.FrameGroupTab(''), { title: seqID.replace(/__/g, '/') + snpInfo.position, sizeX: 830, sizeY: 600 });
                     that.frameRoot = that.popup.getFrameRoot();
-                    that.frameRoot.setFrameClass('DQXForm');
+                    that.frameRoot.setFrameClass('DQXDarkFrame');
+                    that.frameRoot.setFrameClassClient('DQXDarkFrame');
                     that.frameRoot.setMarginsIndividual(0, 7, 0, 0);
 
-                    that.frameInfo = that.frameRoot.addMemberFrame(Framework.FrameFinal('', 1)).setMargins(5).setDisplayTitle('SNP info').setFrameClassClient('DQXForm');
+                    var frameInfo = that.frameRoot.addMemberFrame(Framework.FrameGroupHor('', 1)).setMarginsIndividual(0,4,0,0).setDisplayTitle('VCF info')/*.setFrameClassClient('DQXForm')*/;
+
+                    that.frameInfoVariant = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle('Variant info').setFrameClassClient('DQXForm');
+                    that.frameInfoCall = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle(that.seqID.replace(/__/g, '/')+' call info').setFrameClassClient('DQXForm');
+
                     that.frameLookSeq = that.frameRoot.addMemberFrame(Framework.FrameFinal('', 1)).setMargins(5).setDisplayTitle('Pileup').setFrameClassClient('DQXForm');
 
                     that.popup.render();
@@ -40,16 +46,41 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                 }
 
                 that.createInfoPanel = function() {
-                    that.frameInfo.setContentHtml("<h2>Fetching the information...</h2>");
+                    that.frameInfoVariant.setContentHtml("<h2>Fetching the information...</h2>");
                     var infoFetcher = DataFetcherSnp.FetcherSnpDetails(serverUrl);
                     infoFetcher.getSnpInfo(that.dataLocation+'/'+that.vcf,chrom,snpInfo.position,function(header,content) {
+                        header= $.trim(header)
+                        content= $.trim(content);
                         var headerComps=header.split('\t');
                         var contentComps=content.split('\t');
-                        var st='';
-                        for (i=0; i<headerComps.length; i++) {
-                            st+=headerComps[i]+' = '+contentComps[i]+'<br>';
+                        var stVariant='';
+                        var stCall='';
+                        for (var compNr=0; compNr<headerComps.length; compNr++) {
+                            if (headerComps[compNr]=='INFO') {
+                                stVariant+='<b>INFO</b><br/><div style="margin-left: 15px">'
+                                $.each(contentComps[compNr].split(';'),function(idx,infoComp){
+                                    stVariant+=infoComp+'<br/>';
+                                })
+                                stVariant+='</div>';
+                            }
+                            else {
+                                if (headerComps[compNr]=='FORMAT') break;
+                                stVariant+=headerComps[compNr]+' = '+contentComps[compNr]+'<br>';
+                            }
                         }
-                        that.frameInfo.setContentHtml(st);
+                        if (headerComps[compNr]=='FORMAT') {
+                            var formatComponents = contentComps[compNr].split(':')
+                            for (;compNr<headerComps.length; compNr++) {
+                                if (headerComps[compNr]==that.seqID.replace(/__/g, '/')) {
+                                    formatValues = contentComps[compNr].split(':');
+                                    $.each(formatComponents,function(idx,comp) {
+                                        stCall+=comp+' = '+formatValues[idx]+'<br>';
+                                    })
+                                }
+                            }
+                        }
+                        that.frameInfoVariant.setContentHtml('<div style="margin:5px">'+stVariant+'</div>');
+                        that.frameInfoCall.setContentHtml('<div style="margin:5px">'+stCall+'</div>');
                     })
                 }
 
