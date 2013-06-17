@@ -23,7 +23,7 @@
                 
 
                 that.activateState = function () {
-                    enableHomeButton();
+                    //enableHomeButton();
                     var tabswitched = this.myFrame.makeVisible();
                     //that.panelBrowser.handleResize(); //force immediate calculation of size
                 };
