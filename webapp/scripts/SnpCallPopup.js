@@ -22,6 +22,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
             create : function(callSetID, dataLocation, vcf ,snpInfo,seqID,chrom) {
                 var that={};
 
+                that.snpInfo=snpInfo;
+                that.chrom=chrom;
                 that.callSetID=callSetID;
                 that.dataLocation = dataLocation;
                 that.vcf=vcf;
@@ -33,7 +35,11 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     that.frameRoot.setFrameClassClient('DQXDarkFrame');
                     that.frameRoot.setMarginsIndividual(0, 7, 0, 0);
 
-                    var frameInfo = that.frameRoot.addMemberFrame(Framework.FrameGroupHor('', 1)).setMarginsIndividual(0,4,0,0).setDisplayTitle('VCF info')/*.setFrameClassClient('DQXForm')*/;
+                    var frameGeneral = that.frameRoot.addMemberFrame(Framework.FrameGroupVert('', 1)).setMarginsIndividual(0,4,0,0).setDisplayTitle('General')/*.setFrameClassClient('DQXForm')*/;
+
+                    that.frameButtons = frameGeneral.addMemberFrame(Framework.FrameFinal('', 0.2)).setMarginsIndividual(0,4,0,0).setAutoSize();
+
+                    var frameInfo = frameGeneral.addMemberFrame(Framework.FrameGroupHor('', 1)).setMarginsIndividual(0,0,0,0);
 
                     that.frameInfoVariant = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle('Variant info').setFrameClassClient('DQXForm');
                     that.frameInfoCall = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle(that.seqID.replace(/__/g, ' / ')+' call info').setFrameClassClient('DQXForm');
@@ -41,14 +47,32 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     that.frameLookSeq = that.frameRoot.addMemberFrame(Framework.FrameFinal('', 1)).setMargins(5).setDisplayTitle('Pileup').setFrameClassClient('DQXForm');
 
                     that.popup.render();
+                    that.createLinkButtons();
                     that.createInfoPanel();
                     that.createLookseqPanel();
+                }
+
+                that.createLinkButtons = function() {
+                    this.panelButtons = Framework.Form(this.frameButtons);
+
+                    var btList=[];
+                    var bt = Controls.Button(id, { bitmap: 'Bitmaps/Icons/Medium/GenomeAccessibility.png', content: "Show genome accessibility", buttonClass: "DQXToolButton3", width: 200, height: 51 });
+                    bt.setOnChanged(function() {
+                        that.popup.close();
+                        Msg.send({type:'JumpgenomePositionGenomeBrowser'}, {chromoID: that.chrom, position: that.snpInfo.position})
+                    })
+                    btList.push(bt);
+
+                    this.panelButtons.addControl(Controls.CompoundHor(btList));
+
+
+                    this.panelButtons.render();
                 }
 
                 that.createInfoPanel = function() {
                     that.frameInfoVariant.setContentHtml("<h2>Fetching the information...</h2>");
                     var infoFetcher = DataFetcherSnp.FetcherSnpDetails(serverUrl);
-                    infoFetcher.getSnpInfo(that.dataLocation+'/'+that.vcf,chrom,snpInfo.position,function(header,content) {
+                    infoFetcher.getSnpInfo(that.dataLocation+'/'+that.vcf,that.chrom,that.snpInfo.position,function(header,content) {
                         header= $.trim(header)
                         content= $.trim(content);
                         var headerComps=header.split('\t');

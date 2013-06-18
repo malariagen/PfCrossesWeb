@@ -35,6 +35,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
 
+                    Msg.listen("", { type: 'JumpgenomePositionGenomeBrowser' }, $.proxy(this.onJumpGenomePosition, this));
                     Msg.listen("", { type: 'JumpgenomeRegionGenomeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
 
                     //Create the datafetcher that will obtain the summary profiles over the genome, such as coverage, mapping quality, etc.
@@ -363,6 +364,21 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.panelBrowser.addChromosome(chromo.id, chromo.id, chromo.len+0.01);
                     });
                 }
+
+
+                //Call this function to jump to & highlight a specific position on the genome
+                that.onJumpGenomePosition = function (context, args) {
+                    if ('chromoID' in args)
+                        var chromoID = args.chromoID;
+                    else {
+                        DQX.assertPresence(args, 'chromNr');
+                        var chromoID = this.panelBrowser.getChromoID(args.chromNr);
+                    }
+
+                    DQX.assertPresence(args, 'position');
+                    this.activateState();
+                    this.panelBrowser.highlightRegion(chromoID, args.position, 20);
+                };
 
 
                 //Call this function to jump to & highlight a specific region on the genome
