@@ -41,6 +41,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     //Create the datafetcher that will obtain the summary profiles over the genome, such as coverage, mapping quality, etc.
                     this.dataFetcherProfiles = new DataFetcherSummary.Fetcher(serverUrl, 1, 600);
 
+                    require("Common").addToolGene("GeneOnGenome", "Show position on genome", "Icons/Medium/GenomeAccessibility.png", function (args) {
+                        that.jumpGene(args);
+                    });
 
                 };
 
@@ -401,6 +404,12 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     }, 50);*/
                 };
 
+                //Call this function to make the browser jump to a gene
+                that.jumpGene = function (args) {
+                    DQX.requireMember(args, 'chromid'); DQX.requireMember(args, 'start'); DQX.requireMember(args, 'stop');
+                    this.activateState();
+                    this.panelBrowser.highlightRegion(args.chromid, (args.start + args.stop) / 2, (args.stop - args.start));
+                };
 
                 return that;
             }

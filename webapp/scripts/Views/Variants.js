@@ -1,7 +1,7 @@
-﻿define(["require", "DQX/Framework", "DQX/SQL", "DQX/Msg", "DQX/Controls", "DQX/Model",
+﻿define(["require", "DQX/Utils", "DQX/Framework", "DQX/SQL", "DQX/Msg", "DQX/Controls", "DQX/Model",
     "CrossesMetaData", "TableCortex", "TableGATK", "VariantFilters",
     "i18n!nls/PfCrossesWebResources"],
-    function (require, Framework, SQL, Msg, Controls, Model,
+    function (require, DQX, Framework, SQL, Msg, Controls, Model,
               CrossesMetaData, TableCortex, TableGATK, VariantFilters,
               resources) {
 
@@ -43,6 +43,9 @@
                         var aFrameTable = that.frameTableGroup.addMemberFrame(Framework.FrameFinal(tableID, 0.6))
                             .setMargins(0).setFrameClassClient('DQXDarkFrame').setAllowScrollBars(false, false);
                         that.frameTables[tableID] = aFrameTable
+                    });
+                    require("Common").addToolGene("GeneVariantList", "Variants for this gene", "Icons/Medium/VariantCatalogue.png", function(args) {
+                        that.jumpGene(args);
                     });
                 };
 
@@ -194,6 +197,19 @@
                         that.tablecortex.panelTable.handleResize(); //force immediate calculation of size
                         that.tablegatk.panelTable.handleResize(); //force immediate calculation of size
                     }, 50);
+                };
+
+                //Call this function to activate the variant catalog panel, and show SNPs for a specific gene
+                that.jumpGene = function(params) {
+                    DQX.requireMember(params,"chromid");
+                    DQX.requireMember(params,"start");
+                    DQX.requireMember(params,"stop");
+                    this.activateState();
+                    this.frameLeftGroup.makeVisible();
+                    this.region_search.set('chrom', params.chromid);
+                    this.region_search.set('start', params.start);
+                    this.region_search.set('stop', params.stop);
+                    this.changeFunction();
                 };
 
                 return that;

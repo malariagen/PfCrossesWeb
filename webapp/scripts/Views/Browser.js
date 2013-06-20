@@ -26,6 +26,11 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
                         .setMargins(0).setDisplayTitle('Browser');
                     Msg.listen("", { type: 'JumpgenomeRegionGenotypeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
+
+                    require("Common").addToolGene("GeneOnGenotypes", "Browse genotypes", "Icons/Medium/GenotypeBrowser.png", function (args) {
+                        that.jumpGene(args);
+                    });
+
                 };
                 that.createPanels = function () {
 
@@ -331,6 +336,13 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     /*                    setTimeout(function () {
                     that.panelBrowser.handleResize(); //force immediate calculation of size
                     }, 50);*/
+                };
+
+                //Call this function to make the browser jump to a gene
+                that.jumpGene = function (args) {
+                    DQX.requireMember(args, 'chromid'); DQX.requireMember(args, 'start'); DQX.requireMember(args, 'stop');
+                    this.activateState();
+                    this.panelBrowser.highlightRegion(args.chromid, (args.start + args.stop) / 2, (args.stop - args.start));
                 };
 
 
