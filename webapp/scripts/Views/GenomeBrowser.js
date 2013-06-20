@@ -58,6 +58,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     };
 
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
+                    this.panelBrowser.annotationChannel.handleFeatureClicked = function (geneID) {
+                        require("Common").showGenePopup(geneID);
+                    }
                     this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'CDS');
                     this.panelBrowser.getAnnotationChannel().setMinDrawZoomFactX(0.005);
                     this.panelBrowser.MaxZoomFactX = 1.0 / 0.2;

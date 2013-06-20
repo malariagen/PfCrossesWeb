@@ -50,6 +50,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         browserConfig.annotTableName = 'pf3annot';
 
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
+                    this.panelBrowser.annotationChannel.handleFeatureClicked = function (geneID) {
+                        require("Common").showGenePopup(geneID);
+                    }
 
                     if (this.refVersion == 2)
                         this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'exon');
