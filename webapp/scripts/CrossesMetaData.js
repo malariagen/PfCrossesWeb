@@ -286,7 +286,7 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
 
             that.getTextConvertFunction = function () {
 
-                return function (x) { if (x) return x.toString(); else return '-' };
+                return function (x) { if (x) return x.toString(); else return '' };
             }
 
             return that;

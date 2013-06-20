@@ -50,6 +50,13 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
             
             this.frameTable = parentFrame;
         },
+
+        //This function is called when the user clicks on a gene id link in the SNP query table
+        _onClickGene: function(scope,id) {
+            var geneid=this.panelTable.getTable().getCellValue(id,"gene");
+            Msg.send({ type: 'ShowGenePopup' }, geneid);
+        },
+
         createPanelTable : function (parentFrame) {
 
         	this.setup(parentFrame);
@@ -89,7 +96,12 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
                     };
                 }
 				mytable.addSortOption(info.name, SQL.TableSort([info.id]));
-				
+
+                if (info.id=='gene') {
+                    var msgID={ type: 'ClickGene', id: mytable.myBaseID };
+                    comp.makeHyperlinkCell(msgID,DQX.interpolate("Show gene info card"));
+                    Msg.listen("",msgID,$.proxy(this._onClickGene,this));
+                }
             }
 
 
