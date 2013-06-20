@@ -22,8 +22,8 @@ require.config({
     urlArgs: "version="+versionString
 });
 
-require(["jquery", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils", "Page"],
-    function ($, Framework, Msg, HistoryManager, DQX, thePage) {
+require(["jquery", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils", "Page", "Common"],
+    function ($, Framework, Msg, HistoryManager, DQX, thePage, Common) {
         $(function () {
 
             //Global initialisation of utilities
@@ -36,6 +36,8 @@ require(["jquery", "DQX/Framework", "DQX/Msg", "DQX/HistoryManager", "DQX/Utils"
 
                 //Render frames
                 thePage.frameWindow.render('Div1');
+
+                Common.addToolHandlers();
 
                 //Some generic stuff after creation of the html
                 DQX.initPostCreate();

@@ -4,6 +4,7 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
 
         CrossesMetaData.database = "pfx";
         CrossesMetaData.tableAnnotation = "pf3annot";
+        CrossesMetaData.externalGeneLink = "http://old.plasmodb.org/plasmo/showRecord.do?name=GeneRecordClasses.GeneRecordClass&project_id=&primary_key={id}";
         CrossesMetaData.tableSamples = "pfx_samples";
         CrossesMetaData.tableVariants = "variants_filtered";
 

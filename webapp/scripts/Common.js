@@ -78,21 +78,9 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
 
         //Create handlers for various tool buttons
         Common.addToolHandlers = function () {
-            //Show a snp on the genome browser
-            Common.addToolSNP("SNPOnGenome", "Show position on genome", "Icons/Medium/GenomeAccessibility.png", function (args) {
-                require('Page').GenomeBrowserView.jumpSNP(args.snpid);
-            });
-            //Show a snp on the map
-            Common.addToolSNP("SNPOnMap", "Show frequencies on map", "Icons/Medium/VariantFrequency.png", function (args) {
-                require('Page').MapSNPFrequenciesView.jumpSNP(args.snpid);
-            });
-            //Tool handler that opens the gene popup card for a SNP
-            Common.addToolSNP("SNP2Gene", "Show gene containing this [@snp]", "Icons/Medium/Gene.png", function (args) {
-                Common.showGenePopup(args.geneid);
-            });
             //Tool handler that opens a gene in PlasmoDb
             Common.addToolGene("Gene2PlasmoDb", "Show in PlasmoDb", "plasmodb_bw.png", function (args) {
-                var url = require("MetaData1").externalGeneLink.DQXformat({ id: args.geneid });
+                var url = CrossesMetaData.externalGeneLink.DQXformat({ id: args.geneid });
                 window.open(url, '_blank');
             });
 
@@ -148,7 +136,7 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
         function handleShowGenePopup(data) {
             var geneid = data.fid;
             var geneData = { geneid: geneid, chromid: data.chromid, start: parseInt(data.fstart), stop: parseInt(data.fstop) };
-            content = '<div>' + Common.GeneData2InfoTable(data) + "</div>";
+            var content = '<div>' + Common.GeneData2InfoTable(data) + "</div>";
             for (var i = 0; i < Common._toolsGene.length; i++) {
                 content += Common._generateToolButton(Common._toolsGene[i], function (handler) {
                     handler(geneData);
