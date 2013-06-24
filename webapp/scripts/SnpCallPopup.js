@@ -1,9 +1,9 @@
 
 define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg", "DQX/DocEl",
     "DQX/Utils", "DQX/FrameList",
-    "DQX/ChannelPlot/ChannelSnps2", "DQX/DataFetcher/DataFetcherFile", "DQX/DataFetcher/DataFetcherSnp2", "Page", "CrossesMetaData"],
+    "DQX/ChannelPlot/ChannelSnps2", "DQX/DataFetcher/DataFetcherFile", "DQX/DataFetcher/DataFetcherSnp2", "Page", "CrossesMetaData", "Common"],
     function (require, Framework, Controls, PopupFrame, Msg, DocEl, DQX, FrameList,
-              ChannelSnps, DataFetcherFile, DataFetcherSnp, Page, CrossesMetaData) {
+              ChannelSnps, DataFetcherFile, DataFetcherSnp, Page, CrossesMetaData, Common) {
 
         var SnpCallPopupModule = {
 
@@ -56,12 +56,12 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.panelButtons = Framework.Form(this.frameButtons);
 
                     var btList=[];
-                    var bt = Controls.Button('', { bitmap: 'Bitmaps/Icons/Medium/GenomeAccessibility.png', content: "Show genome accessibility", buttonClass: "DQXToolButton3", width: 200, height: 51 });
-                    bt.setOnChanged(function() {
-                        that.popup.close();
-                        Msg.send({type:'JumpgenomePositionGenomeBrowser'}, {chromoID: that.chrom, position: that.snpInfo.position})
-                    })
-                    btList.push(bt);
+                    Common._toolsSNP.forEach(function(tool) {
+                        btList.push(Common._generateToolButton(tool, function (handler) {
+                            that.popup.close();
+                            handler({chromoID: that.chrom, position: that.snpInfo.position});
+                            }));
+                    });
 
                     this.panelButtons.addControl(Controls.CompoundHor(btList));
 

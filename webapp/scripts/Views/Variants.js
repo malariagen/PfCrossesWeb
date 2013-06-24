@@ -47,6 +47,10 @@
                     require("Common").addToolGene("GeneVariantList", "Variants for this gene", "Icons/Medium/VariantCatalogue.png", function(args) {
                         that.jumpGene(args);
                     });
+                    require("Common").addToolSNP("SNPVariantList", "Show variant in catalogue", "Icons/Medium/VariantCatalogue.png", function(args) {
+                        that.jumpGene({chromid: args.chromoID, start: args.position-1, stop: args.position+1});
+                    });
+
                 };
 
                 that.queryComponentToString = function (sq) {
@@ -211,7 +215,6 @@
                     this.region_search.set('stop', params.stop);
                     this.changeFunction();
                 };
-
                 return that;
             }
 

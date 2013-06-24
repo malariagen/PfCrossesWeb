@@ -30,6 +30,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     require("Common").addToolGene("GeneOnGenotypes", "Browse genotypes", "Icons/Medium/GenotypeBrowser.png", function (args) {
                         that.jumpGene(args);
                     });
+                    require("Common").addToolSNP("SNPOnGenotypes", "Browse genotypes", "Icons/Medium/GenotypeBrowser.png", function (args) {
+                        that.jumpGene({chromid: args.chromoID, start: args.position, stop: args.position});
+                    });
 
                 };
                 that.createPanels = function () {

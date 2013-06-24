@@ -44,6 +44,10 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     require("Common").addToolGene("GeneOnGenome", "Show position on genome", "Icons/Medium/GenomeAccessibility.png", function (args) {
                         that.jumpGene(args);
                     });
+                    require("Common").addToolSNP("SNPOnGenome", "Show position on genome", "Icons/Medium/GenomeAccessibility.png", function (args) {
+                        Msg.send({type:'JumpgenomePositionGenomeBrowser'}, args)
+                    });
+
 
                 };
 
