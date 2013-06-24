@@ -20,11 +20,11 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.3))
                         .setMargins(0).setMinSize(Framework.dimX, 380);
                     this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('settings', 0.7))
-                        .setMargins(5).setDisplayTitle('Settings').setFixedSize(Framework.dimX, 380);
+                        .setMargins(5).setFixedSize(Framework.dimX, 380);
                     this.frameDetails = this.frameLeft.addMemberFrame(Framework.FrameFinal('details', 0.4))
                         .setMargins(5).setDisplayTitle('Details').setFixedSize(Framework.dimX, 380);
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
-                        .setMargins(0).setDisplayTitle('Browser');
+                        .setMargins(0);
                     Msg.listen("", { type: 'JumpgenomeRegionGenotypeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
 
                     require("Common").addToolGene("GeneOnGenotypes", "Browse genotypes", "Icons/Medium/GenotypeBrowser.png", function (args) {

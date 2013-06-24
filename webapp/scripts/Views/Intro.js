@@ -44,6 +44,8 @@
                     navSectionDiv.addStyle("position", "absolute");
                     navSectionDiv.addStyle("right", "0px");
                     navSectionDiv.addStyle("top", "0px");
+                    navSectionDiv.addStyle("padding-top", "3px");
+                    navSectionDiv.addStyle("padding-right", "3px");
                     this.createNavigationButton("HeaderHome", navSectionDiv, 'Bitmaps/Icons/Small/Home.png',
                         resources.navButtonIntro, "DQXToolButton3", 100,
                         function () { Msg.send({ type: 'Home' }) });

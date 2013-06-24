@@ -6,11 +6,11 @@
 
                 thePage.frameWindow = Framework.FrameFullWindow(Framework.FrameGroupVert(''));
                 thePage.frameRoot = thePage.frameWindow.getFrameRoot();
-                thePage.frameRoot.setMargins(0);
+                thePage.frameRoot.setMargins(0).setSeparatorSize(0);
 
                 //The top line of the page
                 thePage.frameHeaderIntro = thePage.frameRoot.addMemberFrame(Framework.FrameFinal('HeaderIntro', 1))
-                    .setFixedSize(Framework.dimY, 75).setFrameClassClient('DQXPage');
+                    .setFixedSize(Framework.dimY, 60).setFrameClassClient('DQXPage').setMargins(0).setAllowScrollBars(false,false);
 
                 
                 //The body panel of the page
@@ -20,22 +20,22 @@
                 .setFrameClass('DQXClient').setDisplayTitle(resources.appName + resources.introPageHeader); ;
                 
                 thePage.frameBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('browser', 1))
-                .setMarginsIndividual(0,7,0,0).setDisplayTitle(resources.appName + resources.genotypePageHeader); ;
+                .setMarginsIndividual(0,0,0,0).setDisplayTitle(resources.appName + resources.genotypePageHeader); ;
 
                 thePage.frameGenomeBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('genomebrowser', 1))
-                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.genomePageHeader); ;
+                .setMarginsIndividual(0, 0, 0, 0).setDisplayTitle(resources.appName + resources.genomePageHeader); ;
 
                 thePage.frameVariants = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('variants', 1))
-                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.variantsPageHeader); ;
+                .setMarginsIndividual(0, 0, 0, 0).setDisplayTitle(resources.appName + resources.variantsPageHeader); ;
                 
                 thePage.frameSamples = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('samples', 1))
-                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.samplesPageHeader); ;
+                .setMarginsIndividual(0, 0, 0, 0).setDisplayTitle(resources.appName + resources.samplesPageHeader); ;
 
                 thePage.frameLookSeq = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('lookSeq', 1))
-                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.lookseqPageHeader); ;
+                .setMarginsIndividual(0, 0, 0, 0).setDisplayTitle(resources.appName + resources.lookseqPageHeader); ;
                 
                 thePage.frameDownloads = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('downloads', 1))
-                .setMarginsIndividual(0, 7, 0, 0).setDisplayTitle(resources.appName + resources.downloadsPageHeader); ;
+                .setMarginsIndividual(0, 0, 0, 0).setDisplayTitle(resources.appName + resources.downloadsPageHeader); ;
 
                 //Create some models for app state
                 var filters = {};

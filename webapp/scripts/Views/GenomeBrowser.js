@@ -24,7 +24,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                 that.createFramework = function () {
 
                     this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
-                        .setMargins(0).setDisplayTitle('Visible channels').setMinSize(Framework.dimX, 430);
+                        .setMargins(0).setMinSize(Framework.dimX, 430);
 
                     this.frameChannels = this.frameLeft.addMemberFrame(Framework.FrameFinal('channels', 0.7))
                         .setMargins(0).setFixedSize(Framework.dimX, 380);
@@ -33,7 +33,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         .setMargins(0).setFixedSize(Framework.dimX, 380);
 
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
-                        .setMargins(0).setDisplayTitle('Browser');
+                        .setMargins(0);
 
                     Msg.listen("", { type: 'JumpgenomePositionGenomeBrowser' }, $.proxy(this.onJumpGenomePosition, this));
                     Msg.listen("", { type: 'JumpgenomeRegionGenomeBrowser' }, $.proxy(this.onJumpGenomeRegion, this));
