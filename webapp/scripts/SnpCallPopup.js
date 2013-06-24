@@ -120,17 +120,22 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     }) + "'>");
                     $('#' + uid).load(function () {
                         var img = $('#' + uid);
-                        var canvas = $("<canvas id='canvas" + uid + "' style='position:absolute; top=0px; left=0px;'></canvas>");
-                        canvas.insertAfter(img);
-                        canvas.attr('height', img.height());
-                        canvas.attr('width', img.width());
-                        var c = canvas.get(0).getContext('2d');
-                        c.strokeStyle = '#F00';
-                        c.beginPath();
-                        c.moveTo(395, 0);
-                        c.lineTo(395, canvas.height());
-                        c.lineWidth = 1;
-                        c.stroke();
+                        //The img may be in a hidden tab so we need to get its width, height from a dupe img.
+                        var theImage = new Image();
+                        theImage.src = img.attr("src");
+                        theImage.onload = function() {
+                            var canvas = $("<canvas id='canvas" + uid + "' style='position:absolute; top=0px; left=0px;'></canvas>");
+                            canvas.insertAfter(img);
+                            canvas.attr('height', theImage.height);
+                            canvas.attr('width', theImage.width);
+                            var c = canvas.get(0).getContext('2d');
+                            c.strokeStyle = '#F00';
+                            c.beginPath();
+                            c.moveTo(395, 0);
+                            c.lineTo(395, theImage.height);
+                            c.lineWidth = 1;
+                            c.stroke();
+                        };
                     })
                 }
 
