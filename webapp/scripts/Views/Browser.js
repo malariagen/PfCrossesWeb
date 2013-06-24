@@ -235,7 +235,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     }
 
                     //Per-variant value filters specific for Cortex
-                    var ctrl_Variant_SITE_CONF = Controls.ValueSlider('CtrlVariantSITE_CONF', { label: 'Min. SITE_CONF', width: sliderWidth, minval: 0, maxval: 2000, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                    var ctrl_Variant_SITE_CONF = Controls.ValueSlider('CtrlVariantSITE_CONF', { label: 'Min. SITE_CONF', width: sliderWidth, minval: 0, maxval: 1000, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.filter.setCustomVariantFilter('SITE_CONF','SITE_CONF', ctrl_Variant_SITE_CONF.getValue(), true, true)
                         that.panelBrowser.render();
                     });
@@ -297,7 +297,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
 
                     //Per-call filters specific for Cortex
-                    var ctrl_Call_GT_CONF = Controls.ValueSlider('CtrlCallGT_CONF', { label: 'Min. GT_CONF', width: sliderWidth, minval: 0, maxval: 1000, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                    var ctrl_Call_GT_CONF = Controls.ValueSlider('CtrlCallGT_CONF', { label: 'Min. GT_CONF', width: sliderWidth, minval: 0, maxval: 500, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.filter.setCustomCallFilter('GT_CONF', 'GT_CONF', ctrl_Call_GT_CONF.getValue(), true, true)
                         that.panelBrowser.render();
                     });
