@@ -56,7 +56,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.panelButtons = Framework.Form(this.frameButtons);
 
                     var btList=[];
-                    var bt = Controls.Button(id, { bitmap: 'Bitmaps/Icons/Medium/GenomeAccessibility.png', content: "Show genome accessibility", buttonClass: "DQXToolButton3", width: 200, height: 51 });
+                    var bt = Controls.Button('', { bitmap: 'Bitmaps/Icons/Medium/GenomeAccessibility.png', content: "Show genome accessibility", buttonClass: "DQXToolButton3", width: 200, height: 51 });
                     bt.setOnChanged(function() {
                         that.popup.close();
                         Msg.send({type:'JumpgenomePositionGenomeBrowser'}, {chromoID: that.chrom, position: that.snpInfo.position})
