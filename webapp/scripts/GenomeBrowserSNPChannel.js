@@ -11,6 +11,7 @@
                 that._pointsX = [];
                 that._pointsIndex = [];
                 that._SNPIDColumn = "id";
+                that.callSetID = callSetID;
 
                 that.draw = function (drawInfo, args) {
                     var PosMin = Math.round((-50 + drawInfo.offsetX) / drawInfo.zoomFactX);
@@ -28,6 +29,8 @@
                     drawInfo.centerContext.strokeStyle = DQX.Color(0.0, 0.0, 0.0).toString();
                     this._pointsX = [];
                     var pointsX = this._pointsX;
+                    this._pointsGenome = [];
+                    var pointsGenome = this._pointsGenome;
                     this._pointsIndex = [];
                     var pointsIndex = this._pointsIndex;
                     this.startIndex = points.startIndex;
@@ -35,7 +38,7 @@
                     for (var i = 0; i < xvals.length; i++) {
                         var x = xvals[i];
                         var psx = Math.round(x * drawInfo.zoomFactX - drawInfo.offsetX) + 0.5;
-                        pointsX.push(psx); pointsIndex.push(i + points.startIndex);
+                        pointsX.push(psx); pointsGenome.push(x); pointsIndex.push(i + points.startIndex);
                         var psy = 5.5;
                         drawInfo.centerContext.beginPath();
                         drawInfo.centerContext.moveTo(psx, psy);
@@ -56,6 +59,7 @@
                     if ((py >= 0) && (py <= 20)) {
                         var pointsX = this._pointsX;
                         var pointsIndex = this._pointsIndex;
+                        var pointsGenome = this._pointsGenome;
                         var mindst = 12;
                         var bestpt = -1;
                         for (var i = 0; i < pointsX.length; i++)
@@ -71,6 +75,8 @@
                             info.snpid = this.myFetcher.getColumnPoint(this.startIndex + bestpt, this._SNPIDColumn);
                             info.content = info.snpid;
                             info.showPointer = true;
+                            info.pos = pointsGenome[bestpt];
+
                             return info;
                         }
                     }
@@ -78,15 +84,15 @@
                 }
 
                 that.handleMouseClicked = function (px, py) {
-                    var tooltipInfo = that.getToolTipInfo(px, py);
-//                    if (tooltipInfo) {
-//                        if (tooltipInfo.tpe == 'SNP')
-//                            Msg.send({ type: 'ShowSNPPopup' }, tooltipInfo.snpid);
-//                    }
+                    var info = that.getToolTipInfo(px, py);
+                    if (info) {
+                        if (info.tpe == 'SNP')
+                            Msg.send({ type: 'ShowSNPPopup' }, {call_set: that.callSetID, snp_pos:info.pos, chrom: that.myFetcher._userQuery1.CompValue});
+                    }
                 }
 
                 return that;
-            },
+            }
 
         }
 

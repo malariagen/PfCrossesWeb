@@ -86,42 +86,11 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
 
         }
 
-        function handleShowSNPPopup(data) {
-            var snpid = data['snpid'];
-            var geneid = data['GeneId'];
-            var content = '';
-            content = '<div style="display:inline-block;vertical-align:top;margin:5px">' + Common.SnpData2InfoTable(data) + "</div>";
-            var freqDiv = DQX.getNextUniqueID();
-            content += '<div id="' + freqDiv + '" style="display:inline-block;vertical-align:top;margin:5px"></div>';
-            content += "<br/>";
-
-            var snpData = { snpid: snpid, geneid: geneid };
-            for (var i = 0; i < Common._toolsSNP.length; i++) {
-                content += Common._generateToolButton(Common._toolsSNP[i], function (handler) {
-                    handler(snpData);
-                    Popup.closeIfNeeded(popupID);
-                }).renderHtml();
-            }
-            var popupID = Popup.create("[@Snp] " + snpid, content);
-
-            Common.SnpData2AlleleFrequenciesTable(data, $("#" + freqDiv));
-        }
-
-        //Call this function to fetch snp data in an async way
-        Common.fetchSnpData = function (snpid, handleFunction) {
-            var dataFetcher = require("Page").dataFetcherSNPs;
-            dataFetcher.fetchFullRecordInfo(
-                SQL.WhereClause.CompareFixed('snpid', '=', snpid),
-                function (data) {
-                    DQX.stopProcessing();
-                    handleFunction(data);
-                },
-                function (msg) {
-                    DQX.stopProcessing();
-                    alert(DQX.Text("InvalidSNPID").DQXformat({ id: snpid }));
-                }
-            );
-            DQX.setProcessing("Downloading...");
+        Common.showSNPPopup = function(data) {
+            data.call_set = data.call_set.replace("_gatk", ":gatk");
+            data.call_set = data.call_set.replace("_cortex", ":cortex");
+            var vcf = CrossesMetaData.variantsMap[data.call_set].vcf;
+            require("SnpCallPopup").create(data.call_set, "SnpDataCross2", vcf, {position: data.snp_pos}, null, data.chrom);
         }
 
         //Returns html with info about a gene
@@ -177,9 +146,8 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
 
 
         //Create event listener for actions to open a SNP popup window
-        Msg.listen('', { type: 'ShowSNPPopup' }, function (context, snpid) {
-            require("Wizards/WizardFindSNP").addSNPHit(snpid);
-            Common.fetchSnpData(snpid, handleShowSNPPopup);
+        Msg.listen('', { type: 'ShowSNPPopup' }, function (context, data) {
+            Common.showSNPPopup(data);
         });
 
         //Create event listener for actions to open a gene popup window
