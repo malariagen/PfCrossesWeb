@@ -86,29 +86,24 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
 
         }
 
-        function handleShowSNPPopup(data) {
-            var snpid = data['snpid'];
-            var geneid = data['GeneId'];
+        Common.showSNPPopup = function(data) {
             var content = '';
-            content = '<div style="display:inline-block;vertical-align:top;margin:5px">' + Common.SnpData2InfoTable(data) + "</div>";
-            var freqDiv = DQX.getNextUniqueID();
-            content += '<div id="' + freqDiv + '" style="display:inline-block;vertical-align:top;margin:5px"></div>';
-            content += "<br/>";
+            content = 'BOB'//<div style="display:inline-block;vertical-align:top;margin:5px">' + Common.SnpData2InfoTable(data) + "</div>";
+            //var freqDiv = DQX.getNextUniqueID();
+            //content += '<div id="' + freqDiv + '" style="display:inline-block;vertical-align:top;margin:5px"></div>';
+            //content += "<br/>";
 
-            var snpData = { snpid: snpid, geneid: geneid };
             for (var i = 0; i < Common._toolsSNP.length; i++) {
                 content += Common._generateToolButton(Common._toolsSNP[i], function (handler) {
-                    handler(snpData);
+                    handler({chromoID: data.chromo, position: data.pos});
                     Popup.closeIfNeeded(popupID);
                 }).renderHtml();
             }
-            var popupID = Popup.create("[@Snp] " + snpid, content);
-
-            Common.SnpData2AlleleFrequenciesTable(data, $("#" + freqDiv));
+            var popupID = Popup.create("SNP" + DQX.getNextUniqueID(), content);
         }
 
         //Call this function to fetch snp data in an async way
-        Common.fetchSnpData = function (snpid, handleFunction) {
+        Common.fetchSnpData = function (call_set, chromo, pos, handleFunction) {
             var dataFetcher = require("Page").dataFetcherSNPs;
             dataFetcher.fetchFullRecordInfo(
                 SQL.WhereClause.CompareFixed('snpid', '=', snpid),
@@ -177,9 +172,8 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
 
 
         //Create event listener for actions to open a SNP popup window
-        Msg.listen('', { type: 'ShowSNPPopup' }, function (context, snpid) {
-            require("Wizards/WizardFindSNP").addSNPHit(snpid);
-            Common.fetchSnpData(snpid, handleShowSNPPopup);
+        Msg.listen('', { type: 'ShowSNPPopup' }, function (context, data) {
+            Common.showSNPPopup(data);
         });
 
         //Create event listener for actions to open a gene popup window

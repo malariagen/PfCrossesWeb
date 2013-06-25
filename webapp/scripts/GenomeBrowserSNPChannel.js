@@ -79,14 +79,14 @@
 
                 that.handleMouseClicked = function (px, py) {
                     var tooltipInfo = that.getToolTipInfo(px, py);
-//                    if (tooltipInfo) {
-//                        if (tooltipInfo.tpe == 'SNP')
-//                            Msg.send({ type: 'ShowSNPPopup' }, tooltipInfo.snpid);
-//                    }
+                    if (tooltipInfo) {
+                        if (tooltipInfo.tpe == 'SNP')
+                            Msg.send({ type: 'ShowSNPPopup' }, {chromo: that.myFetcher._userQuery1.CompValue, pos:tooltipInfo.snpid});
+                    }
                 }
 
                 return that;
-            },
+            }
 
         }
 
