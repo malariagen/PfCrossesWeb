@@ -87,36 +87,10 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
         }
 
         Common.showSNPPopup = function(data) {
-            var content = '';
-            content = 'BOB'//<div style="display:inline-block;vertical-align:top;margin:5px">' + Common.SnpData2InfoTable(data) + "</div>";
-            //var freqDiv = DQX.getNextUniqueID();
-            //content += '<div id="' + freqDiv + '" style="display:inline-block;vertical-align:top;margin:5px"></div>';
-            //content += "<br/>";
-
-            for (var i = 0; i < Common._toolsSNP.length; i++) {
-                content += Common._generateToolButton(Common._toolsSNP[i], function (handler) {
-                    handler({chromoID: data.chromo, position: data.pos});
-                    Popup.closeIfNeeded(popupID);
-                }).renderHtml();
-            }
-            var popupID = Popup.create("SNP" + DQX.getNextUniqueID(), content);
-        }
-
-        //Call this function to fetch snp data in an async way
-        Common.fetchSnpData = function (call_set, chromo, pos, handleFunction) {
-            var dataFetcher = require("Page").dataFetcherSNPs;
-            dataFetcher.fetchFullRecordInfo(
-                SQL.WhereClause.CompareFixed('snpid', '=', snpid),
-                function (data) {
-                    DQX.stopProcessing();
-                    handleFunction(data);
-                },
-                function (msg) {
-                    DQX.stopProcessing();
-                    alert(DQX.Text("InvalidSNPID").DQXformat({ id: snpid }));
-                }
-            );
-            DQX.setProcessing("Downloading...");
+            data.call_set = data.call_set.replace("_gatk", ":gatk");
+            data.call_set = data.call_set.replace("_cortex", ":cortex");
+            var vcf = CrossesMetaData.variantsMap[data.call_set].vcf;
+            require("SnpCallPopup").create(data.call_set, "SnpDataCross2", vcf, {position: data.snp_pos}, null, data.chrom);
         }
 
         //Returns html with info about a gene
