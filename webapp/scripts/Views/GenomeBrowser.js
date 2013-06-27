@@ -86,13 +86,6 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                     this.treeChannels.render();
 
-                    //Causes the browser to start with a start region
-                    var firstChromosome = CrossesMetaData.chromosomes[0].id;
-                    this.panelBrowser.setChromosome(firstChromosome, true, false);
-                    this.panelBrowser.setPostInitialiseHandler(function () {
-                        that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 10000);
-                    });
-
                 };
 
 
