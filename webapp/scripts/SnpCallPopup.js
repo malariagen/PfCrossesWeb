@@ -29,29 +29,41 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                 that.vcf=vcf;
                 that.seqID = seqID;
                 that.createFramework = function() {
-                    that.popup = PopupFrame.PopupFrame('SnpCallPopupFrame', seqID ? Framework.FrameGroupTab('') : Framework.FrameGroupVert(''), { title: seqID ? seqID.replace(/__/g, ' / ') + snpInfo.position : callSetID + ' ' + snpInfo.position, sizeX: 830, sizeY: 600 });
-                    that.frameRoot = that.popup.getFrameRoot();
-                    that.frameRoot.setFrameClass('DQXDarkFrame');
-                    that.frameRoot.setFrameClassClient('DQXDarkFrame');
-                    that.frameRoot.setMarginsIndividual(0, 7, 0, 0);
+                    that.popup = PopupFrame.PopupFrame('SnpCallPopupFrame', { title: seqID ? seqID.replace(/__/g, ' / ') + snpInfo.position : callSetID + ' ' + snpInfo.position, sizeX: 830, sizeY: 600 });
 
-                    var frameGeneral = that.frameRoot.addMemberFrame(Framework.FrameGroupVert('', 1)).setMarginsIndividual(0,4,0,0).setDisplayTitle(seqID ? 'General' : '')/*.setFrameClassClient('DQXForm')*/;
+                    that.popup.createFrames = function(frameRoot) {
+                        that.frameRoot = frameRoot;
+                        if (seqID)
+                            that.frameRoot.makeGroupTab('');
+                        else
+                            Framework.makeGroupVert('');
+                        that.frameRoot.setFrameClass('DQXDarkFrame');
+                        that.frameRoot.setFrameClassClient('DQXDarkFrame');
+                        that.frameRoot.setMarginsIndividual(0, 7, 0, 0);
 
-                    that.frameButtons = frameGeneral.addMemberFrame(Framework.FrameFinal('', 0.2)).setMarginsIndividual(0,4,0,0).setAutoSize();
+                        var frameGeneral = that.frameRoot.addMemberFrame(Framework.FrameGroupVert('', 1)).setDisplayTitle(seqID ? 'General' : '')/*.setFrameClassClient('DQXForm')*/;
 
-                    var frameInfo = frameGeneral.addMemberFrame(Framework.FrameGroupHor('', 1)).setMarginsIndividual(0,0,0,0);
+                        that.frameButtons = frameGeneral.addMemberFrame(Framework.FrameFinal('', 0.2)).setAutoSize();
 
-                    that.frameInfoVariant = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle('Variant info').setFrameClassClient('DQXForm');
-                    if (seqID) {
-                        that.frameInfoCall = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle(that.seqID.replace(/__/g, ' / ')+' call info').setFrameClassClient('DQXForm');
-                        that.frameLookSeq = that.frameRoot.addMemberFrame(Framework.FrameFinal('', 1)).setMargins(5).setDisplayTitle('Pileup').setFrameClassClient('DQXForm');
+                        var frameInfo = frameGeneral.addMemberFrame(Framework.FrameGroupHor('', 1));
+
+                        that.frameInfoVariant = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle('Variant info').setFrameClassClient('DQXForm');
+                        if (seqID) {
+                            that.frameInfoCall = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle(that.seqID.replace(/__/g, ' / ')+' call info').setFrameClassClient('DQXForm');
+                            that.frameLookSeq = that.frameRoot.addMemberFrame(Framework.FrameFinal('', 1)).setMargins(5).setDisplayTitle('Pileup').setFrameClassClient('DQXForm');
+                        }
                     }
 
-                    that.popup.render();
-                    that.createLinkButtons();
-                    that.createInfoPanel();
-                    if (seqID)
-                        that.createLookseqPanel();
+                    that.popup.createPanels = function() {
+                        that.createLinkButtons();
+                        that.createInfoPanel();
+                        if (seqID)
+                            that.createLookseqPanel();
+                    }
+
+                    that.popup.create();
+
+
                 }
 
                 that.createLinkButtons = function() {
