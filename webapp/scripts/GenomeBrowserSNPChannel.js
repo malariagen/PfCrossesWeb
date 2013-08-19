@@ -73,9 +73,9 @@
                             info.px = pointsX[bestpt];
                             info.py = 13;
                             info.snpid = this.myFetcher.getColumnPoint(this.startIndex + bestpt, this._SNPIDColumn);
-                            info.content = info.snpid;
                             info.showPointer = true;
                             info.pos = pointsGenome[bestpt];
+                            info.content = 'Position: '+info.pos;
 
                             return info;
                         }

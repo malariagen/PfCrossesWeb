@@ -169,10 +169,10 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                              '3' : DQX.Color(0,0.2,0)
                              }
                              );
-                            /*                    //Define a custom tooltip
-                             theChannel.setToolTipHandler(function(snpid) {
-                             return 'SNP: '+snpid;
+                             theChannel.setToolTipHandler(function(snpid,positIndex) {
+                                return 'Position: '+dataFetcherRecomb.getPosition(positIndex);
                              })
+                            /*
                              //Define a function tht will be called when the user clicks a snp
                              theChannel.setClickHandler(function(snpid) {
                              Msg.send({ type: 'SnpPopup' }, snpid);//Send a message that should trigger showing the snp popup
