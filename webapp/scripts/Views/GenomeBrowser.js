@@ -1,12 +1,12 @@
 ﻿
 define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Utils",
     "DQX/Popup", "DQX/FrameTree", "DQX/FrameList", "DQX/ChannelPlot/GenomePlotter",
-    "DQX/ChannelPlot/ChannelYVals", "DQX/ChannelPlot/ChannelSequence", "DQX/ChannelPlot/ChannelSnps",
+    "DQX/ChannelPlot/ChannelYVals", "DQX/ChannelPlot/ChannelSequence", "DQX/ChannelPlot/ChannelSnps", "DQX/ChannelPlot/ChannelPositions",
     "DQX/DataFetcher/DataFetcherFile", "DQX/DataFetcher/DataFetchers", "DQX/DataFetcher/DataFetcherSummary",
     "GenomeBrowserSNPChannel", "CrossesMetaData", "VariantFilters", "i18n!nls/PfCrossesWebResources"],
     function (require, Framework, Controls, Msg, SQL, DocEl, DQX,
               Popup, FrameTree, FrameList, GenomePlotter,
-              ChannelYVals, ChannelSequence, ChannelSnps,
+              ChannelYVals, ChannelSequence, ChannelSnps, ChannelPositions,
               DataFetcherFile, DataFetchers, DataFetcherSummary,
               GenomeBrowserSNPChannel,
               CrossesMetaData, VariantFilters, resources) {
@@ -79,6 +79,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     this.createChannelVisibilityControls();
                     this.createControls();
                     this.createSNPChannels();
+                    this.createRecombChannels();
+                    this.createHotSpotChannels();
 
                     //Initialise the summary profiles
                     this.panelBrowser.addDataFetcher(this.dataFetcherProfiles);
@@ -138,6 +140,90 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.callSetViewers.push(callSetViewer);
                     });
                 };
+
+
+                that.createRecombChannels = function () {
+
+                    $.each(CrossesMetaData.sampleSets, function(idx,sampleset) {
+                        crossid=sampleset.id;
+                        if (crossid) {
+                            var dataFetcherRecomb = new DataFetchers.Curve(
+                                serverUrl,CrossesMetaData.database,
+                                'recombinationpositions'
+                            );
+
+                            dataFetcherRecomb.setUserQuery2(SQL.WhereClause.CompareFixed('crossid', '=', crossid))
+
+                            var theChannel = ChannelPositions.Channel(null,
+                                dataFetcherRecomb,   // The datafetcher containing the positions of the snps
+                                'chrom'                 // Name of the column containing a unique identifier for each snp
+                            );
+                            theChannel
+                                .setTitle(sampleset.name+' - Recombination spots')        //sets the title of the channel
+                                .setMaxViewportSizeX(500.0e5);
+                            theChannel.makeCategoricalColors(//Assign a different color to silent/nonsilent snps
+                             'samplecount',               // Name of the column containing a categorical string value that determines the color of the snp
+                             {
+                             '1' :  DQX.Color(0.75,1.0,0.75) ,
+                             '2' : DQX.Color(0.0,0.7,0.0),
+                             '3' : DQX.Color(0,0.2,0)
+                             }
+                             );
+                            /*                    //Define a custom tooltip
+                             theChannel.setToolTipHandler(function(snpid) {
+                             return 'SNP: '+snpid;
+                             })
+                             //Define a function tht will be called when the user clicks a snp
+                             theChannel.setClickHandler(function(snpid) {
+                             Msg.send({ type: 'SnpPopup' }, snpid);//Send a message that should trigger showing the snp popup
+                             })*/
+                            that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
+                        }
+                    });
+                }
+
+
+                that.createHotSpotChannels = function() {
+                    var dataFetcherHotSpot = new DataFetchers.Curve(
+                        serverUrl,CrossesMetaData.database,
+                        'hotspot5000'
+                    );
+
+
+                    //Create the channel in the browser that will contain the frequency values
+                    var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 5 });
+                    theChannel
+                        .setTitle("Number of recombinations")        //sets the title of the channel
+                        .setSubTitle("in 5kb window")        //sets the title of the channel
+                        .setHeight(120)                 //sets the height of the channel, in pixels
+                        .setMaxViewportSizeX(50.0e5)     //if more than 5e5 bases are in the viewport, this channel is not shown
+                        .setChangeYScale(false,true);   //makes the scale adjustable by dragging it
+                    that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
+
+                    var plotcomp = theChannel.addComponent(ChannelYVals.Comp(null, dataFetcherHotSpot, 'hotspot5000'), true);//Create the component
+                    //plotcomp.myPlotHints.color = population.color;//define the color of the component
+                    plotcomp.myPlotHints.pointStyle = 1;//chose a sensible way of plotting the points
+                    plotcomp.myPlotHints.makeDrawLines(9E99);
+                    //that.channelControls.push(theChannel.createComponentVisibilityControl(population.freqid, population.name, true));//Create a visibility checkbox for the component, and add to the list of controls
+
+/*
+                    //Define the tooltip shown when a user hovers the mouse over a point in the channel
+                    theChannel.getToolTipContent = function(compID, pointIndex) {
+                        var snpid = that.dataFetcherSNPs.getColumnPoint(pointIndex, "snpid");
+                        var value = that.dataFetcherSNPs.getColumnPoint(pointIndex, compID);
+                        return snpid+'<br/>'+compID+'= '+value.toFixed(3);
+                    };
+
+                    //Define the action when a user clicks on a point in the channel
+                    theChannel.handlePointClicked = function(compID, pointIndex) {
+                        var snpid = that.dataFetcherSNPs.getColumnPoint(pointIndex, "snpid");//Get the snp id from the datafetcher
+                        Msg.send({ type: 'ShowSNPPopup' }, snpid);//Send a message that should trigger showing the snp popup
+                    };
+*/
+
+                }
+
+
 
 
                 that.addChannelToTree = function (channel, name, defaultVisible, docID) {
