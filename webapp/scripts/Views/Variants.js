@@ -231,6 +231,8 @@
                     theForm.addControl(pane);
                     that.myPage.variant_filters.on({change: true}, that.changeFunction);
                     theForm.render();
+
+                    that.myPage.promptCallSetIfRequired();
                 };
 
 

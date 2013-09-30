@@ -1,5 +1,5 @@
-﻿define(["DQX/Framework", "DQX/Model", "DQX/HistoryManager", "DQX/DocEl", "DQX/Msg", "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "Views/LookSeq", "Views/Downloads", "i18n!nls/PfCrossesWebResources", "CrossesMetaData"],
-    function (Framework, Model, HistoryManager, DocEl, Msg, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule, LookSeqModule, DownloadsModule, resources, CrossesMetaData) {
+﻿define(["DQX/Framework", "DQX/Model", "DQX/HistoryManager", "DQX/DocEl", "DQX/Msg", "DQX/Popup", "DQX/Controls", "Views/Intro", "Views/Browser", "Views/GenomeBrowser", "Views/Samples", "Views/Variants", "Views/LookSeq", "Views/Downloads", "i18n!nls/PfCrossesWebResources", "CrossesMetaData"],
+    function (Framework, Model, HistoryManager, DocEl, Msg, Popup, Controls, IntroModule, BrowserModule, GenomeBrowserModule, SamplesModule, VariantsModule, LookSeqModule, DownloadsModule, resources, CrossesMetaData) {
         thePage = {
 
             createFramework: function () {
@@ -43,7 +43,7 @@
                     filters[id] = true;
                 });
                 thePage.variant_filters = Model(filters);
-                thePage.current_call_set = Model({ 'call_set': CrossesMetaData.variants[0].id });
+                thePage.current_call_set = Model({ 'call_set': '' });
 
                 this.type_search = Model({ snp: true, indel: true });
 
@@ -80,6 +80,23 @@
 
            
         };
+
+        thePage.promptCallSetIfRequired = function() {
+            if (!thePage.current_call_set.get('call_set')) {
+                var content = '';
+                $.each(CrossesMetaData.variants, function(idx, callset) {
+                    var bt = Controls.Button(null,{content: callset.name, width:350 });
+                    bt.setOnChanged(function() {
+                    thePage.current_call_set.set('call_set',callset.id);
+                        DQX.ClosePopup(popupid);
+                    })
+                    content += bt.renderHtml();
+                    content += '<br>';
+                });
+                content += '<br>NOTE: you can change the active call set any time later<br>using the combo box selector in the left panel<br>'
+                var popupid = Popup.create('Select call set', content, null, {canClose: false});
+            }
+        }
 
         return thePage;
     });

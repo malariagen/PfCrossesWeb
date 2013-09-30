@@ -16,7 +16,7 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
                                       { id: '7g8_gb4', name: resources.x7g8_gb4, color: DQX.Color(0.6, 0.2, 0.6) }
                                       ];
         CrossesMetaData.variants = [
-                                    { id: '', name: '' },
+                                    //{ id: '', name: '' },
 
                                     {
                                         id: '3d7_hb3:gatk',

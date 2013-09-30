@@ -109,6 +109,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         }
                     });
 
+                    that.myPage.promptCallSetIfRequired();
+
+
                     //Causes the browser to start with a start region
  /*                   this.panelBrowser.setPostInitialiseHandler(function () {
                         that.panelBrowser.showRegion(that.panelBrowser.getChromoID(1), 200000, 100000);
