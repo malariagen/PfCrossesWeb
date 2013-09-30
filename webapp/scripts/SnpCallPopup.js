@@ -36,7 +36,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         if (seqID)
                             that.frameRoot.makeGroupTab('');
                         else
-                            Framework.makeGroupVert('');
+                            that.frameRoot.makeGroupVert('');
                         that.frameRoot.setFrameClass('DQXDarkFrame');
                         that.frameRoot.setFrameClassClient('DQXDarkFrame');
                         that.frameRoot.setMarginsIndividual(0, 7, 0, 0);

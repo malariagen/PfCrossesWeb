@@ -212,14 +212,14 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         var snpid = that.dataFetcherSNPs.getColumnPoint(pointIndex, "snpid");
                         var value = that.dataFetcherSNPs.getColumnPoint(pointIndex, compID);
                         return snpid+'<br/>'+compID+'= '+value.toFixed(3);
-                    };
+                    }; */
 
                     //Define the action when a user clicks on a point in the channel
                     theChannel.handlePointClicked = function(compID, pointIndex) {
                         var snpid = that.dataFetcherSNPs.getColumnPoint(pointIndex, "snpid");//Get the snp id from the datafetcher
                         Msg.send({ type: 'ShowSNPPopup' }, snpid);//Send a message that should trigger showing the snp popup
                     };
-*/
+
 
                 }
 
