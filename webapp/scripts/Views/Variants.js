@@ -177,17 +177,20 @@
                     this.region_ctrls = theForm.addControl(Controls.CompoundVert())
                         .setLegend(resources.genomeSearchOptions);
                     this.region_ctrls.addControl(
-                        Controls.Combo('SearchRegionChromosome', { label: resources.genomeSearchChromosome, states: chromoPickerList }))
+                        Controls.Combo('SearchRegionChromosome', { label: resources.genomeSearchChromosome+':', states: chromoPickerList }))
                         .bindToModel(this.region_search, 'chrom');
-                    var ctrl_regionStart = this.region_ctrls.addControl(
-                        Controls.Edit('SearchRegionStart', { label: resources.genomeSearchStart, size: 10 }))
+                    var ctrl_regionStart =
+                        Controls.Edit('SearchRegionStart', { label: resources.genomeSearchStart+':', size: 10 })
                         .bindToModel(this.region_search, 'start');
-                    var ctrl_regionEnd = this.region_ctrls.addControl(
-                        Controls.Edit('SearchRegionEnd', { label: resources.genomeSearchEnd, size: 10 }))
+                    var ctrl_regionEnd =
+                        Controls.Edit('SearchRegionEnd', { label: resources.genomeSearchEnd+':', size: 10 })
                         .bindToModel(this.region_search, 'stop');
+
+                    this.region_ctrls.addControl(Controls.CompoundHor([ctrl_regionStart, Controls.HorizontalSeparator(10), ctrl_regionEnd]));
+
                     var buttons = this.region_ctrls.addControl(Controls.CompoundHor());
                     buttons.addControl(
-                        Controls.Button('Search', { content: resources.genomeSearch, width: 50 }))
+                        Controls.Button('Search', { content: resources.genomeSearch }))
                             .setOnChanged(function (id) {
                                 that.changeFunction();
                             });
