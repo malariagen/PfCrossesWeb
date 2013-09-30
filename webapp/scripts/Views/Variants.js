@@ -81,6 +81,26 @@
                     }
                 };
 
+
+                that.getMethod = function() {
+                    var callSet = that.myPage.current_call_set.get('call_set');
+                    if (callSet == "") return '';
+                    var opts = callSet.split(":");
+                    var cross_name = opts[0];
+                    var method = opts[1];
+                    return method;
+                }
+
+                //Call this function to invalidate the current table content
+                that.invalidateQuery = function () {
+                    var method = that.getMethod();
+                    if (!method) return;
+                    var panelTable = that['table' + method].panelTable.myTable;
+                    panelTable.invalidate();
+                    this.setCurrentQuery(null);
+                };
+
+
                 that.changeFunction = function () {
                     var callSet = that.myPage.current_call_set.get('call_set');
                     if (callSet == "") {
@@ -98,12 +118,13 @@
                     options.push(SQL.WhereClause.CompareFixed('cross_name', '=', cross_name));
                     options.push(SQL.WhereClause.CompareFixed('method', '=', method));
                     //Region params
-                    if (that.region_search.get('chrom') != '')
-                        options.push(SQL.WhereClause.CompareFixed('chrom','=',that.region_search.get('chrom')));
-                    if (that.region_search.get('start') != '')
-                        options.push(SQL.WhereClause.CompareFixed('pos','>',that.region_search.get('start')));
-                    if (that.region_search.get('stop') != '')
-                        options.push(SQL.WhereClause.CompareFixed('pos','<',that.region_search.get('stop')));
+                    if ((that.region_search.get('chrom') != '') && (that.region_search.get('chrom') != 'all') ) {
+                            options.push(SQL.WhereClause.CompareFixed('chrom','=',that.region_search.get('chrom')));
+                        if (that.region_search.get('start') != '')
+                            options.push(SQL.WhereClause.CompareFixed('pos','>',that.region_search.get('start')));
+                        if (that.region_search.get('stop') != '')
+                            options.push(SQL.WhereClause.CompareFixed('pos','<',that.region_search.get('stop')));
+                    }
                     //Type params
                     var snp = that.myPage.type_search.get('snp');
                     var indel = that.myPage.type_search.get('indel');
@@ -145,17 +166,23 @@
                     groupPop.addControl(this.catVarQueryPopulationFreqType);
                     theForm.addControl(groupPop);
 
+                    var chromoPickerList = [{id:'all', name:'All'}];
+                    $.each(CrossesMetaData.chromosomes, function(idx, chromoInfo) {
+                        chromoPickerList.push(chromoInfo);
+                    });
+
+
                     //Genome region controls
-                    this.region_search = Model({chrom: CrossesMetaData.chromosomes[0].id, start: '', stop: ''});
+                    this.region_search = Model({chrom: 'all', start: '', stop: ''});
                     this.region_ctrls = theForm.addControl(Controls.CompoundVert())
                         .setLegend(resources.genomeSearchOptions);
                     this.region_ctrls.addControl(
-                        Controls.Combo('SearchRegionChromosome', { label: resources.genomeSearchChromosome, states: CrossesMetaData.chromosomes }))
+                        Controls.Combo('SearchRegionChromosome', { label: resources.genomeSearchChromosome, states: chromoPickerList }))
                         .bindToModel(this.region_search, 'chrom');
-                    this.region_ctrls.addControl(
+                    var ctrl_regionStart = this.region_ctrls.addControl(
                         Controls.Edit('SearchRegionStart', { label: resources.genomeSearchStart, size: 10 }))
                         .bindToModel(this.region_search, 'start');
-                    this.region_ctrls.addControl(
+                    var ctrl_regionEnd = this.region_ctrls.addControl(
                         Controls.Edit('SearchRegionEnd', { label: resources.genomeSearchEnd, size: 10 }))
                         .bindToModel(this.region_search, 'stop');
                     var buttons = this.region_ctrls.addControl(Controls.CompoundHor());
@@ -167,9 +194,18 @@
                     buttons.addControl(
                         Controls.Button('Clear', { content: resources.genomeSearchClear, width: 50 }))
                             .setOnChanged(function (id) {
-                                that.region_search.set({'start': '', 'stop':''});
+                                that.region_search.set({'chrom':'all', 'start': '', 'stop':''});
                                 that.changeFunction();
                         });
+
+                    ctrl_regionStart.modifyEnabled(false);
+                    ctrl_regionEnd.modifyEnabled(false);
+                    this.region_search.on({change: true}, function() {
+                        var allChromosomes = that.region_search.get('chrom')=='all';
+                        ctrl_regionStart.modifyEnabled(!allChromosomes);
+                        ctrl_regionEnd.modifyEnabled(!allChromosomes);
+                        that.invalidateQuery();
+                    });
 
 
                     //Variant type controls
