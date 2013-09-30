@@ -57,6 +57,16 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
             Msg.send({ type: 'ShowGenePopup' }, geneid);
         },
 
+        //This function is called when the user clicks on a gene id link in the SNP query table
+        _onClickVariant: function(scope,id) {
+            var variantid=this.panelTable.getTable().getCellValue(id,"chrom_pos");
+            //Msg.send({ type: 'ShowSnpPopup' }, variantid);
+            //???
+            var tokens = variantid.split(':');
+            var callSet = this.myView.myPage.current_call_set.get('call_set');
+            Msg.send({ type: 'ShowSNPPopup' }, {call_set: callSet, snp_pos: tokens[1], chrom: tokens[0]});
+        },
+
         createPanelTable : function (parentFrame) {
 
         	this.setup(parentFrame);
@@ -97,10 +107,15 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
                 }
 				mytable.addSortOption(info.name, SQL.TableSort([info.id]));
 
+                if (info.id=='chrom_pos') {
+                    comp.makeHyperlinkCell(msgID,DQX.interpolate("Show variant info card"));
+                    comp.setCellClickHandler($.proxy(this._onClickVariant,this));
+                }
+
                 if (info.id=='gene') {
                     var msgID={ type: 'ClickGene', id: mytable.myBaseID };
                     comp.makeHyperlinkCell(msgID,DQX.interpolate("Show gene info card"));
-                    Msg.listen("",msgID,$.proxy(this._onClickGene,this));
+                    comp.setCellClickHandler($.proxy(this._onClickGene,this));
                 }
             }
 

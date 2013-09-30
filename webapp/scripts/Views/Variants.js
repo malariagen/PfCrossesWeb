@@ -22,6 +22,8 @@
                     this.tablecortex.createPanelTable(this.frameTables['cortex']);
                     this.tablegatk = new TableGATK();
                     this.tablegatk.createPanelTable(this.frameTables['gatk']);
+                    this.tablecortex.myView = that;
+                    this.tablegatk.myView = that;
                     this.createPanelAdvancedQuery();
                     //Run the change func to load first data
                     this.changeFunction();
