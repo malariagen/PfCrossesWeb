@@ -20,36 +20,42 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
 
                                     {
                                         id: '3d7_hb3:gatk',
+                                        crossDispName:resources.x3d7_hb3,
                                         name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (GATK)',
                                         vcf: '3d7_hb3.gatk.both.final',
                                         download_href: 'downloads/3d7_hb3.gatk.both.final.vcf.gz'
                                     },
                                     {
                                         id: '3d7_hb3:cortex',
+                                        crossDispName:resources.x3d7_hb3,
                                         name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (Cortex)',
                                         vcf: '3d7_hb3.cortex.final',
                                         download_href: 'downloads/3d7_hb3.cortex.final.vcf.gz'
                                     },
                                     {
                                         id: 'hb3_dd2:gatk',
+                                        crossDispName:resources.xhb3_dd2,
                                         name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (GATK)',
                                         vcf:'hb3_dd2.gatk.both.final',
                                         download_href: 'downloads/hb3_dd2.gatk.both.final.vcf.gz'
                                     },
                                     {
                                         id: 'hb3_dd2:cortex',
+                                        crossDispName:resources.xhb3_dd2,
                                         name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (Cortex)',
                                         vcf:'hb3_dd2.cortex.final',
                                         download_href: 'downloads/hb3_dd2.cortex.final.vcf.gz'
                                     },
                                     {
                                         id: '7g8_gb4:gatk',
+                                        crossDispName:resources.x7g8_gb4,
                                         name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (GATK)',
                                         vcf:'7g8_gb4.gatk.both.final',
                                         download_href: 'downloads/7g8_gb4.gatk.both.final.vcf.gz'
                                     },
                                     {
                                         id: '7g8_gb4:cortex',
+                                        crossDispName:resources.x7g8_gb4,
                                         name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (Cortex)',
                                         vcf:'7g8_gb4.cortex.final',
                                         download_href: 'downloads/7g8_gb4.cortex.final.vcf.gz'
@@ -133,7 +139,10 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
             if (callSet.id.length > 0) {
                 var crossName = callSet.id.split(':')[0];
                 var callMethod = callSet.id.split(':')[1].toUpperCase();
+                callSet.crossName = crossName;
+                callSet.callMethod = callMethod;
                 callSet.dataSourceSNP = callMethod + '_final_' + crossName;
+                callSet.dataSourceDnpDensity = 'SNPDENS_F_{cross}_{method}'.DQXformat({cross:crossName, method:callMethod.toLowerCase()});
             }
         });
 

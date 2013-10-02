@@ -82,6 +82,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     this.createRecombChannels();
                     this.createHotSpotChannels();
 
+                    this.createSnpDensChannels();
+
                     //Initialise the summary profiles
                     this.panelBrowser.addDataFetcher(this.dataFetcherProfiles);
                     this.createSummaryChannels();
@@ -226,6 +228,34 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                 }
 
 
+                that.createSnpDensChannels = function () {
+
+                    $.each(CrossesMetaData.variants, function(idx,callSet) {
+                        var dataFetcherDens = new DataFetchers.Curve(
+                            serverUrl,CrossesMetaData.database,
+                            callSet.dataSourceDnpDensity
+                        );
+
+
+                        //Create the channel in the browser that will contain the frequency values
+                        var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 20 });
+                        theChannel
+                            .setTitle("{cross} Variant dens. ({method})".DQXformat({cross:callSet.crossDispName, method:callSet.callMethod}))        //sets the title of the channel
+                            //.setSubTitle("in 1kb window")        //sets the title of the channel
+                            .setHeight(80)                 //sets the height of the channel, in pixels
+                            .setMaxViewportSizeX(50.0e5)     //if more than 5e5 bases are in the viewport, this channel is not shown
+                            .setChangeYScale(false,true);   //makes the scale adjustable by dragging it
+                        that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
+
+                        var plotcomp = theChannel.addComponent(ChannelYVals.CompFilled(null, dataFetcherDens, 'CntRaw'), true);//Create the component
+                        plotcomp.myPlotHints.color = DQX.Color(0.5,0.5,0.5);
+
+                        var plotcomp = theChannel.addComponent(ChannelYVals.CompFilled(null, dataFetcherDens, 'CntFlt'), true);//Create the component
+                        plotcomp.myPlotHints.color = DQX.Color(0,0,1);
+                    });
+
+
+                }
 
 
                 that.addChannelToTree = function (channel, name, defaultVisible, docID) {
