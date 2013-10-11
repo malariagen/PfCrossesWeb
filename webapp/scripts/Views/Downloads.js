@@ -41,7 +41,6 @@
                 };
 
                 that.activateState = function () {
-                    enableHomeButton();
                     var tabswitched = this.myFrame.makeVisible();
                     //that.panelBrowser.handleResize(); //force immediate calculation of size
                 };
