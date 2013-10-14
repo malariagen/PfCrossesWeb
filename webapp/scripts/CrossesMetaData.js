@@ -4,7 +4,20 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
 
         CrossesMetaData.database = "pfx";
         CrossesMetaData.tableAnnotation = "annotation";
+
         CrossesMetaData.externalGeneLink = "http://old.plasmodb.org/plasmo/showRecord.do?name=GeneRecordClasses.GeneRecordClass&project_id=&primary_key={id}";
+
+        CrossesMetaData.listExternalGeneLinks = [
+            {
+                name: "GeneDb",
+                url:"http://www.genedb.org/Query/quickSearch?taxons=Pfalciparum&searchText={id}&_pseudogenes=on&allNames=true&_allNames=on&_product=on"
+            },
+            {
+                name: "PlasmoDB",
+                url:"http://plasmodb.org/plasmo/showRecord.do?name=GeneRecordClasses.GeneRecordClass&project_id=&primary_key={id}"
+            }
+        ];
+
         CrossesMetaData.tableSamples = "pfx_samples";
         CrossesMetaData.tableVariants = "variants_filtered";
 

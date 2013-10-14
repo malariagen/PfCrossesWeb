@@ -78,12 +78,13 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
 
         //Create handlers for various tool buttons
         Common.addToolHandlers = function () {
-            //Tool handler that opens a gene in PlasmoDb
+            /*
+            //Tool handler that opens a gene in PlasmoDbhandleShowGenePopup
             Common.addToolGene("Gene2PlasmoDb", "Show in PlasmoDb", "plasmodb_bw.png", function (args) {
                 var url = CrossesMetaData.externalGeneLink.DQXformat({ id: args.geneid });
                 window.open(url, '_blank');
             });
-
+            */
         }
 
         Common.showSNPPopup = function(data) {
@@ -112,6 +113,17 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
                     Popup.closeIfNeeded(popupID);
                 }).renderHtml();
             }
+
+            content += '<br>';
+            $.each(CrossesMetaData.listExternalGeneLinks,function(idx,linkInfo) {
+                var bt = Controls.Button(null, { buttonClass: 'DQXToolButton0', content: 'Find in <b>'+linkInfo.name+'</b>'});
+                bt.setOnChanged(function() {
+                    var url = linkInfo.url.DQXformat({ id: geneid });
+                    window.open(url, '_blank');
+                })
+                content += bt.renderHtml();
+            })
+
             var popupID = Popup.create("Gene " + geneid, content);
         }
 
