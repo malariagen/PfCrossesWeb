@@ -47,10 +47,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         database: CrossesMetaData.database
                     };
 
-                    if (this.refVersion == 2)
-                        browserConfig.annotTableName = 'pfannot';
-                    if (this.refVersion == 3)
-                        browserConfig.annotTableName = 'pf3annot';
+                    browserConfig.annotTableName = CrossesMetaData.tableAnnotation;
 
                     this.panelBrowser = GenomePlotter.Panel(this.frameBrowser, browserConfig);
                     this.panelBrowser.annotationChannel.handleFeatureClicked = function (geneID) {
@@ -111,6 +108,19 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
                     that.myPage.promptCallSetIfRequired();
                     that.changeDataSource();
+
+                    that.updateChromosomePosition();
+
+                    //Part of TEMP solution for browser syncing - need better in DQX
+                    Msg.listen('',{ type: 'ChromosomePositionChanged', id: that.panelBrowser.getID() }, function() {
+                        if (!that._ignorePositionUpdates) {
+                            CrossesMetaData.browser_source = that.panelBrowser.getID();
+                            CrossesMetaData.browser_chromid = that.panelBrowser.getCurrentChromoID();
+                            CrossesMetaData.browser_pos = that.panelBrowser.getPosition();
+                        }
+                    });
+
+
 
                 };
 
@@ -324,6 +334,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
                 //Call this function to jump to & highlight a specific region on the genome
                 that.onJumpGenomeRegion = function (context, args) {
+                    CrossesMetaData.browser_chromid = null;
                     if ('chromoID' in args)
                         var chromoID = args.chromoID;
                     else {
@@ -336,14 +347,33 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
 
                 that.activateState = function () {
+                    that.updateChromosomePosition();
                     var tabswitched = that.myPage.frameBrowser.makeVisible();
                     /*                    setTimeout(function () {
                     that.panelBrowser.handleResize(); //force immediate calculation of size
                     }, 50);*/
                 };
 
+                //Part of TEMP solution for browser syncing - need better in DQX
+                that.updateChromosomePosition = function() {
+                    if ((CrossesMetaData.browser_chromid)&&(CrossesMetaData.browser_source!=that.panelBrowser.getID()))
+                    {
+                        var chromid = CrossesMetaData.browser_chromid;
+                        var left = CrossesMetaData.browser_pos.left;
+                        var right = CrossesMetaData.browser_pos.right;
+                        setTimeout(function() {
+                            that._ignorePositionUpdates = true;
+                            that.panelBrowser.setChromosome(chromid,true,true);
+                            var posInfo = CrossesMetaData.browser_pos;
+                            that.panelBrowser.setPosition((left+right)/2, right-left);
+                            that._ignorePositionUpdates = false;
+                        },50);
+                    }
+                }
+
                 //Call this function to make the browser jump to a gene
                 that.jumpGene = function (args) {
+                    CrossesMetaData.browser_chromid = null;
                     DQX.requireMember(args, 'chromid'); DQX.requireMember(args, 'start'); DQX.requireMember(args, 'stop');
                     this.activateState();
                     this.panelBrowser.highlightRegion(args.chromid, (args.start + args.stop) / 2, (args.stop - args.start));

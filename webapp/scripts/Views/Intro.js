@@ -62,7 +62,7 @@
 
                 that.createButton = function (id, parentDiv, bitmap, content, style, handlerFunction) {
                     if (true) {
-                        var bt = Controls.Button(id, { bitmap: bitmap, content: content, buttonClass: style, width: 270, height: 51 });
+                        var bt = Controls.Button(id, { bitmap: bitmap, content: content, buttonClass: style, width: 270, height: 70 });
                         bt.setOnChanged(handlerFunction);
                         parentDiv.addElem(bt.renderHtml());
                     }
