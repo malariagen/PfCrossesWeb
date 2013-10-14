@@ -83,6 +83,8 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
             var msgIDClickHeader={ type: 'ClickHeader', id: mytable.myBaseID };
             Msg.listen("",msgIDClickHeader,$.proxy(this._onClickHeader,this));
 
+
+
             //add columns for all the fields
             for (var i=0; i<this.fieldInfo.length; i++) {
                 var info=this.fieldInfo[i];
@@ -95,7 +97,7 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
                 if (info.textFunction)
                     comp.CellToText = info.textFunction;
                 if (info.linkFunction) {
-                    comp.linkFunction=info.linkFunction;
+                    comp.linkFunFction=info.linkFunction;
                     comp.linkHint=info.linkHint;
                 }
                 comp.makeHyperlinkHeader(msgIDClickHeader,'Column information');
@@ -105,7 +107,14 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
                     	return (text.toFixed(2));
                     };
                 }
-				mytable.addSortOption(info.name, SQL.TableSort([info.id]));
+
+                if (info.id!='chrom_pos')
+				    mytable.addSortOption(info.name, SQL.TableSort([info.id]));
+                else {
+                    var sortopt = SQL.TableSort(['chrom','pos']);
+                    mytable.addSortOption('Position', sortopt, true);
+                    comp.sortOption = sortopt;
+                }
 
                 if (info.id=='chrom_pos') {
                     comp.makeHyperlinkCell(msgID,DQX.interpolate("Show variant info card"));
