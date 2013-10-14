@@ -152,7 +152,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
                     var group1 = this.panelControls.addControl(Controls.CompoundVert());
 
-                    this.callSetControl = Controls.Combo('', { label: 'Call set',
+                    this.callSetControl = Controls.Combo('', { label: '<span style="font-size:11pt;font-weight:bold">Variant call set:&nbsp;</span>',
                         states: CrossesMetaData.variants,
                         value: that.myPage.current_call_set.get('call_set')
                     });
