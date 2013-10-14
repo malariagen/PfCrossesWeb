@@ -498,7 +498,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                     DQX.assertPresence(args, 'position');
                     this.activateState();
-                    this.panelBrowser.highlightRegion(chromoID, args.position, 20);
+                    this.panelBrowser.highlightRegion(chromoID, parseInt(args.position), 20);
                 };
 
 
