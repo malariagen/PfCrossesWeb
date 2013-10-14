@@ -46,7 +46,8 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/Utils", "DQX/DocEl",
                         this.idMap = {};
                         var items = [];
                         for (var i = 0; i < descrs.length; i++) {
-                            var txt = descrs[i];
+                            var txt = '';
+                            $.each(descrs[i].split(','), function(idx,cmp) { txt+=cmp+', '; });
                             txt = DQX.highlightText(txt, pattern);
                             var descr = txt + ' ({id}; {chrom}:{p1}-{p2})'.DQXformat({ id: ids[i], chrom: chromidlist[i], p1: startlist[i], p2: endlist[i] });
                             items.push({ id: 'id' + i, content: descr });
