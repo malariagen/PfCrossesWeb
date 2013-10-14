@@ -31,7 +31,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         that.jumpGene(args);
                     });
                     require("Common").addToolSNP("SNPOnGenotypes", "Browse genotypes", "Icons/Medium/GenotypeBrowser.png", function (args) {
-                        that.jumpGene({chromid: args.chromoID, start: parseInt(args.position)-100, stop: parseInt(args.position)+100});
+                        that.jumpGene({chromid: args.chromoID, start: parseInt(args.position)-10, stop: parseInt(args.position)+10});
                     });
 
                 };
@@ -64,8 +64,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
                     this.panelBrowser.getAnnotationChannel().setMinDrawZoomFactX(0.005);
 
-                    this.panelBrowser.MaxZoomFactX = 1.0 / 10;
-                    this.panelBrowser.getNavigator().setMinScrollSize(0.002);
+                    this.panelBrowser.MaxZoomFactX = 1.0 / 3;
+                    this.panelBrowser.getNavigator().setMinScrollSize(0.001);
 
                     SeqChannel = ChannelSequence.Channel(serverUrl, 'Tracks-Cross/Sequence', 'Summ01', true);
                     this.panelBrowser.addChannel(SeqChannel, true);
