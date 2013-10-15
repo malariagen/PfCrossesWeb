@@ -109,8 +109,8 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
             var content = '<div>' + Common.GeneData2InfoTable(data) + "</div>";
             for (var i = 0; i < Common._toolsGene.length; i++) {
                 content += Common._generateToolButton(Common._toolsGene[i], function (handler) {
-                    handler(geneData);
                     Popup.closeIfNeeded(popupID);
+                    handler(geneData);
                 }).renderHtml();
             }
 
