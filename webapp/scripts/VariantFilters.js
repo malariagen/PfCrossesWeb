@@ -12,11 +12,11 @@ define(["jquery", "DQX/Controls", "DQX/Utils", "i18n!nls/PfCrossesWebResources"]
                 });
                 return ret;
             };
-            var select_all = Controls.Button(DQX.getNextUniqueID()+'SetAll', { content: resources.filtersSetAll, width: 100, buttonClass: "DQXWizardButton FilterGroupChangeButton" })
+            var select_all = Controls.Button(DQX.getNextUniqueID()+'SetAll', { content: resources.filtersSetAll, width: 80, buttonClass: "DQXWizardButton FilterGroupChangeButton" })
                 .setOnChanged(function(id) {
                     model.set(set_all(filters, true));
                 });
-            var select_none = Controls.Button(DQX.getNextUniqueID()+'SetNone', { content: resources.filtersSetNone, width: 100, buttonClass: "DQXWizardButton FilterGroupChangeButton" })
+            var select_none = Controls.Button(DQX.getNextUniqueID()+'SetNone', { content: resources.filtersSetNone, width: 80, buttonClass: "DQXWizardButton FilterGroupChangeButton" })
                 .setOnChanged(function(id) {
                     model.set(set_all(filters, false));
                 });

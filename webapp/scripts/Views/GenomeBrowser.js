@@ -23,14 +23,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                 that.createFramework = function () {
 
-                    this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.33))
+                    this.frameChannels = that.getFrame().addMemberFrame(Framework.FrameFinal('settings', 0.33))
                         .setMargins(0).setMinSize(Framework.dimX, 430);
-
-                    this.frameChannels = this.frameLeft.addMemberFrame(Framework.FrameFinal('channels', 0.7))
-                        .setMargins(0).setFixedSize(Framework.dimX, 380).setDisplayTitle('Visible channels');
-
-                    this.frameFilters = this.frameLeft.addMemberFrame(Framework.FrameFinal('filters', 0.7))
-                        .setMargins(0).setFixedSize(Framework.dimX, 380).setDisplayTitle(resources.variant_filters);
 
                     this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.67))
                         .setMargins(0);
@@ -68,7 +62,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'CDS');
                     this.panelBrowser.getAnnotationChannel().setMinDrawZoomFactX(0.005);
                     this.panelBrowser.MaxZoomFactX = 1.0 / 0.2;
-                    this.panelBrowser.getNavigator().setMinScrollSize(0.0001);
+                    this.panelBrowser.getNavigator().setMinScrollSize(0.0003);
 
                     SeqChannel = ChannelSequence.Channel(serverUrl, 'Tracks-Cross/Sequence', 'Summ01', true);
                     this.panelBrowser.addChannel(SeqChannel, true);
@@ -88,7 +82,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     this.panelBrowser.addDataFetcher(this.dataFetcherProfiles);
                     this.createSummaryChannels();
 
-                    //this.treeChannels.render();
+                    this.formChannels.render();
 
 
                     //Part of TEMP solution for browser syncing - need better in DQX
@@ -160,7 +154,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         { id:'MapQuality', name: "Mapping quality", defaultvisible:false }
                     ];
 
-                    var groupProperties = Controls.CompoundVert().setLegend('Channels').setTreatAsBlock();
+                    var groupProperties = Controls.CompoundVert().setLegend('Properties').setTreatAsBlock();
                     $.each(genotypePropertyList, function(idx, prop) {
                         that.visibilityStatus['visibility_properties'][prop.id] = prop.defaultvisible;
                         var chk = Controls.Check(null, { label: prop.name, value: prop.defaultvisible }).setOnChanged(function() {
@@ -182,26 +176,23 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.channelModifyVisibility('Repeats', that.chk_Repeats.getValue())
                     });
 
+                    that.controlsBaseGroup = Controls.CompoundVert([
+                        Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls ]).setLegend('<b>Genotyping channels</b>'),
+                        Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome channels</b>'),
+                        Controls.VerticalSeparator(10)
+                    ]);
 
-                    this.formChannels.addControl(Controls.CompoundVert([
-                        Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls ]).setLegend('<b>Genotyping information</b>'),
-                        Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome information</b>')
-                    ]));
-                    //this.treeChannels = FrameTree.Tree(this.frameChannels);
-                    //this.branchChannelsProfiles = this.treeChannels.root;
+                    this.formChannels.addControl(that.controlsBaseGroup);
 
-                    this.formChannels.render();
                 }
 
                 that.createControls = function () {
 
-                    this.formFilters = Framework.Form(this.frameFilters);
                     var pane = Controls.CompoundVert();
-                    pane.setLegend(resources.variant_filters);
+                    pane.setLegend('<b>'+resources.variant_filters+'</b>');
                     that.variant_filter_controls = VariantFilters(CrossesMetaData.variant_filters, that.myPage.variant_filters);
                     pane.addControl(that.variant_filter_controls.grid);
-                    this.formFilters.addControl(pane);
-                    that.formFilters.render();
+                    that.controlsBaseGroup.addControl(pane);
                     that.myPage.variant_filters.on({ change: true }, function () {
                         $.each(that.callSetViewers, function (idx, callSetViewer) {
                             that.updateCallSetViewerQuery(callSetViewer);
