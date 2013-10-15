@@ -76,6 +76,7 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
             this.panelTable = QueryTable.Panel(this.frameTable, this.theTableFetcher, { leftfraction: 50 });
 
             var mytable = this.panelTable.myTable;
+            //mytable.immediateFetchRecordCount = false;
 
             //Create the columns of the data fetcher, and the table columns
 

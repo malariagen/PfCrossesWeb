@@ -23,16 +23,16 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                 that.createFramework = function () {
 
-                    this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.01))
+                    this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.33))
                         .setMargins(0).setMinSize(Framework.dimX, 430);
 
                     this.frameChannels = this.frameLeft.addMemberFrame(Framework.FrameFinal('channels', 0.7))
-                        .setMargins(0).setFixedSize(Framework.dimX, 380);
+                        .setMargins(0).setFixedSize(Framework.dimX, 380).setDisplayTitle('Visible channels');
 
                     this.frameFilters = this.frameLeft.addMemberFrame(Framework.FrameFinal('filters', 0.7))
-                        .setMargins(0).setFixedSize(Framework.dimX, 380);
+                        .setMargins(0).setFixedSize(Framework.dimX, 380).setDisplayTitle(resources.variant_filters);
 
-                    this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.7))
+                    this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.67))
                         .setMargins(0);
 
                     Msg.listen("", { type: 'JumpgenomePositionGenomeBrowser' }, $.proxy(this.onJumpGenomePosition, this));
@@ -88,7 +88,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     this.panelBrowser.addDataFetcher(this.dataFetcherProfiles);
                     this.createSummaryChannels();
 
-                    this.treeChannels.render();
+                    //this.treeChannels.render();
 
 
                     //Part of TEMP solution for browser syncing - need better in DQX
@@ -102,12 +102,95 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                     that.updateChromosomePosition();
 
+                    that.updateChannelVisibility();
                 };
 
 
+                that.updateChannelVisibility = function() {
+                    $.each(that.controlledVisibilityChannels, function(idx, channelInfo) {
+                        var channelid = channelInfo.channel.getID();
+                        var isVisible = true;
+                        $.each(channelInfo.dependencies, function(depid, depvalue) {
+                            if (!that.visibilityStatus[depid][depvalue])
+                                isVisible = false;
+                        });
+
+                        that.channelModifyVisibility(channelid, isVisible);
+                    });
+
+                }
+
                 that.createChannelVisibilityControls = function () {
-                    this.treeChannels = FrameTree.Tree(this.frameChannels);
-                    this.branchChannelsProfiles = this.treeChannels.root;
+                    this.formChannels = Framework.Form(this.frameChannels).setPadding(10);
+
+                    that.visibilityStatus={
+                        'visibility_crosses': {},
+                        'visibility_calls': {},
+                        'visibility_properties': {}
+                    }
+
+                    that.controlledVisibilityChannels = [];
+
+                    var groupCrosses = Controls.CompoundVert().setLegend('Crosses').setTreatAsBlock();
+                    $.each(CrossesMetaData.sampleSets, function(idx, cross) {
+                        that.visibilityStatus['visibility_crosses'][cross.id] = true;
+                        var chk = Controls.Check(null, { label: cross.name, value: true }).setOnChanged(function() {
+                            that.visibilityStatus['visibility_crosses'][cross.id] = chk.getValue();
+                            that.updateChannelVisibility();
+                        });
+                        groupCrosses.addControl(chk);
+
+                    });
+
+                    var groupCalls = Controls.CompoundVert().setLegend('Call type').setTreatAsBlock();
+                    $.each(CrossesMetaData.callMethods, function(idx, callMethod) {
+                        that.visibilityStatus['visibility_calls'][callMethod] = true;
+                        var chk = Controls.Check(null, { label: callMethod, value: true }).setOnChanged(function() {
+                            that.visibilityStatus['visibility_calls'][callMethod] = chk.getValue();
+                            that.updateChannelVisibility();
+                        });
+                        groupCalls.addControl(chk);
+                    });
+
+                    var genotypePropertyList = [
+                        { id:'VariantPositions', name: "Variant positions", defaultvisible:true },
+                        { id:'RecombinationEvents', name: "Recombination", defaultvisible:false },
+                        { id:'VariantDensity', name: "Variant density", defaultvisible:false },
+                        { id:'Coverage', name: "Coverage", defaultvisible:false },
+                        { id:'MapQuality', name: "Mapping quality", defaultvisible:false }
+                    ];
+
+                    var groupProperties = Controls.CompoundVert().setLegend('Channels').setTreatAsBlock();
+                    $.each(genotypePropertyList, function(idx, prop) {
+                        that.visibilityStatus['visibility_properties'][prop.id] = prop.defaultvisible;
+                        var chk = Controls.Check(null, { label: prop.name, value: prop.defaultvisible }).setOnChanged(function() {
+                            that.visibilityStatus['visibility_properties'][prop.id] = chk.getValue();
+                            that.updateChannelVisibility();
+                        });
+                        groupProperties.addControl(chk);
+                    });
+
+                    that.chk_GC300 = Controls.Check(null, { label: '% GC', value: true }).setOnChanged(function() {
+                        that.channelModifyVisibility('GC300', that.chk_GC300.getValue())
+                    });
+
+                    that.chk_Uniqueness = Controls.Check(null, { label: 'Uniqueness', value: true }).setOnChanged(function() {
+                        that.channelModifyVisibility('Uniqueness', that.chk_Uniqueness.getValue())
+                    });
+
+                    that.chk_Repeats = Controls.Check(null, { label: 'Repeats', value: false }).setOnChanged(function() {
+                        that.channelModifyVisibility('Repeats', that.chk_Repeats.getValue())
+                    });
+
+
+                    this.formChannels.addControl(Controls.CompoundVert([
+                        Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls ]).setLegend('<b>Genotyping information</b>'),
+                        Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome information</b>')
+                    ]));
+                    //this.treeChannels = FrameTree.Tree(this.frameChannels);
+                    //this.branchChannelsProfiles = this.treeChannels.root;
+
+                    this.formChannels.render();
                 }
 
                 that.createControls = function () {
@@ -152,6 +235,12 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.channelSNPs = GenomeBrowserSNPChannel.SNPChannel(callSetViewer.dataFetcherSNPs, callSet.Id + '_' + callSet.callMethod, callSet.name);
                         that.panelBrowser.addChannel(that.channelSNPs, false);
                         that.callSetViewers.push(callSetViewer);
+                        that.controlledVisibilityChannels.push({
+                            channel:that.channelSNPs,
+                            dependencies:{
+                                'visibility_properties':'VariantPositions', 'visibility_crosses':callSet.Id, 'visibility_calls':callSet.callMethod
+                            }
+                        });
                     });
                 };
 
@@ -192,6 +281,13 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                              Msg.send({ type: 'SnpPopup' }, snpid);//Send a message that should trigger showing the snp popup
                              })*/
                             that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
+
+                            that.controlledVisibilityChannels.push({
+                                channel:theChannel,
+                                dependencies:{
+                                    'visibility_properties':'RecombinationEvents', 'visibility_crosses':crossid
+                                }
+                            });
                         }
                     });
                 }
@@ -209,7 +305,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     theChannel
                         .setTitle("Number of recombinations")        //sets the title of the channel
                         .setSubTitle("in 5kb window")        //sets the title of the channel
-                        .setHeight(120)                 //sets the height of the channel, in pixels
+                        .setHeight(60)                 //sets the height of the channel, in pixels
                         .setMaxViewportSizeX(50.0e5)     //if more than 5e5 bases are in the viewport, this channel is not shown
                         .setChangeYScale(false,true);   //makes the scale adjustable by dragging it
                     that.panelBrowser.addChannel(theChannel, false);//Add the channel to the browser
@@ -218,7 +314,14 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     //plotcomp.myPlotHints.color = population.color;//define the color of the component
                     plotcomp.myPlotHints.pointStyle = 1;//chose a sensible way of plotting the points
                     plotcomp.myPlotHints.makeDrawLines(9E99);
-                    //that.channelControls.push(theChannel.createComponentVisibilityControl(population.freqid, population.name, true));//Create a visibility checkbox for the component, and add to the list of controls
+
+                    that.controlledVisibilityChannels.push({
+                        channel:theChannel,
+                        dependencies:{
+                            'visibility_properties':'RecombinationEvents'
+                        }
+                    });
+
 
 /*
                     //Define the tooltip shown when a user hovers the mouse over a point in the channel
@@ -262,6 +365,14 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                         var plotcomp = theChannel.addComponent(ChannelYVals.CompFilled(null, dataFetcherDens, 'CntFlt'), true);//Create the component
                         plotcomp.myPlotHints.color = DQX.Color(0,0,1);
+
+                        that.controlledVisibilityChannels.push({
+                            channel:theChannel,
+                            dependencies:{
+                                'visibility_properties':'VariantDensity', 'visibility_crosses':callSet.crossName, 'visibility_calls':callSet.callMethod.toLowerCase()
+                            }
+                        });
+
                     });
 
 
@@ -353,66 +464,14 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         }
                         else
                             that.panelBrowser.channelModifyVisibility(SummChannel.getID(), false);
-                        //Create the visibility control
-                        var chk = Controls.Check('ChannelControl' + info.id, { label: '<b>' + info.title + '</b>', value: info.active });
-                        that.branchChannelsProfiles.addItem(FrameTree.Control(Controls.CompoundHor([chk, Controls.Static('&nbsp;&nbsp;')])));
-                        chk.setOnChanged(function () {
-                            that.channelModifyVisibility(info.id, chk.getValue());
-                        });
+
                         return SummChannel;
-                    }
-
-                    //Create the generic summary channels
-                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/GC300', id: 'GC300', title: '[@channelPercentGC]', hasStdev: false, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 15 });
-                    cha.setChangeYScale(true, true);
-                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Uniqueness', id: 'Uniqueness', title: '[@ChannelNonuniqueness]', hasStdev: false, maxval: 75, active: true, alertZoneMin: 26, alertZoneMax: 199 });
-                    cha.setChangeYScale(false, true);
-
-
-                    //Create the repeats channel
-                    var repeatConfig = {
-                        database: CrossesMetaData.database,
-                        serverURL: serverUrl,
-                        annotTableName: 'tandemrepeats',
-                        chromnrfield: 'chrom'
-                    };
-                    var DataFetcherAnnotation = require("DQX/DataFetcher/DataFetcherAnnotation");
-                    var ChannelAnnotation = require("DQX/ChannelPlot/ChannelAnnotation");
-                    var repeatFetcher = new DataFetcherAnnotation.Fetcher(repeatConfig);
-                    repeatFetcher.ftype = 'repeat';
-                    repeatFetcher.fetchSubFeatures = false;
-                    //repeatFetcher.translateChromoId = translateChromoId;
-                    that.panelBrowser.addDataFetcher(repeatFetcher);
-                    repeatChannel = ChannelAnnotation.Channel("Repeats", repeatFetcher);
-                    repeatChannel.setHeight(120);
-                    repeatChannel.setTitle('[@channelRepeatRegions]');
-                    that.panelBrowser.addChannel(repeatChannel, false);
-
-                    that.addChannelToTree(repeatChannel, '[@channelRepeatRegions]', true, 'Doc/GenomeBrowser/Channels/Repeats.htm');
-                    repeatChannel.handleFeatureClicked = function (id) {
-                        DQX.setProcessing("Downloading...");
-                        repeatFetcher.fetchFullAnnotInfo(id, that._callBackPointInfoFetched_Repeat, DQX.createFailFunction("Failed to download data"));
                     }
 
                     
                     //Show coverage & mapping quality tracks
                     if (true) {//alternative 1: channel per cross
-                        $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
-                            var sampleSet = sampleSetObj.id;
-                            if (sampleSet) {
-                                createSummaryChannel({
-                                    config: 'Summ01',
-                                    folder: 'Tracks-Cross/MapQuality/' + sampleSet,
-                                    idData: 'MapQuality',
-                                    id: 'MQ' + sampleSet,
-                                    title: 'Mapping quality ' + sampleSetObj.name,
-                                    hasStdev: true,
-                                    maxval: 60,
-                                    active: true,
-                                    alertZoneMin: 0,
-                                    alertZoneMax: 40 });
-                            }
-                        });
+
                         $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
                             var sampleSet = sampleSetObj.id;
                             if (sampleSet) {
@@ -426,8 +485,38 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                                     maxval: 3,
                                     active: true });
                                 cha.setChangeYScale(false, true);
+                                that.controlledVisibilityChannels.push({
+                                    channel:cha,
+                                    dependencies:{
+                                        'visibility_properties':'Coverage', 'visibility_crosses':sampleSet
+                                    }
+                                });
                             }
                         });
+
+                        $.each(CrossesMetaData.sampleSets, function (idx, sampleSetObj) {
+                            var sampleSet = sampleSetObj.id;
+                            if (sampleSet) {
+                                var theChannel = createSummaryChannel({
+                                    config: 'Summ01',
+                                    folder: 'Tracks-Cross/MapQuality/' + sampleSet,
+                                    idData: 'MapQuality',
+                                    id: 'MQ' + sampleSet,
+                                    title: 'Mapping quality ' + sampleSetObj.name,
+                                    hasStdev: true,
+                                    maxval: 60,
+                                    active: true,
+                                    alertZoneMin: 0,
+                                    alertZoneMax: 40 });
+                                that.controlledVisibilityChannels.push({
+                                    channel:theChannel,
+                                    dependencies:{
+                                        'visibility_properties':'MapQuality', 'visibility_crosses':sampleSet
+                                    }
+                                });
+                            }
+                        });
+
                     }
                     else {//alternative 2: multi-color in single channel
                         var channelList = [{ ID: 'Coverage', maxVal: 3 }, { ID: 'MapQuality', maxVal: 60}];
@@ -474,6 +563,37 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         });
                     }
 
+                    //Create the Reference genome summary channels
+                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/GC300', id: 'GC300', title: '[@channelPercentGC]', hasStdev: false, maxval: 60, active: true, alertZoneMin: 0, alertZoneMax: 15 });
+                    cha.setChangeYScale(true, true);
+                    var cha = createSummaryChannel({ config: 'Summ01', folder: 'Tracks-Cross/Uniqueness', id: 'Uniqueness', title: '[@ChannelNonuniqueness]', hasStdev: false, maxval: 75, active: true, alertZoneMin: 26, alertZoneMax: 199 });
+                    cha.setChangeYScale(false, true);
+
+
+                    //Create the repeats channel
+                    var repeatConfig = {
+                        database: CrossesMetaData.database,
+                        serverURL: serverUrl,
+                        annotTableName: 'tandemrepeats',
+                        chromnrfield: 'chrom'
+                    };
+                    var DataFetcherAnnotation = require("DQX/DataFetcher/DataFetcherAnnotation");
+                    var ChannelAnnotation = require("DQX/ChannelPlot/ChannelAnnotation");
+                    var repeatFetcher = new DataFetcherAnnotation.Fetcher(repeatConfig);
+                    repeatFetcher.ftype = 'repeat';
+                    repeatFetcher.fetchSubFeatures = false;
+                    //repeatFetcher.translateChromoId = translateChromoId;
+                    that.panelBrowser.addDataFetcher(repeatFetcher);
+                    repeatChannel = ChannelAnnotation.Channel("Repeats", repeatFetcher);
+                    repeatChannel.setHeight(120);
+                    repeatChannel.setTitle('[@channelRepeatRegions]');
+                    that.panelBrowser.addChannel(repeatChannel, false);
+                    that.channelModifyVisibility('Repeats', false);
+
+                    repeatChannel.handleFeatureClicked = function (id) {
+                        DQX.setProcessing("Downloading...");
+                        repeatFetcher.fetchFullAnnotInfo(id, that._callBackPointInfoFetched_Repeat, DQX.createFailFunction("Failed to download data"));
+                    }
 
                 }
 
