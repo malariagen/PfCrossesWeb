@@ -65,6 +65,7 @@
                     this.createFieldCatalog(); //This function translates the metadata field info to a format that is better suited in this context (todo: remove this conversion step?)
                     this.createPanelTable();
                     this.createPanelAdvancedQuery();
+                    that.promptCrossIfRequired();
                 };
 
                 that.createFramework = function () {
@@ -78,6 +79,38 @@
                     this.frameTable = this.frameTableGroup.addMemberFrame(Framework.FrameFinal('SamplesTable', 0.6))
                         .setMargins(0).setFrameClassClient('DQXDarkFrame').setAllowScrollBars(false, false);
                 };
+
+
+                that.promptCrossIfRequired = function() {
+                    if (that.crossIsSelected)
+                        return;
+                    var sampleTypeControl = that.catVarQueryPopulationFreqType;
+                    var thePage = that.myPage;
+
+                    if (thePage.current_call_set.get('call_set')) {// Fetch the cross from what callset is active
+                        var callset = thePage.current_call_set.get('call_set');
+                        var cross = callset.split(':')[0];
+                        sampleTypeControl.modifyValue(cross);
+                        that.updatePopQuery();
+                        that.crossIsSelected = true;
+                        return
+                    }
+
+                    var content = '';
+                    $.each(CrossesMetaData.sampleSets, function(idx, cross) {
+                        var bt = Controls.Button(null,{content: cross.name, width:350 });
+                        bt.setOnChanged(function() {
+                            DQX.ClosePopup(popupid);
+                            sampleTypeControl.modifyValue(cross.id);
+                            that.updatePopQuery();
+                            that.crossIsSelected = true;
+                        })
+                        content += bt.renderHtml();
+                        content += '<br>';
+                    });
+                    content += '<br>NOTE: you can change the active cross any time later<br>using the combo box selector in the left panel<br>'
+                    var popupid = Popup.create('Select cross', content, null, {canClose: false});
+                }
 
 
                 //This function is called when the user clicks on a link in a column header of the SNP query table
