@@ -1,7 +1,7 @@
 define({
 
   root: {
-     variant_filters: "Variant Filters (check to exclude)",
+     variant_filters: "<b>Variant Filters</b> <i>(check to exclude)</i>",
 	 variantTypeOptions: "Variant type",
 	 genomeSearchOptions: "Genome region",
 	 genomeSearchChromosome: 'Chromosome',

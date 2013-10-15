@@ -227,7 +227,7 @@
                     var pane = Controls.CompoundVert();
                     pane.setLegend(resources.variant_filters);
                     that.variant_filter_controls = VariantFilters(CrossesMetaData.variant_filters, that.myPage.variant_filters);
-                    pane.addControl(that.variant_filter_controls.grid);
+                    pane.addControl(that.variant_filter_controls.getControl());
                     theForm.addControl(pane);
                     that.myPage.variant_filters.on({change: true}, that.changeFunction);
                     theForm.render();

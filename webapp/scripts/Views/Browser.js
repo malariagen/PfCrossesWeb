@@ -166,7 +166,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.groupDispSettingsControls = group1.addControl(Controls.CompoundVert()).setLegend('Display settings');
 
                     that.variant_filter_controls = VariantFilters(CrossesMetaData.variant_filters, that.myPage.variant_filters);
-                    that.groupVariantFilterControls.addControl(that.variant_filter_controls.grid);
+                    that.groupVariantFilterControls.addControl(that.variant_filter_controls.getControl());
 
                     that.myPage.variant_filters.on({ change: true }, function () {
                         //Context is new model

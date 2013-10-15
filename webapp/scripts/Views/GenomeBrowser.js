@@ -189,9 +189,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                 that.createControls = function () {
 
                     var pane = Controls.CompoundVert();
-                    pane.setLegend('<b>'+resources.variant_filters+'</b>');
+                    pane.setLegend(resources.variant_filters);
                     that.variant_filter_controls = VariantFilters(CrossesMetaData.variant_filters, that.myPage.variant_filters);
-                    pane.addControl(that.variant_filter_controls.grid);
+                    pane.addControl(that.variant_filter_controls.getControl());
                     that.controlsBaseGroup.addControl(pane);
                     that.myPage.variant_filters.on({ change: true }, function () {
                         $.each(that.callSetViewers, function (idx, callSetViewer) {
