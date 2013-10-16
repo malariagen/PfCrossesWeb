@@ -125,7 +125,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                     that.controlledVisibilityChannels = [];
 
-                    var groupCrosses = Controls.CompoundVert().setLegend('Crosses').setTreatAsBlock();
+                    var groupCrosses = Controls.CompoundVert().setLegend('Crosses').setLegendSimple().setTreatAsBlock();
                     $.each(CrossesMetaData.sampleSets, function(idx, cross) {
                         that.visibilityStatus['visibility_crosses'][cross.id] = true;
                         var chk = Controls.Check(null, { label: cross.name, value: true }).setOnChanged(function() {
@@ -136,7 +136,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                     });
 
-                    var groupCalls = Controls.CompoundVert().setLegend('Call type').setTreatAsBlock();
+                    var groupCalls = Controls.CompoundVert().setLegend('Call type').setLegendSimple().setTreatAsBlock();
                     $.each(CrossesMetaData.callMethods, function(idx, callMethod) {
                         that.visibilityStatus['visibility_calls'][callMethod] = true;
                         var chk = Controls.Check(null, { label: callMethod, value: true }).setOnChanged(function() {
@@ -154,7 +154,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         { id:'MapQuality', name: "Mapping quality", defaultvisible:false }
                     ];
 
-                    var groupProperties = Controls.CompoundVert().setLegend('Properties').setTreatAsBlock();
+                    var groupProperties = Controls.CompoundVert().setLegend('Properties').setLegendSimple().setTreatAsBlock();
                     $.each(genotypePropertyList, function(idx, prop) {
                         that.visibilityStatus['visibility_properties'][prop.id] = prop.defaultvisible;
                         var chk = Controls.Check(null, { label: prop.name, value: prop.defaultvisible }).setOnChanged(function() {
