@@ -13,7 +13,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                 that.myPage = iPage;
                 that.registerView();
                 that.refVersion = 3;
-                that.dataLocation = "SnpDataCross2";
+                that.dataLocation = "SnpDataCross3";
 
 
                 that.createFramework = function () {

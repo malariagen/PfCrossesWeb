@@ -91,7 +91,7 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
             data.call_set = data.call_set.replace("_gatk", ":gatk");
             data.call_set = data.call_set.replace("_cortex", ":cortex");
             var vcf = CrossesMetaData.variantsMap[data.call_set].vcf;
-            require("SnpCallPopup").create(data.call_set, "SnpDataCross2", vcf, {position: data.snp_pos}, null, data.chrom);
+            require("SnpCallPopup").create(data.call_set, "SnpDataCross3", vcf, {position: data.snp_pos}, null, data.chrom);
         }
 
         //Returns html with info about a gene

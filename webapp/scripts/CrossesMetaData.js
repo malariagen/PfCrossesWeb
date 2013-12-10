@@ -76,42 +76,75 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
                                     },
         ];
 
+/*
+Common
+ ##FILTER=<ID=MISSING_PARENT,Description="One or both parents have a missing genotype call.">
+ ##FILTER=<ID=NON_CORE,Description="Variant is not within the core genome.">
+ ##FILTER=<ID=NON_MENDELIAN,Description="Variant calls are not consistent with Mendelian segregation because one or more progeny have an allele not found in either parent.">
+ ##FILTER=<ID=LOW_CONFIDENCE,Description="Variant confidence is low.">
+ ##FILTER=<ID=LOW_CONFIDENCE_PARENT,Description="Genotype confidence for one or both parents is low (GQ < 99).">
+ ##FILTER=<ID=CNV,Description="There is evidence for copy number variation at this locus.">
+ ##FILTER=<ID=DUP_SITE,Description="Variant position coincides with another.">
+ ##FILTER=<ID=NON_SEGREGATING,Description="Variant is fixed within the sample set.">
+
+GATK filters:
+ #
+Cortex filters:
+ ##FILTER=<ID=MAPQ,Description="5prime flank maps to reference with mapping quality below 40">
+ ##FILTER=<ID=MISMAPPED_UNPLACEABLE,Description="Stampy mapped the variant (using the 5p-flank) confidently (mapqual> 40) to a place where the ref-allele does not match">
+ ##FILTER=<ID=MULTIALLELIC,Description="Cortex does not call multiallelic sites, but combining run_calls VCFs can produce them. Filtered as current genotyper assumes biallelic.">
+ ##FILTER=<ID=OVERLAPPING_SITE,Description="If Stampy (or combining VCFs) has placed two biallelic variants overlapping, they are filtered">
+ ##FILTER=<ID=PF_FAIL_ERROR,Description="Likely to be a sequencing error">
+ ##FILTER=<ID=PF_FAIL_REPEAT,Description="Likely to be an artifact due to repetitive sequence">
+
+
+
+
+ ##FILTER=<ID=DUP_ALLELE,Description="Duplicate allele">
+         */
+
         CrossesMetaData.variant_filters = {
-            ParentCallMissing: {
-                label : "ParentCallMissing",
+            MISSING_PARENT: {
+                label : "MISSING_PARENT",
                 description : "One or both parents have a missing genotype call.",
                 call_methods: ['cortex', 'gatk']
             },
-            SubtelomericHypervariable:{
-                label : "SubtelomericHypervariable",
-                description : "Variant is within a sub-telomeric hypervariable region.",
+            NON_CORE:{
+                label : "NON_CORE",
+                description : "Variant is not within the core genome.",
                 call_methods: ['cortex', 'gatk']
             },
-            NonMendelian:{
-                label : "NonMendelian",
+            NON_MENDELIAN:{
+                label : "NON_MENDELIAN",
                 description : "Variant calls are not consistent with Mendelian segregation because one or more progeny have an allele not found in either parent.",
                 call_methods: ['cortex', 'gatk']
             },
-            LowQuality:{
-                label : "LowQuality",
-                description : "Recalibrated variant quality score (VQSLOD) falls below defined threshold.",
-                call_methods: ['gatk']
-            },
-            InternalHypervariable:{
-                label : "InternalHypervariable",
-                description : "Variant is within a chromosome-internal hypervariable region.",
+            LOW_CONFIDENCE:{
+                label : "LOW_CONFIDENCE",
+                description : "Variant confidence is low.",
                 call_methods: ['cortex', 'gatk']
             },
-            Centromere:{
-                label : "Centromere",
-                description : "Variant is within a centromere.",
+            LOW_CONFIDENCE_PARENT:{
+                label : "LOW_CONFIDENCE_PARENT",
+                description : "Genotype confidence for one or both parents is low (GQ < 99).",
                 call_methods: ['cortex', 'gatk']
             },
-            SubtelomericRepeat:{
-                label : "SubtelomericRepeat",
-                description : "Variant is within a sub-telomeric repeat region.",
+            CNV:{
+                label : "CNV",
+                description : "There is evidence for copy number variation at this locus.",
                 call_methods: ['cortex', 'gatk']
             },
+            DUP_SITE:{
+                label : "DUP_SITE",
+                description : "Variant position coincides with another.",
+                call_methods: ['cortex', 'gatk']
+            },
+            NON_SEGREGATING:{
+                label : "NON_SEGREGATING",
+                description : "Variant is fixed within the sample set.",
+                call_methods: ['cortex', 'gatk']
+            },
+
             MAPQ:{
                 label : "MAPQ",
                 description : "5prime flank maps to reference with mapping quality below 40.",
@@ -143,6 +176,11 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
             PF_FAIL_ERROR:{
                 label : "PF_FAIL_ERROR",
                 description : "The variant is likely to be a sequencing error.",
+                call_methods: ['cortex']
+            },
+            DUP_ALLELE:{
+                label : "DUP_ALLELE",
+                description : "Duplicate allele.",
                 call_methods: ['cortex']
             }
         };
