@@ -1,0 +1,73 @@
+{
+	"SourceFileFormat":"VCF",
+
+	"FilterPassedOnly":false,
+	"PositiveQualityOnly":true,
+	
+#	"ConvertChromoNamesV32Pf3D7":true,
+	"LimitCount":-1,
+
+	"InfoComps":[
+
+################ FIXED PART ########################################
+		{"Name":"Reference base","ID":"RefBase", "Source":"REF",
+			"Display":false,
+			"Encoder": {"ID": "FixedString", "Len": 1 }
+		},
+		{"Name":"Alternative base","ID":"AltBase", "Source":"ALT",
+			"Display":false,
+			"Encoder": {"ID": "FixedString", "Len": 1 }
+		},
+		{"Name":"Filter passed","ID":"Filtered", "Source":"FILTER",
+			"Display":false,
+			"Categories":{"PASS":true,"*":false},
+			"Encoder": {"ID": "Boolean" }
+		},
+
+
+################ VARIABLE PART ########################################
+
+		{"Name":"Reference variant","ID":"RefVar", "Source":"REF",
+			"Display":false,
+			"Encoder": {"ID": "LimitString", "Len": 20 }
+		},
+			
+		{"Name":"Alternative variant","ID":"AltVar", "Source":"ALT",
+			"Display":false,
+			"Encoder": {"ID": "LimitString", "Len": 20 }
+		},
+                {"Name":"SITE_CONF","ID":"SITE_CONF","Source":"INFO:SITE_CONF:0",
+                        "Display":true, "Min":0, "Max":2000,
+                        "Encoder": {"ID": "Float2B64", "Len":3, "Min":0, "Max":10000 } }
+			
+			
+#		{"Name":"Variation type", "ID":"SVTYPE", "Source":"INFO:SVTYPE:0",
+#			"Display":false,
+#			"Categories":{"SNP":0,"SNP_FROM_COMPLEX":0,"INDEL":1,"INV_INDEL":1,"INDEL_FROM_COMPLEX":1,"INS":2,"DEL":3},
+#			"Encoder": {"ID": "Int2B64", "Len":1 } },
+#			
+#		{"Name":"Variation length","ID":"SVLEN", "Source":"INFO:SVLEN:0",
+#			"Display":false, "Min":-500, "Max":500,
+#			"Encoder": {"ID": "Float2B64", "Len":2, "Min":-500, "Max":500 } }
+
+
+	],
+
+
+	"SampleComps":[
+		{"ID":"GT",
+			"SourceID":"GT","SourceSub":0,
+			"Encoder": {"ID": "Int2B64", "Len":1 }
+		},
+		{"ID":"DP",
+			"SourceID":"COV","SourceSub":"0+1",
+			"Encoder": {"ID": "Int2B64", "Len":2 }
+		},
+		{"ID":"GT_CONF",
+			"SourceID":"GT_CONF","SourceSub":0,
+			"Encoder": {"ID": "Float2B64", "Len":2, "Min":0, "Max":20000 }
+		}
+	]
+
+
+}

@@ -1,0 +1,61 @@
+{
+	"SourceFileFormat":"VCF",
+
+	"FilterPassedOnly":false,
+	"PositiveQualityOnly":true,
+	
+#	"ConvertChromoNamesV32Pf3D7":true,
+	"LimitCount":-1,
+
+	"InfoComps":[
+
+################ FIXED PART ########################################
+		{"Name":"Reference base","ID":"RefBase", "Source":"REF",
+			"Display":false,
+			"Encoder": {"ID": "FixedString", "Len": 1 } },
+		{"Name":"Alternative base","ID":"AltBase", "Source":"ALT",
+			"Display":false,
+			"Encoder": {"ID": "FixedString", "Len": 1 } },
+		{"Name":"Filter passed","ID":"Filtered", "Source":"FILTER",
+			"Display":false,
+			"Categories":{"PASS":true,"*":false},
+			"Encoder": {"ID": "Boolean" } },
+
+
+################ VARIABLE PART ########################################
+
+		{"Name":"Reference variant","ID":"RefVar", "Source":"REF",
+			"Display":false,
+			"Encoder": {"ID": "LimitString", "Len": 20 } },
+			
+		{"Name":"Alternative variant","ID":"AltVar", "Source":"ALT",
+			"Display":false,
+			"Encoder": {"ID": "LimitString", "Len": 20 } },
+
+                {"Name":"VQSLOD","ID":"VQSLOD","Source":"INFO:VQSLOD:0",
+                        "Display":true, "Min":-5, "Max":10,
+                        "Encoder": {"ID": "Float2B64", "Len":3, "Min":-20, "Max":20 } }
+			
+			
+
+
+	],
+
+
+	"SampleComps":[
+		{"ID":"GT",
+			"SourceID":"GT","SourceSub":0,
+			"Encoder": {"ID": "Int2B64", "Len":1 }
+		},
+		{"ID":"DP",
+			"SourceID":"DP","SourceSub":0,
+			"Encoder": {"ID": "Int2B64", "Len":2 }
+		},
+		{"ID":"GQ",
+			"SourceID":"GQ","SourceSub":0,
+			"Encoder": {"ID": "Float2B64", "Len":2, "Min":0, "Max":100 }
+		}
+	]
+
+
+}

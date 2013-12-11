@@ -1,0 +1,44 @@
+{
+	"SourceFileFormat":"VCF",
+
+	"FilterPassedOnly":false,
+	"PositiveQualityOnly":true,
+	
+#	"LimitCount":5000,
+
+	"InfoComps":[
+
+		{"ID":"chrom", "Source":"CHROM", "Type":"Text" },
+		{"ID":"pos", "Source":"POS", "Type":"Int" },
+                {"ID":"GeneId","Source":"INFO:EFF:6", "Type":"Text" },
+		{"ID":"REF", "Source":"REF", "MaxLen":50, "Type":"Text" },
+		{"ID":"ALT", "Source":"ALT", "MaxLen":50, "Type":"Text" },
+                {"ID":"Effect","Source":"INFO:EFF:0", "Type":"Text" },
+                {"ID":"AminoAcidChange","Source":"INFO:EFF:4", "Type":"Text" },
+                {"ID":"RegionType","Source":"INFO:RegionType:0", "Type":"Text" },
+                {"ID":"GC","Source":"INFO:GC:0", "Type":"Float" },
+                {"ID":"STR","Source":"INFO:STR:0", "Type":"Float" },
+                {"ID":"RU","Source":"INFO:RU:0", "MaxLen":20, "Type":"Text" },
+		{"ID":"FILTER", "Source":"FILTER", "Default":"PASS", "Type":"Text" },
+                {"ID":"VQSLOD","Source":"INFO:VQSLOD:0", "Type":"Float" },
+                {"ID":"BaseQRankSum","Source":"INFO:BaseQRankSum:0", "Type":"Float" },
+                {"ID":"DP","Source":"INFO:DP:0", "Type":"Float" },
+                {"ID":"FS","Source":"INFO:FS:0", "Type":"Float" },
+                {"ID":"HaplotypeScore","Source":"INFO:HaplotypeScore:0", "Type":"Float" },
+                {"ID":"HRun","Source":"INFO:HRun:0", "Type":"Float" },
+                {"ID":"MQ","Source":"INFO:MQ:0", "Type":"Float" },
+                {"ID":"MQ0Fraction","Source":"INFO:MQ0Fraction:0", "Type":"Float" },
+                {"ID":"MQRankSum","Source":"INFO:MQRankSum:0", "Type":"Float" },
+                {"ID":"QD","Source":"INFO:QD:0", "Type":"Float" },
+                {"ID":"ReadPosRankSum","Source":"INFO:ReadPosRankSum:0", "Type":"Float" },
+                {"ID":"UQ","Source":"INFO:UQ:0", "Type":"Float" }
+
+			
+			
+
+
+	]
+
+
+
+}

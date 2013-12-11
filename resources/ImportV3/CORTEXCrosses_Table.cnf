@@ -1,0 +1,44 @@
+{
+	"SourceFileFormat":"VCF",
+
+	"Method": "cortex",
+
+	"FilterPassedOnly":false,
+	"PositiveQualityOnly":true,
+	
+#	"LimitCount":5000,
+
+	"InfoComps":[
+
+		{"ID":"chrom", "Source":"CHROM", "Type":"Text" },
+		{"ID":"pos", "Source":"POS", "Type":"Int" },
+                {"ID":"GeneId","Source":"INFO:EFF:6", "Type":"Text" },
+		{"ID":"REF", "Source":"REF", "MaxLen":50, "Type":"Text" },
+		{"ID":"ALT", "Source":"ALT", "MaxLen":50, "Type":"Text" },
+                {"ID":"Effect","Source":"INFO:EFF:0", "Type":"Text" },
+                {"ID":"AminoAcidChange","Source":"INFO:EFF:4", "Type":"Text" },
+                {"ID":"RegionType","Source":"INFO:RegionType:0", "Type":"Text" },
+                {"ID":"GC","Source":"INFO:GC:0", "Type":"Float" },
+                {"ID":"STR","Source":"INFO:STR:0", "Type":"Float" },
+                {"ID":"RU","Source":"INFO:RU:0", "MaxLen":20, "Type":"Text" },
+		{"ID":"FILTER", "Source":"FILTER", "Default":"PASS", "Type":"Text" },
+
+
+
+
+                {"ID":"SITE_CONF","Source":"INFO:SITE_CONF:0", "Type":"Float" },
+                {"ID":"HRun","Source":"INFO:HRun:0", "Type":"Float" },
+                {"ID":"KMER","Source":"INFO:KMER:0", "Type":"Int" },
+                {"ID":"SVLEN","Source":"INFO:SVLEN:0", "Type":"Float" },
+                {"ID":"SVTYPE","Source":"INFO:SVTYPE:0", "Type":"Text" },
+                {"ID":"UQ","Source":"INFO:UQ:0", "Type":"Float" }
+
+			
+			
+
+
+	]
+
+
+
+}
