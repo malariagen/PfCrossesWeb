@@ -1,5 +1,5 @@
-define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX/Popup", "DQX/SQL", "DQX/Msg","CrossesMetaData" ],
-		function(DataFetcher, QueryTable, Controls, Popup, SQL, Msg, CrossesMetaData) {
+define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/DataFetcher/DataFetchers", "DQX/Controls", "DQX/Popup", "DQX/SQL", "DQX/Msg","CrossesMetaData" ],
+		function(DataFetcher, QueryTable, DataFetchers, Controls, Popup, SQL, Msg, CrossesMetaData) {
 	function TableCommon() {};
 	
 		
@@ -53,7 +53,7 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
 
         //This function is called when the user clicks on a gene id link in the SNP query table
         _onClickGene: function(scope,id) {
-            var geneid=this.panelTable.getTable().getCellValue(id,"gene");
+            var geneid=this.panelTable.getTable().getCellValue(id,"GeneId");
             Msg.send({ type: 'ShowGenePopup' }, geneid);
         },
 
@@ -73,10 +73,11 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
             this.theTableFetcher = new DataFetcher.Table(serverUrl, CrossesMetaData.database, CrossesMetaData.tableVariants);
             this.theTableFetcher.showDownload=true;
             this.theTableFetcher.positionField = "pos";
+
             this.panelTable = QueryTable.Panel(this.frameTable, this.theTableFetcher, { leftfraction: 50 });
 
             var mytable = this.panelTable.myTable;
-            //mytable.immediateFetchRecordCount = false;
+            mytable.recordCountFetchType = DataFetchers.RecordCountFetchType.DELAYED;
 
             //Create the columns of the data fetcher, and the table columns
 
@@ -105,6 +106,8 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
                
                 if (info.qbuildertype == "Float") {
                     comp.CellToText = function (text) {
+                        if (text == null)
+                            return '';
                     	return (text.toFixed(2));
                     };
                 }
@@ -122,7 +125,7 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/Controls", "DQX
                     comp.setCellClickHandler($.proxy(this._onClickVariant,this));
                 }
 
-                if (info.id=='gene') {
+                if (info.id=='GeneId') {
                     var msgID={ type: 'ClickGene', id: mytable.myBaseID };
                     comp.makeHyperlinkCell(msgID,DQX.interpolate("Show gene info card"));
                     comp.setCellClickHandler($.proxy(this._onClickGene,this));

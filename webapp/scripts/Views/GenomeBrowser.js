@@ -590,7 +590,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
 
                 that.updateCallSetViewerQuery = function (callSetViewer) {
-                    var andList = [SQL.WhereClause.CompareFixed('cross_name', '=', callSetViewer.Id), SQL.WhereClause.CompareFixed('method', '=', callSetViewer.callMethod)];
+                    var andList = [SQL.WhereClause.CompareFixed(CrossesMetaData.fieldCrossName, '=', callSetViewer.Id), SQL.WhereClause.CompareFixed('method', '=', callSetViewer.callMethod)];
                     $.each(that.myPage.variant_filters.get(), function (filter, value) {
                         //We only care about a value if it is checked, unchecked means all are wanted, checked means we don't want!.
                         if (value &&

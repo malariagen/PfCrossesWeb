@@ -260,7 +260,7 @@
                     that.frameTableGroup.switchTab('SamplesTable');
 
                     var thequery = SQL.WhereClause.AND();
-                    thequery = SQL.WhereClause.CompareFixed('cross_name', '=', freqPrefix);
+                    thequery = SQL.WhereClause.CompareFixed(CrossesMetaData.fieldCrossName, '=', freqPrefix);
 
                     this.panelTable.myTable.setQuery(thequery);
                     this.panelTable.myTable.reLoadTable();

@@ -117,7 +117,7 @@
 
                     //Build the query
                     var options = [];
-                    options.push(SQL.WhereClause.CompareFixed('cross_name', '=', cross_name));
+                    options.push(SQL.WhereClause.CompareFixed(CrossesMetaData.fieldCrossName, '=', cross_name));
                     options.push(SQL.WhereClause.CompareFixed('method', '=', method));
                     //Region params
                     if ((that.region_search.get('chrom') != '') && (that.region_search.get('chrom') != 'all') ) {

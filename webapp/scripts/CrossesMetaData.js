@@ -19,7 +19,10 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
         ];
 
         CrossesMetaData.tableSamples = "pfx_samples";
-        CrossesMetaData.tableVariants = "variants_filtered";
+        CrossesMetaData.tableVariants = "variants3";
+
+        //Some field name in variants table
+        CrossesMetaData.fieldCrossName = 'ExpName';
 
         CrossesMetaData.callMethods = ['gatk', 'cortex'];
 
@@ -36,7 +39,7 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
                                         id: '3d7_hb3:gatk',
                                         crossDispName:resources.x3d7_hb3,
                                         name: resources.x3d7_hb3 + ' - ' + resources.variantsDescrip + ' (GATK)',
-                                        vcf: '3d7_hb3.gatk.both.final',
+                                        vcf: '3d7_hb3.gatk.final',
                                         download_href: 'downloads/3d7_hb3.gatk.both.final.vcf.gz'
                                     },
                                     {
@@ -50,7 +53,7 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
                                         id: 'hb3_dd2:gatk',
                                         crossDispName:resources.xhb3_dd2,
                                         name: resources.xhb3_dd2 + ' - ' + resources.variantsDescrip + ' (GATK)',
-                                        vcf:'hb3_dd2.gatk.both.final',
+                                        vcf:'hb3_dd2.gatk.final',
                                         download_href: 'downloads/hb3_dd2.gatk.both.final.vcf.gz'
                                     },
                                     {
@@ -64,7 +67,7 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
                                         id: '7g8_gb4:gatk',
                                         crossDispName:resources.x7g8_gb4,
                                         name: resources.x7g8_gb4 + ' - ' + resources.variantsDescrip + ' (GATK)',
-                                        vcf:'7g8_gb4.gatk.both.final',
+                                        vcf:'7g8_gb4.gatk.final',
                                         download_href: 'downloads/7g8_gb4.gatk.both.final.vcf.gz'
                                     },
                                     {
@@ -257,21 +260,37 @@ Cortex filters:
             CrossesMetaData.variantFieldList = [];
 
             CrossesMetaData.variantFieldList.push({ id: "chrom_pos", shortName: "position", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "gene", shortName: "gene", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "ref", shortName: "ref", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "alt", shortName: "alt", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "filter", shortName: "filter", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "GeneId", shortName: "gene", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "REF", shortName: "REF", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "ALT", shortName: "ALT", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "Effect", shortName: "Effect", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "AminoAcidChange", shortName: "Mutation", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "RegionType", shortName: "RegionType", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "GC", shortName: "GC", dataTypeID: "Float" });
+            CrossesMetaData.variantFieldList.push({ id: "STR", shortName: "STR", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "RU", shortName: "RU", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "FILTER", shortName: "FILTER", dataTypeID: "String" });
 
             CrossesMetaData.gatkVariantFieldList = CrossesMetaData.variantFieldList.slice(0);
 
-            CrossesMetaData.gatkVariantFieldList.push({ id: "vqslod", shortName: "vqslod", dataTypeID: "Float" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "dp", shortName: "dp", dataTypeID: "Int" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "mq", shortName: "mq", dataTypeID: "Int" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "mq0fraction", shortName: "mq0fraction", dataTypeID: "Float" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "uq", shortName: "uq", dataTypeID: "Int" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "VQSLOD", shortName: "VQSLOD", dataTypeID: "Float" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "BaseQRankSum", shortName: "BaseQRankSum", dataTypeID: "Float" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "DP", shortName: "DP", dataTypeID: "Int" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "FS", shortName: "FS", dataTypeID: "Float" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "HaplotypeScore", shortName: "HaplotypeScore", dataTypeID: "Float" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "HRun", shortName: "HRun", dataTypeID: "Int" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "MQ", shortName: "MQ", dataTypeID: "Int" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "MQ0Fraction", shortName: "MQ0Fraction", dataTypeID: "Float" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "MQRankSum", shortName: "MQRankSum", dataTypeID: "Float" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "UQ", shortName: "UQ", dataTypeID: "Int" });
 
             CrossesMetaData.cortexVariantFieldList = CrossesMetaData.variantFieldList.slice(0);
-            CrossesMetaData.cortexVariantFieldList.push({ id: "site_conf", shortName: "site_conf", dataTypeID: "Float" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "SITE_CONF", shortName: "SITE_CONF", dataTypeID: "Float" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "HRun", shortName: "HRun", dataTypeID: "Int" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "KMER", shortName: "KMER", dataTypeID: "Int" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "SVLEN", shortName: "SVLEN", dataTypeID: "Int" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "SVTYPE", shortName: "SVTYPE", dataTypeID: "String" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "UQ", shortName: "UQ", dataTypeID: "Int" });
 
             CrossesMetaData.fillFieldList(CrossesMetaData.gatkVariantFieldList);
             CrossesMetaData.fillFieldList(CrossesMetaData.cortexVariantFieldList);
