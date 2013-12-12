@@ -220,7 +220,7 @@
                         Controls.Check('SearchSNP', {label: 'SNP', value: true, hint: 'Show all SNPs'}))
                         .bindToModel(that.myPage.type_search, 'snp');
                     this.type_ctrls.addControl(
-                        Controls.Check('SearchInDel', {label: 'InDel', value: true, hint: 'Show all InDels'}))
+                        Controls.Check('SearchIndel', {label: 'Indel', value: true, hint: 'Show all Indels'}))
                         .bindToModel(that.myPage.type_search, 'indel');
                     that.myPage.type_search.on({ change: true }, this.changeFunction);
 

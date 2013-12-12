@@ -31,6 +31,8 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/DataFetcher/Dat
                     colorFunction:dataType.getBackColorFunction(),
                     textFunction:dataType.getTextConvertFunction()
                     };
+                if (field.funcTextConvert)
+                    info.textFunction = field.funcTextConvert;
                 fieldInfo.push(info);
             }
 

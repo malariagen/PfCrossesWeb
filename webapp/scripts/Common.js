@@ -97,8 +97,9 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
         //Returns html with info about a gene
         Common.GeneData2InfoTable = function (data) {
             tokens = {};
-            tokens["Names:"] = data.fnames;
-            tokens["Description:"] = data.descr;
+            tokens["ID:"] = decodeURIComponent(data.fid);
+            tokens["Names:"] = decodeURIComponent(data.fnames);
+            tokens["Description:"] = decodeURIComponent(data.descr);
             tokens["Position:"] = data.chromid + ':' + data.fstart + '-' + data.fstop;
             return DQX.CreateKeyValueTable(tokens);
         }

@@ -10,7 +10,7 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
         CrossesMetaData.listExternalGeneLinks = [
             {
                 name: "GeneDb",
-                url:"http://www.genedb.org/Query/quickSearch?taxons=Pfalciparum&searchText={id}&_pseudogenes=on&allNames=true&_allNames=on&_product=on"
+                url:"http://www.genedb.org/gene/{id}"
             },
             {
                 name: "PlasmoDB",
@@ -256,6 +256,12 @@ Cortex filters:
             for (var i = 0; i < CrossesMetaData.fieldList.length; i++)
                 CrossesMetaData.fieldMap[CrossesMetaData.fieldList[i].id] = CrossesMetaData.fieldList[i];
 
+            var funcConvertSTR = function(inp) {
+                if (inp == '1.0')
+                    return 'True';
+                return '';
+            }
+
 
             CrossesMetaData.variantFieldList = [];
 
@@ -263,13 +269,13 @@ Cortex filters:
             CrossesMetaData.variantFieldList.push({ id: "GeneId", shortName: "gene", dataTypeID: "String" });
             CrossesMetaData.variantFieldList.push({ id: "REF", shortName: "REF", dataTypeID: "String" });
             CrossesMetaData.variantFieldList.push({ id: "ALT", shortName: "ALT", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "FILTER", shortName: "FILTER", dataTypeID: "String" });
             CrossesMetaData.variantFieldList.push({ id: "Effect", shortName: "Effect", dataTypeID: "String" });
             CrossesMetaData.variantFieldList.push({ id: "AminoAcidChange", shortName: "Mutation", dataTypeID: "String" });
             CrossesMetaData.variantFieldList.push({ id: "RegionType", shortName: "RegionType", dataTypeID: "String" });
             CrossesMetaData.variantFieldList.push({ id: "GC", shortName: "GC", dataTypeID: "Float" });
-            CrossesMetaData.variantFieldList.push({ id: "STR", shortName: "STR", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "STR", shortName: "STR", dataTypeID: "String", funcTextConvert: funcConvertSTR });
             CrossesMetaData.variantFieldList.push({ id: "RU", shortName: "RU", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "FILTER", shortName: "FILTER", dataTypeID: "String" });
 
             CrossesMetaData.gatkVariantFieldList = CrossesMetaData.variantFieldList.slice(0);
 
