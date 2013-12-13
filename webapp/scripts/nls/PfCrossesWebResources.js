@@ -13,6 +13,7 @@ define({
 	 filtersSetNone: 'Apply none',
 	 variantCallSet: 'Variant call set',
 	 variantsHelp: "The variant catalogues display basic properties of SNPs and indels discovered in the crosses. There are several catalogues for each cross, for variants discovered by different methods.",
+     genotypesHelp: 'Use this page to browse genotype calls for individual samples. The colours show genotype inheritance:<br><div class="ColorInfoBlock" style="background-color:rgb(0,0,255)"/> Allele from parent 1 (e.g., 3D7)<br><div class="ColorInfoBlock" style="background-color:rgb(255,0,0)"/> Allele from parent 2 (e.g., HB3)<br><div class="ColorInfoBlock" style="background-color:rgb(255,255,255)"/> Missing call<br><div class="ColorInfoBlock" style="background-color:rgb(160,160,160)"/> Filtered call<br><div class="ColorInfoBlock" style="background-color:rgb(0,0,0)"/> Non-parental allele (Mendel error)<br><div class="ColorInfoBlock" style="background-color:rgb(255,128,0)"/> REF allele where parents are both REF<br><div class="ColorInfoBlock" style="background-color:rgb(0,192,0)"/> ALT allele where parents are both ALT.',
 	 variantsDescrip: "SNPs and indels",
 	 x3d7_hb3: "3D7 x HB3",
 	 xhb3_dd2: "HB3 x DD2",

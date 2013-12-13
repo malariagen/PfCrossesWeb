@@ -1,15 +1,15 @@
 ﻿
 define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg", "DQX/DocEl",
 "DQX/Utils", "DQX/FrameList", "DQX/ChannelPlot/GenomePlotter", "DQX/ChannelPlot/ChannelSequence",
-"DQX/ChannelPlot/ChannelSnps2", "DQX/DataFetcher/DataFetcherFile", "Page", "CrossesMetaData", "VariantFilters", "SnpCallPopup"],
+"DQX/ChannelPlot/ChannelSnps2", "DQX/DataFetcher/DataFetcherFile", "Page", "CrossesMetaData", "VariantFilters", "SnpCallPopup", "i18n!nls/PfCrossesWebResources"],
     function (require, Framework, Controls, PopupFrame, Msg, DocEl, DQX, FrameList, GenomePlotter, ChannelSequence,
-              ChannelSnps, DataFetcherFile, Page, CrossesMetaData, VariantFilters, SnpCallPopup) {
+              ChannelSnps, DataFetcherFile, Page, CrossesMetaData, VariantFilters, SnpCallPopup, resources) {
 
         var BrowserModule = {
 
             Instance: function (iPage, iFrame) {
                 iFrame._tmp = 123;
-                var that = Framework.ViewSet(iFrame, 'genome');
+                var that = Framework.ViewSet(iFrame, 'genotypes');
                 that.myPage = iPage;
                 that.registerView();
                 that.refVersion = 3;
@@ -19,6 +19,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                 that.createFramework = function () {
                     this.frameLeft = that.getFrame().addMemberFrame(Framework.FrameGroupVert('settings', 0.3))
                         .setMargins(0).setMinSize(Framework.dimX, 380);
+                    this.frameLeft.InsertIntroBox(null/*"Icons/Medium/GenotypeBrowser.png"*/, resources.genotypesHelp);
                     this.frameControls = this.frameLeft.addMemberFrame(Framework.FrameFinal('settings', 0.7))
                         .setMargins(5).setFixedSize(Framework.dimX, 380);
                     this.frameDetails = this.frameLeft.addMemberFrame(Framework.FrameFinal('details', 0.4))
@@ -75,6 +76,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     //Initialise some settings
                     that.SnpChannel.filter.showSNPs = that.myPage.type_search.get('snp');
                     that.SnpChannel.filter.showINDELs = that.myPage.type_search.get('indel');
+                    that.SnpChannel.filter.setCustomCallFilter('GQ', 'GQ', 99, true, true);
+                    that.SnpChannel.filter.setCustomCallFilter('GT_CONF', 'GT_CONF', 50, true, true);
 
 
                     //Define the chromosomes
@@ -157,7 +160,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     that.myPage.current_call_set.on({ change: true }, $.proxy(that.changeDataSource, that));
                     group1.addControl(this.callSetControl);
 
-                    this.groupVariantFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Variant VCF filters (check to exclude)');
+                    this.groupVariantFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Variant VCF filters');
                     this.groupVariantOtherFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Other Variant filters');
                     this.groupCallFilterControls = group1.addControl(Controls.CompoundVert()).setLegend('Call filters');
                     this.groupDispSettingsControls = group1.addControl(Controls.CompoundVert()).setLegend('Display settings');
@@ -197,25 +200,25 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     });
 
                     //Control inclusion of SNPS and INDELS in view
-                    var ctrlShowSNPs = Controls.Check('', { label: 'Show SNPs', value: true });
+                    var ctrlShowSNPs = Controls.Check('', { label: 'SNP', value: true });
                     ctrlShowSNPs.bindToModel(that.myPage.type_search, 'snp');
-                    var ctrlShowINDELs = Controls.Check('', { label: 'Show INDELs', value: true });
+                    var ctrlShowINDELs = Controls.Check('', { label: 'Indel', value: true });
                     ctrlShowINDELs.bindToModel(that.myPage.type_search, 'indel');
                     this.groupVariantOtherFilterControls.addControl(Controls.CompoundHor([ctrlShowSNPs, Controls.HorizontalSeparator(8), ctrlShowINDELs]));
 
-                    var ctrlHideNonSegregating = Controls.Check('', { label: 'Hide non-segregating variants', value: true });
+/*                    var ctrlHideNonSegregating = Controls.Check('', { label: 'Hide non-segregating variants', value: true });
                     ctrlHideNonSegregating.setOnChanged(function () {
                         that.SnpChannel.filter.hideNonSegregating = ctrlHideNonSegregating.getValue();
                         that.panelBrowser.render();
                     });
-                    this.groupVariantOtherFilterControls.addControl(ctrlHideNonSegregating);
+                    this.groupVariantOtherFilterControls.addControl(ctrlHideNonSegregating);*/
 
-                    var ctrlHideMissingParentCalls = Controls.Check('', { label: 'Parent calls not missing', value: true });
+/*                    var ctrlHideMissingParentCalls = Controls.Check('', { label: 'Parent calls not missing', value: true });
                     ctrlHideMissingParentCalls.setOnChanged(function () {
                         that.SnpChannel.filter.requireParentsPresent = ctrlHideMissingParentCalls.getValue();
                         that.panelBrowser.render();
                     });
-                    this.groupVariantOtherFilterControls.addControl(ctrlHideMissingParentCalls);
+                    this.groupVariantOtherFilterControls.addControl(ctrlHideMissingParentCalls);*/
 
                     that.myPage.type_search.on({ change: true }, function () {
                         that.SnpChannel.filter.showSNPs = that.myPage.type_search.get('snp');
@@ -282,17 +285,17 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
 
                     //Per-call filters for both
-                    var ctrl_Call_COV = Controls.ValueSlider('CtrlCallCOV', { label: 'Min. Coverage', width: sliderWidth, minval: 0, maxval: 200, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+/*                    var ctrl_Call_COV = Controls.ValueSlider('CtrlCallCOV', { label: 'Min. Coverage', width: sliderWidth, minval: 0, maxval: 200, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.filter.setCustomCallFilter('DP', 'DP', ctrl_Call_COV.getValue(), true, true)
                         that.panelBrowser.render();
                     });
                     var showHide_ctrl_Call_COV = Controls.ShowHide(ctrl_Call_COV);
-                    that.groupCallFilterControls.addControl(showHide_ctrl_Call_COV);
+                    that.groupCallFilterControls.addControl(showHide_ctrl_Call_COV);*/
 
 
 
                     //Per-call filters specific for GATK
-                    var ctrl_Call_GQ = Controls.ValueSlider('CtrlCallGQ', { label: 'Min. GQ', width: sliderWidth, minval: 0, maxval: 101, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                    var ctrl_Call_GQ = Controls.ValueSlider('CtrlCallGQ', { label: 'Min. GQ', width: sliderWidth, minval: 0, maxval: 99, value: 99, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.filter.setCustomCallFilter('GQ', 'GQ', ctrl_Call_GQ.getValue(), true, true)
                         that.panelBrowser.render();
                     });
@@ -305,7 +308,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
 
                     //Per-call filters specific for Cortex
-                    var ctrl_Call_GT_CONF = Controls.ValueSlider('CtrlCallGT_CONF', { label: 'Min. GT_CONF', width: sliderWidth, minval: 0, maxval: 500, value: 0, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
+                    var ctrl_Call_GT_CONF = Controls.ValueSlider('CtrlCallGT_CONF', { label: 'Min. GT_CONF', width: sliderWidth, minval: 0, maxval: 200, value: 50, digits: 0, minIsNone: true }).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.filter.setCustomCallFilter('GT_CONF', 'GT_CONF', ctrl_Call_GT_CONF.getValue(), true, true)
                         that.panelBrowser.render();
                     });

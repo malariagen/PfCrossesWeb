@@ -129,7 +129,7 @@ Cortex filters:
             },
             LOW_CONFIDENCE_PARENT:{
                 label : "LOW_CONFIDENCE_PARENT",
-                description : "Genotype confidence for one or both parents is low (GQ < 99).",
+                description : "Genotype confidence for one or both parents is low (GATK: GQ < 99, Cortex: GT_CONF < 50).",
                 call_methods: ['cortex', 'gatk']
             },
             CNV:{

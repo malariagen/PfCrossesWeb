@@ -36,7 +36,8 @@ define(["jquery", "DQX/Controls", "DQX/Utils", "i18n!nls/PfCrossesWebResources"]
                 );
                 check.bindToModel(model, id);
                 check.call_methods = filter.call_methods;
-                that.grid.setItem(Math.floor(i/2), i%2, check);
+                check.showhide = Controls.ShowHide(check);
+                that.grid.setItem(Math.floor(i/2), i%2, check.showhide);
                 i++;
                 return check;
             });
@@ -44,6 +45,7 @@ define(["jquery", "DQX/Controls", "DQX/Utils", "i18n!nls/PfCrossesWebResources"]
             that.setCallMethod = function(call_method) {
                 $.each(that.checks, function(i, check) {
                     check.modifyEnabled($.inArray(call_method, check.call_methods) != -1);
+                    check.showhide.setVisible($.inArray(call_method, check.call_methods) != -1);
                 })
             };
 
