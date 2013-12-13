@@ -200,7 +200,10 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     SQL.WhereClause.CompareFixed('chromid', '=', chromid),
                     SQL.WhereClause.CompareFixed('fstop', '>=', str_start),
                     SQL.WhereClause.CompareFixed('fstart', '<=', str_stop),
-                    SQL.WhereClause.CompareFixed('ftype', '=', 'gene'),
+                    SQL.WhereClause.OR([
+                        SQL.WhereClause.CompareFixed('ftype', '=', 'gene'),
+                        SQL.WhereClause.CompareFixed('ftype', '=', 'pseudogene')
+                    ])
                 ]);
                 var fetcher = DataFetcher.RecordsetFetcher(serverUrl, CrossesMetaData.database, CrossesMetaData.tableAnnotation);
                 fetcher.setMaxResultCount(201);

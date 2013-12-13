@@ -54,10 +54,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         require("Common").showGenePopup(geneID);
                     }
 
-                    if (this.refVersion == 2)
-                        this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'exon');
-                    if (this.refVersion == 3)
-                        this.panelBrowser.getAnnotationFetcher().setFeatureType('gene', 'CDS');
+                    this.panelBrowser.getAnnotationFetcher().setFeatureType('gene,pseudogene', 'CDS');
 
                     this.panelBrowser.getAnnotationChannel().setMinDrawZoomFactX(0.005);
 

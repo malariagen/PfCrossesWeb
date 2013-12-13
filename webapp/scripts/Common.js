@@ -125,7 +125,7 @@ define(["require", "DQX/Framework", "DQX/Msg", "DQX/SQL", "DQX/DocEl", "DQX/Popu
                 content += bt.renderHtml();
             })
 
-            var popupID = Popup.create("Gene " + geneid, content);
+            var popupID = Popup.create(geneid, content);
         }
 
         Common.showGenePopup = function (id) {
