@@ -26,6 +26,12 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
 
         CrossesMetaData.callMethods = ['gatk', 'cortex'];
 
+        CrossesMetaData.getCallMethodDisplayName = function(id)  {
+            if (id =='gatk') return 'GATK';
+            if (id =='cortex') return 'Cortex';
+            DQX.reportError('Invalid call method');
+        }
+
         CrossesMetaData.sampleSets = [
                                       //{ id: '', name: '' },
                                       { id: '3d7_hb3', name: resources.x3d7_hb3, color:DQX.Color(0.7,  0.3,0.0) },

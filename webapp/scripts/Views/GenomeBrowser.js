@@ -15,7 +15,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
             Instance: function (iPage, iFrame) {
                 iFrame._tmp = 123;
-                var that = Framework.ViewSet(iFrame, 'genomebrowser');
+                var that = Framework.ViewSet(iFrame, 'genome');
                 that.myPage = iPage;
                 that.registerView();
                 that.refVersion = 3;
@@ -139,7 +139,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     var groupCalls = Controls.CompoundVert().setLegend('Call type').setLegendSimple().setTreatAsBlock();
                     $.each(CrossesMetaData.callMethods, function(idx, callMethod) {
                         that.visibilityStatus['visibility_calls'][callMethod] = true;
-                        var chk = Controls.Check(null, { label: callMethod, value: true }).setOnChanged(function() {
+                        var chk = Controls.Check(null, { label: CrossesMetaData.getCallMethodDisplayName(callMethod), value: true }).setOnChanged(function() {
                             that.visibilityStatus['visibility_calls'][callMethod] = chk.getValue();
                             that.updateChannelVisibility();
                         });
@@ -177,8 +177,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     });
 
                     that.controlsBaseGroup = Controls.CompoundVert([
-                        Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls ]).setLegend('<b>Genotyping channels</b>'),
-                        Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome channels</b>'),
+                        Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls ])
+                            .setLegend('<b>Select tracks</b>'),
+                        Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome tracks</b>'),
                         Controls.VerticalSeparator(10)
                     ]);
 
@@ -253,7 +254,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                                 'chrom'                 // Name of the column containing a unique identifier for each snp
                             );
                             theChannel
-                                .setTitle(sampleset.name+' - Recombination spots')        //sets the title of the channel
+                                .setTitle(sampleset.name+' - Recombination events')        //sets the title of the channel
                                 .setMaxViewportSizeX(500.0e5);
                             theChannel.makeCategoricalColors(//Assign a different color to silent/nonsilent snps
                              'samplecount',               // Name of the column containing a categorical string value that determines the color of the snp
@@ -305,6 +306,9 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     //plotcomp.myPlotHints.color = population.color;//define the color of the component
                     plotcomp.myPlotHints.pointStyle = 1;//chose a sensible way of plotting the points
                     plotcomp.myPlotHints.makeDrawLines(9E99);
+                    theChannel.getToolTipContent = function(compID, pointIndex) {
+                        return null;
+                    }
 
                     that.controlledVisibilityChannels.push({
                         channel:theChannel,
@@ -342,7 +346,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
 
                         //Create the channel in the browser that will contain the frequency values
-                        var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 20 });
+                        var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 0.05 });
                         theChannel
                             .setTitle("{cross} Variant dens. ({method})".DQXformat({cross:callSet.crossDispName, method:callSet.callMethod}))        //sets the title of the channel
                             //.setSubTitle("in 1kb window")        //sets the title of the channel
@@ -579,7 +583,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     repeatChannel.setHeight(120);
                     repeatChannel.setTitle('[@channelRepeatRegions]');
                     that.panelBrowser.addChannel(repeatChannel, false);
-                    that.channelModifyVisibility('Repeats', false);
+                    //that.channelModifyVisibility('Repeats', false);
 
                     repeatChannel.handleFeatureClicked = function (id) {
                         DQX.setProcessing("Downloading...");

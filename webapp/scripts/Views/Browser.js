@@ -71,6 +71,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     this.SnpChannel.setTitle('Snps1');
                     this.SnpChannel.setHeight(400);
                     this.SnpChannel.setAutoFillHeight();
+                    this.SnpChannel.setMarkVisible(false);
                     this.panelBrowser.addChannel(this.SnpChannel, true);
 
                     //Initialise some settings
@@ -184,6 +185,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                     });
                     this.groupDispSettingsControls.addControl(Controls.Check('CtrlEquiDistant', { label: 'Equidistant blocks', value: true })).setOnChanged(function (id, ctrl) {
                         that.SnpChannel.fillBlocks = ctrl.getValue();
+                        that.SnpChannel.setMarkVisible(!ctrl.getValue());
                         that.panelBrowser.render();
                     });
                     this.groupDispSettingsControls.addControl(Controls.Check('CtrlSmallBlocks', { label: 'Allow subsampled SNP display', value: true })).setOnChanged(function (id, ctrl) {

@@ -22,7 +22,7 @@
                 thePage.frameBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('browser', 1))
                 .setMarginsIndividual(0,0,0,0).setDisplayTitle(resources.appName + resources.genotypePageHeader); ;
 
-                thePage.frameGenomeBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('genomebrowser', 1))
+                thePage.frameGenomeBrowser = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('genome', 1))
                 .setMarginsIndividual(0, 0, 0, 0).setDisplayTitle(resources.appName + resources.genomePageHeader); ;
 
                 thePage.frameVariants = thePage.frameBody.addMemberFrame(Framework.FrameGroupHor('variants', 1))
