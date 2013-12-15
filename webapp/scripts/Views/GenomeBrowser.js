@@ -178,13 +178,14 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.channelModifyVisibility('Repeats', that.chk_Repeats.getValue())
                     });
 
-                    var snpTypeInfoString = '<div class="ColorInfoBlock" style="background-color:rgb(255,192,0)"/> SNP &nbsp;&nbsp;';
+                    var snpTypeInfoString = '<br><div class="ColorInfoBlock" style="background-color:rgb(255,192,0)"/> SNP &nbsp;&nbsp;';
                     snpTypeInfoString += '<div class="ColorInfoBlock" style="background-color:rgb(0,192,255)"/> Indel';
 
                     that.controlsBaseGroup = Controls.CompoundVert([
                         Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls,
-                            Controls.Static(snpTypeInfoString)])
+                            ])
                             .setLegend('<b>Select tracks</b>'),
+                        Controls.Static(snpTypeInfoString),
                         Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome tracks</b>'),
                         Controls.VerticalSeparator(10),
                     ]);
