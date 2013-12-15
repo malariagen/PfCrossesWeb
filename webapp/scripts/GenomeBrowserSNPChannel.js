@@ -23,9 +23,9 @@
 
                     //Draw SNPs
                     this.myFetcher.IsDataReady(PosMin, PosMax, false);
-                    var points = this.myFetcher.getColumnPoints(PosMin, PosMax, this._SNPIDColumn);
+                    var points = this.myFetcher.getColumnPoints(PosMin, PosMax, 'indel');
                     var xvals = points.xVals;
-                    drawInfo.centerContext.fillStyle = DQX.Color(1.0, 0.75, 0.0).toString();
+                    var types = points.YVals;
                     drawInfo.centerContext.strokeStyle = DQX.Color(0.0, 0.0, 0.0).toString();
                     this._pointsX = [];
                     var pointsX = this._pointsX;
@@ -40,6 +40,10 @@
                         var psx = Math.round(x * drawInfo.zoomFactX - drawInfo.offsetX) + 0.5;
                         pointsX.push(psx); pointsGenome.push(x); pointsIndex.push(i + points.startIndex);
                         var psy = 5.5;
+                        if (types[i] == 1)
+                            drawInfo.centerContext.fillStyle = DQX.Color(0.0, 0.75, 1.0).toString();
+                        else
+                            drawInfo.centerContext.fillStyle = DQX.Color(1.0, 0.75, 0.0).toString();
                         drawInfo.centerContext.beginPath();
                         drawInfo.centerContext.moveTo(psx, psy);
                         drawInfo.centerContext.lineTo(psx + 3, psy + 6);

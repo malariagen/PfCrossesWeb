@@ -136,6 +136,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                     });
 
+
+
                     var groupCalls = Controls.CompoundVert().setLegend('Call type').setLegendSimple().setTreatAsBlock();
                     $.each(CrossesMetaData.callMethods, function(idx, callMethod) {
                         that.visibilityStatus['visibility_calls'][callMethod] = true;
@@ -176,11 +178,15 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.channelModifyVisibility('Repeats', that.chk_Repeats.getValue())
                     });
 
+                    var snpTypeInfoString = '<div class="ColorInfoBlock" style="background-color:rgb(255,192,0)"/> SNP &nbsp;&nbsp;';
+                    snpTypeInfoString += '<div class="ColorInfoBlock" style="background-color:rgb(0,192,255)"/> Indel';
+
                     that.controlsBaseGroup = Controls.CompoundVert([
-                        Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls ])
+                        Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls,
+                            Controls.Static(snpTypeInfoString)])
                             .setLegend('<b>Select tracks</b>'),
                         Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome tracks</b>'),
-                        Controls.VerticalSeparator(10)
+                        Controls.VerticalSeparator(10),
                     ]);
 
                     this.formChannels.addControl(that.controlsBaseGroup);
@@ -224,6 +230,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.panelBrowser.addDataFetcher(callSetViewer.dataFetcherSNPs);
                         callSetViewer.dataFetcherSNPs.addFetchColumn("id", "Int");
                         callSetViewer.dataFetcherSNPs.activateFetchColumn("id");
+                        callSetViewer.dataFetcherSNPs.addFetchColumn("indel", "Int");
+                        callSetViewer.dataFetcherSNPs.activateFetchColumn("indel");
                         that.channelSNPs = GenomeBrowserSNPChannel.SNPChannel(callSetViewer.dataFetcherSNPs, callSet.Id + '_' + callSet.callMethod, callSet.name);
                         that.panelBrowser.addChannel(that.channelSNPs, false);
                         that.callSetViewers.push(callSetViewer);
