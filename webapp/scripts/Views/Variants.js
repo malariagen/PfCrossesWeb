@@ -131,9 +131,13 @@
                     var snp = that.myPage.type_search.get('snp');
                     var indel = that.myPage.type_search.get('indel');
                     if (snp != indel) {
-                        options.push(SQL.WhereClause.CompareFixed('snp','=', snp));
-                        options.push(SQL.WhereClause.CompareFixed('indel','=', indel));
+                        if (snp)
+                            options.push(SQL.WhereClause.CompareFixed('indel','=', 0));
+                        if (indel)
+                            options.push(SQL.WhereClause.CompareFixed('indel','=', 1));
                     }
+                    if (!snp &&  !indel)
+                        options.push(SQL.WhereClause.CompareFixed('indel','=', -1));
 
                     //Iterate over the filters model adding those that are checked
                     $.each(that.myPage.variant_filters.get(), function (filter, value) {

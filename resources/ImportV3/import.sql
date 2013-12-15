@@ -17,3 +17,6 @@ create index chrom_pos on variants3(chrom,pos);
 create index exp_meth_chrom_pos on variants3(ExpName,Method,chrom,pos);
 create index exp_meth on variants3(ExpName,Method);
 
+
+alter table variants3 add column indel int(1);
+update variants3 set indel = (length(REF)>1) or (length(ALT)>1);

@@ -172,7 +172,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.channelModifyVisibility('Uniqueness', that.chk_Uniqueness.getValue())
                     });
 
-                    that.chk_Repeats = Controls.Check(null, { label: 'Repeats', value: false }).setOnChanged(function() {
+                    that.chk_Repeats = Controls.Check(null, { label: 'Repeats', value: true }).setOnChanged(function() {
                         that.channelModifyVisibility('Repeats', that.chk_Repeats.getValue())
                     });
 
