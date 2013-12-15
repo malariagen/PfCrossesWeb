@@ -18,7 +18,7 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
             }
         ];
 
-        CrossesMetaData.tableSamples = "pfx_samples";
+        CrossesMetaData.tableSamples = "samples";
         CrossesMetaData.tableVariants = "variants3";
 
         //Some field name in variants table
@@ -247,13 +247,14 @@ Cortex filters:
         CrossesMetaData.createFieldList = function () {
             CrossesMetaData.fieldList = [];
 
-            CrossesMetaData.fieldList.push({ id: "source_code", shortName: "Clone", name: "Clone name", dataTypeID: "String" });
-            CrossesMetaData.fieldList.push({ id: "ox_code", shortName: "Sample", name: "Sample name", dataTypeID: "String" });
+            CrossesMetaData.fieldList.push({ id: "clone", shortName: "Clone", name: "Clone name", dataTypeID: "String" });
+            CrossesMetaData.fieldList.push({ id: "sample", shortName: "Sample", name: "Sample name", dataTypeID: "String" });
             CrossesMetaData.fieldList.push({ id: "run", shortName: "Run", name: "Run", dataTypeID: "String" });
+            CrossesMetaData.fieldList.push({ id: "instrument", shortName: "Instrument", name: "Instrument", dataTypeID: "String" });
             CrossesMetaData.fieldList.push({ id: "coverage", shortName: "Coverage", name: "Coverage", dataTypeID: "Int" });
-            CrossesMetaData.fieldList.push({ id: "percent_mapped", shortName: "% Mapped", name: "Percent Mapped", dataTypeID: "Float",
+            /*CrossesMetaData.fieldList.push({ id: "percent_mapped", shortName: "% Mapped", name: "Percent Mapped", dataTypeID: "Float",
                 textConvertFunction: (function (x) { return (parseFloat(x)).toFixed(1); })
-            });
+            });*/
 
             CrossesMetaData.fillFieldList(CrossesMetaData.fieldList);
 

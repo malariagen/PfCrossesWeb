@@ -354,7 +354,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
 
                         //Create the channel in the browser that will contain the frequency values
-                        var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 0.05 });
+                        var theChannel = ChannelYVals.Channel(null, { minVal: 0, maxVal: 0.15 });
                         theChannel
                             .setTitle("{cross} Variant dens. ({method})".DQXformat({cross:callSet.crossDispName, method:callSet.callMethod}))        //sets the title of the channel
                             //.setSubTitle("in 1kb window")        //sets the title of the channel
