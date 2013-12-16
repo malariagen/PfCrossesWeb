@@ -156,7 +156,7 @@
 
                 that.createPanelAdvancedQuery = function () {
 
-                    this.panelPopQuery = Framework.Form(this.frameQueryAdvanced);
+                    this.panelPopQuery = Framework.Form(this.frameQueryAdvanced).setPadding(6);
                     var theForm = this.panelPopQuery;
 
                     var groupPop = Controls.CompoundVert();

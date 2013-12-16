@@ -26,6 +26,8 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
 
         CrossesMetaData.callMethods = ['gatk', 'cortex'];
 
+        CrossesMetaData.parentList =['3D7', 'HB3', 'DD2', '7G8', 'GB4'];
+
         CrossesMetaData.getCallMethodDisplayName = function(id)  {
             if (id =='gatk') return 'GATK';
             if (id =='cortex') return 'Cortex';
@@ -79,32 +81,6 @@ define(["DQX/Utils", "i18n!nls/PfCrossesWebResources"],
                                     },
         ];
 
-/*
-Common
- ##FILTER=<ID=MISSING_PARENT,Description="One or both parents have a missing genotype call.">
- ##FILTER=<ID=NON_CORE,Description="Variant is not within the core genome.">
- ##FILTER=<ID=NON_MENDELIAN,Description="Variant calls are not consistent with Mendelian segregation because one or more progeny have an allele not found in either parent.">
- ##FILTER=<ID=LOW_CONFIDENCE,Description="Variant confidence is low.">
- ##FILTER=<ID=LOW_CONFIDENCE_PARENT,Description="Genotype confidence for one or both parents is low (GQ < 99).">
- ##FILTER=<ID=CNV,Description="There is evidence for copy number variation at this locus.">
- ##FILTER=<ID=DUP_SITE,Description="Variant position coincides with another.">
- ##FILTER=<ID=NON_SEGREGATING,Description="Variant is fixed within the sample set.">
-
-GATK filters:
- #
-Cortex filters:
- ##FILTER=<ID=MAPQ,Description="5prime flank maps to reference with mapping quality below 40">
- ##FILTER=<ID=MISMAPPED_UNPLACEABLE,Description="Stampy mapped the variant (using the 5p-flank) confidently (mapqual> 40) to a place where the ref-allele does not match">
- ##FILTER=<ID=MULTIALLELIC,Description="Cortex does not call multiallelic sites, but combining run_calls VCFs can produce them. Filtered as current genotyper assumes biallelic.">
- ##FILTER=<ID=OVERLAPPING_SITE,Description="If Stampy (or combining VCFs) has placed two biallelic variants overlapping, they are filtered">
- ##FILTER=<ID=PF_FAIL_ERROR,Description="Likely to be a sequencing error">
- ##FILTER=<ID=PF_FAIL_REPEAT,Description="Likely to be an artifact due to repetitive sequence">
-
-
-
-
- ##FILTER=<ID=DUP_ALLELE,Description="Duplicate allele">
-         */
 
         CrossesMetaData.variant_filters = {
             MISSING_PARENT: {
@@ -235,7 +211,7 @@ Cortex filters:
                 if (!(info.name))
                     info.name = info.shortName;
                 if (!(info.comment))
-                    info.comment = info.name;
+                    info.comment = info.descr;
             }
         }
         CrossesMetaData.createFieldList = function () {
@@ -263,41 +239,54 @@ Cortex filters:
                 return '';
             }
 
+            var funcConvertGeneId = function(inp) {
+                if (inp.substr(0,6) == 'PF3D7_')
+                    return inp.substr(6);
+                return inp;
+            }
+
+            var regionDescr = "The type of genome region within which the variant is found. SubtelomericRepeat: repetitive regions at the ends of the chromosomes.<p>";
+            regionDescr += "<b>SubtelomericHypervariable:</b> subtelomeric region of poor conservation between the 3D7 reference genome and other samples.<br/>"
+            regionDescr += "<b>InternalHypervariable:</b> chromosome-internal region of poor conservation between the 3D7 reference genome and other samples.<br/>"
+            regionDescr += "<b>Centromere:</b> start and end coordinates of the centromere genome annotation.<br/>"
+            regionDescr += "<b>Core:</b> everything else."
+
 
             CrossesMetaData.variantFieldList = [];
 
-            CrossesMetaData.variantFieldList.push({ id: "chrom_pos", shortName: "position", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "GeneId", shortName: "gene", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "REF", shortName: "REF", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "ALT", shortName: "ALT", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "FILTER", shortName: "FILTER", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "Effect", shortName: "Effect", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "AminoAcidChange", shortName: "Mutation", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "RegionType", shortName: "RegionType", dataTypeID: "String" });
-            CrossesMetaData.variantFieldList.push({ id: "GC", shortName: "GC", dataTypeID: "Float" });
-            CrossesMetaData.variantFieldList.push({ id: "STR", shortName: "STR", dataTypeID: "String", funcTextConvert: funcConvertSTR });
-            CrossesMetaData.variantFieldList.push({ id: "RU", shortName: "RU", dataTypeID: "String" });
+            CrossesMetaData.variantFieldList.push({ id: "chrom_pos", shortName: "position", dataTypeID: "String", descr:"Chromosome and position" });
+            CrossesMetaData.variantFieldList.push({ id: "GeneId", shortName: "gene", dataTypeID: "String", descr:"Gene identifier", funcTextConvert: funcConvertGeneId });
+            CrossesMetaData.variantFieldList.push({ id: "REF", shortName: "REF", dataTypeID: "String", descr:"Reference allele" });
+            CrossesMetaData.variantFieldList.push({ id: "ALT", shortName: "ALT", dataTypeID: "String", descr:"Alternative allele (comma separated if multiallelic)" });
+            CrossesMetaData.variantFieldList.push({ id: "FILTER", shortName: "FILTER", dataTypeID: "String", descr:"Comma-separated set of filter applied" });
+            CrossesMetaData.variantFieldList.push({ id: "Effect", shortName: "Effect", dataTypeID: "String", descr:"Effect of the mutation" });
+            CrossesMetaData.variantFieldList.push({ id: "AminoAcidChange", shortName: "Mutation", dataTypeID: "String", descr:"Aminoacid change caused by the mutation" });
+            CrossesMetaData.variantFieldList.push({ id: "RegionType", shortName: "RegionType", dataTypeID: "String", descr:regionDescr });
+            CrossesMetaData.variantFieldList.push({ id: "GC", shortName: "GC", dataTypeID: "Float", descr:"GC content around the variant" });
+            CrossesMetaData.variantFieldList.push({ id: "STR", shortName: "STR", dataTypeID: "String", descr:"Variant is a short tandem repeat", funcTextConvert: funcConvertSTR });
+            CrossesMetaData.variantFieldList.push({ id: "RU", shortName: "RU", dataTypeID: "String", descr:"Tandem repeat unit (bases)" });
+
 
             CrossesMetaData.gatkVariantFieldList = CrossesMetaData.variantFieldList.slice(0);
 
-            CrossesMetaData.gatkVariantFieldList.push({ id: "VQSLOD", shortName: "VQSLOD", dataTypeID: "Float" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "BaseQRankSum", shortName: "BaseQRankSum", dataTypeID: "Float" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "DP", shortName: "DP", dataTypeID: "Int" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "FS", shortName: "FS", dataTypeID: "Float" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "HaplotypeScore", shortName: "HaplotypeScore", dataTypeID: "Float" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "HRun", shortName: "HRun", dataTypeID: "Int" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "MQ", shortName: "MQ", dataTypeID: "Int" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "MQ0Fraction", shortName: "MQ0Fraction", dataTypeID: "Float" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "MQRankSum", shortName: "MQRankSum", dataTypeID: "Float" });
-            CrossesMetaData.gatkVariantFieldList.push({ id: "UQ", shortName: "UQ", dataTypeID: "Int" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "VQSLOD", shortName: "VQSLOD", dataTypeID: "Float", descr:"Log odds ratio of being a true variant versus being false under the trained gaussian mixture model" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "BaseQRankSum", shortName: "BaseQRankSum", dataTypeID: "Float", descr:"Z-score from Wilcoxon rank sum test of Alt Vs. Ref base qualities" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "DP", shortName: "DP", dataTypeID: "Int", descr:"Approximate read depth; some reads may have been filtered" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "FS", shortName: "FS", dataTypeID: "Float", descr:"Phred-scaled p-value using Fisher's exact test to detect strand bias" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "HaplotypeScore", shortName: "HaplotypeScore", dataTypeID: "Float", descr:"Consistency of the site with at most two segregating haplotypes" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "HRun", shortName: "HRun", dataTypeID: "Int", descr:"Largest Contiguous Homopolymer Run of Variant Allele In Either Direction" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "MQ", shortName: "MQ", dataTypeID: "Int", descr:"RMS Mapping Quality" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "MQ0Fraction", shortName: "MQ0Fraction", dataTypeID: "Float", descr:"Fraction of Mapping Quality Zero Reads" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "MQRankSum", shortName: "MQRankSum", dataTypeID: "Float", descr:"Z-score From Wilcoxon rank sum test of Alt vs. Ref read mapping qualities" });
+            CrossesMetaData.gatkVariantFieldList.push({ id: "UQ", shortName: "UQ", dataTypeID: "Int", descr:"Smallest k for which all overlapping k-mers in the reference genome are unique within the genome, capped at 500 (higher values mean the region is less unique)" });
 
             CrossesMetaData.cortexVariantFieldList = CrossesMetaData.variantFieldList.slice(0);
-            CrossesMetaData.cortexVariantFieldList.push({ id: "SITE_CONF", shortName: "SITE_CONF", dataTypeID: "Float" });
-            CrossesMetaData.cortexVariantFieldList.push({ id: "HRun", shortName: "HRun", dataTypeID: "Int" });
-            CrossesMetaData.cortexVariantFieldList.push({ id: "KMER", shortName: "KMER", dataTypeID: "Int" });
-            CrossesMetaData.cortexVariantFieldList.push({ id: "SVLEN", shortName: "SVLEN", dataTypeID: "Int" });
-            CrossesMetaData.cortexVariantFieldList.push({ id: "SVTYPE", shortName: "SVTYPE", dataTypeID: "String" });
-            CrossesMetaData.cortexVariantFieldList.push({ id: "UQ", shortName: "UQ", dataTypeID: "Int" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "SITE_CONF", shortName: "SITE_CONF", dataTypeID: "Float", descr:"Probabilitic site classification confidence. Difference in log likelihood of most likely and next most likely model (models are variant, repeat and error)" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "HRun", shortName: "HRun", dataTypeID: "Int", descr:"Largest Contiguous Homopolymer Run of Variant Allele In Either Direction" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "KMER", shortName: "KMER", dataTypeID: "Int", descr:"K-mer size at which variant was called" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "SVLEN", shortName: "SVLEN", dataTypeID: "Int", descr:"Difference in length between REF and ALT alleles" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "SVTYPE", shortName: "SVTYPE", dataTypeID: "String", descr:"Type of variant" });
+            CrossesMetaData.cortexVariantFieldList.push({ id: "UQ", shortName: "UQ", dataTypeID: "Int", descr:"Smallest k for which all overlapping k-mers in the reference genome are unique within the genome, capped at 500 (higher values mean the region is less unique)" });
 
             CrossesMetaData.fillFieldList(CrossesMetaData.gatkVariantFieldList);
             CrossesMetaData.fillFieldList(CrossesMetaData.cortexVariantFieldList);

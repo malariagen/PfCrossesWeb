@@ -50,7 +50,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                         that.frameInfoVariant = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle('Variant info').setFrameClassClient('DQXForm');
                         if (seqID) {
                             that.frameInfoCall = frameInfo.addMemberFrame(Framework.FrameFinal('', 0.5)).setMargins(0).setDisplayTitle(that.seqID.replace(/__/g, ' / ')+' call info').setFrameClassClient('DQXForm');
-                            that.frameLookSeq = that.frameRoot.addMemberFrame(Framework.FrameFinal('', 1)).setMargins(5).setDisplayTitle('Pileup').setFrameClassClient('DQXForm');
+                            that.frameLookSeq = that.frameRoot.addMemberFrame(Framework.FrameFinal('', 1)).setMargins(0).setDisplayTitle('Pileup').setFrameClassClient('DQXForm');
                         }
                     }
 
@@ -129,11 +129,17 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
 
                 that.createLookseqPanel = function() {
                     var uid = DQX.getNextUniqueID();
+                    var sampleID = seqID.replace(/__/g, '/');
+                    var sampleIDPart1 = sampleID.split('/')[0];
+                    if (CrossesMetaData.parentList.indexOf(sampleIDPart1) >= 0) {
+                        //NOTE: a hack because of the way the parent sample id's are stored in LookSeq
+                        sampleID = ' '+sampleID;
+                    }
                     that.frameLookSeq.setContentHtml("<img id='" + uid + "' style='position:absolute; top=0px; left=0px;' src='" + SnpCallPopupModule.lookseq_img_url({
                         width: 800,
                         start_pos: snpInfo.position - 50,
                         end_pos: snpInfo.position + 50,
-                        sample: seqID.replace(/__/g, '/'),
+                        sample: sampleID,
                         chrom: chrom
                     }) + "'>");
                     $('#' + uid).load(function () {
@@ -149,8 +155,10 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/PopupFrame", "DQX/Msg",
                             var c = canvas.get(0).getContext('2d');
                             c.strokeStyle = '#F00';
                             c.beginPath();
-                            c.moveTo(395, 0);
-                            c.lineTo(395, theImage.height);
+                            c.moveTo(395-0.5, 0);
+                            c.lineTo(395-0.5, theImage.height);
+                            c.moveTo(395 + 7 + 0.5, 0);
+                            c.lineTo(395 + 7 + 0.5, theImage.height);
                             c.lineWidth = 1;
                             c.stroke();
                         };

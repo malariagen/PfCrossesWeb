@@ -275,7 +275,7 @@
 
                 that.createPanelAdvancedQuery = function () {
 
-                    this.panelPopQuery = Framework.Form(this.frameQueryAdvanced);
+                    this.panelPopQuery = Framework.Form(this.frameQueryAdvanced).setPadding(8);
                     var group = this.panelPopQuery.addControl(Controls.CompoundVert());
                     group.setLegend('Cross');
                     this.catVarQueryPopulationFreqType = Controls.Combo('SamplesQuery', { label: '', states: CrossesMetaData.sampleSets }).setOnChanged($.proxy(this.updatePopQuery, this));

@@ -93,6 +93,7 @@ define([  "DQX/DataFetcher/DataFetchers", "DQX/QueryTable", "DQX/DataFetcher/Dat
             for (var i=0; i<this.fieldInfo.length; i++) {
                 var info=this.fieldInfo[i];
                 var colinfo = this.theTableFetcher.addFetchColumn(info.id, info.type, "rgb(0,0,0)");
+                if (info.id == 'chrom_pos') info.panel = 0;
                 var comp = mytable.addTableColumn(QueryTable.Column(info.shortName, info.id, info.panel));
                 if (info.comment)
                     comp.myComment = info.comment;
