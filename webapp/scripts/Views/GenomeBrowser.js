@@ -70,6 +70,46 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                     this.createChromosomesPFV3();
 
+
+                    //Create the genomicRegions channel
+                    var genomicRegionConfig = {
+                        database: CrossesMetaData.database,
+                        serverURL: serverUrl,
+                        annotTableName: 'regions',
+                        chromnrfield: 'chrom'
+                    };
+                    var DataFetcherAnnotation = require("DQX/DataFetcher/DataFetcherAnnotation");
+                    var ChannelAnnotation = require("DQX/ChannelPlot/ChannelAnnotation");
+                    var genomicRegionFetcher = new DataFetcherAnnotation.Fetcher(genomicRegionConfig);
+                    genomicRegionFetcher.ftype = 'region';
+                    genomicRegionFetcher.fetchSubFeatures = false;
+                    //genomicRegionFetcher.translateChromoId = translateChromoId;
+                    that.panelBrowser.addDataFetcher(genomicRegionFetcher);
+                    genomicRegionChannel = ChannelAnnotation.Channel("genomicRegions", genomicRegionFetcher);
+                    genomicRegionChannel.setMinDrawZoomFactX(0);
+                    genomicRegionChannel.setDrawLabels(false);
+                    genomicRegionChannel.setAutoVerticalPosition(false);
+                    genomicRegionChannel.showIDInToolTip(false);
+                    genomicRegionChannel.setSlotHeight(13);
+                    genomicRegionChannel.setHeight(20);
+                    genomicRegionChannel.setTitle('Genomic regions');
+                    genomicRegionChannel.setColorByName({
+                        'SubtelomericRepeat': DQX.Color(1,1,0),
+                        'SubtelomericHypervariable': DQX.Color(1,0,0),
+                        'InternalHypervariable': DQX.Color(0.75,0,0),
+                        'Core': DQX.Color(0.75,1,0.75),
+                        'Centromere': DQX.Color(0,0,0)
+                    });
+
+                    that.panelBrowser.addChannel(genomicRegionChannel, false);
+                    //that.channelModifyVisibility('genomicRegions', false);
+
+                    genomicRegionChannel.handleFeatureClicked = function (id) {
+                        DQX.setProcessing("Downloading...");
+                        genomicRegionFetcher.fetchFullAnnotInfo(id, that._callBackPointInfoFetched_genomicRegion, DQX.createFailFunction("Failed to download data"));
+                    }
+
+
                     this.createChannelVisibilityControls();
                     this.createControls();
                     this.createSNPChannels();
@@ -178,13 +218,21 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.channelModifyVisibility('Repeats', that.chk_Repeats.getValue())
                     });
 
-                    var snpTypeInfoString = '<br><div class="ColorInfoBlock" style="background-color:rgb(255,192,0)"/> SNP &nbsp;&nbsp;';
+                    var regionTypeInfoString = '<br>';
+                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(255,255,0); margin-right:3px"/>SubtelomericRepeat &nbsp;&nbsp;</div>';
+                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(255,0,0); margin-right:3px"/>SubtelomericHypervariable &nbsp;&nbsp;</div>';
+                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(192,0,0); margin-right:3px"/>InternalHypervariable &nbsp;&nbsp;</div>';
+                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(200,255,200); margin-right:3px"/>Core &nbsp;&nbsp;</div>';
+                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(0,0,0); margin-right:3px"/>Centromere &nbsp;&nbsp;</div>';
+
+                    var snpTypeInfoString = '<div class="ColorInfoBlock" style="background-color:rgb(255,192,0)"/> SNP &nbsp;&nbsp;';
                     snpTypeInfoString += '<div class="ColorInfoBlock" style="background-color:rgb(0,192,255)"/> Indel';
 
                     that.controlsBaseGroup = Controls.CompoundVert([
                         Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls,
                             ])
                             .setLegend('<b>Select tracks</b>'),
+                        Controls.Static(regionTypeInfoString),
                         Controls.Static(snpTypeInfoString),
                         Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome tracks</b>'),
                         Controls.VerticalSeparator(10),
@@ -574,6 +622,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     cha.setChangeYScale(false, true);
 
 
+
+                    
                     //Create the repeats channel
                     var repeatConfig = {
                         database: CrossesMetaData.database,
