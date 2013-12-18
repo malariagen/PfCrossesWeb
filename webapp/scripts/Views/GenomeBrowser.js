@@ -23,10 +23,25 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
                 that.createFramework = function () {
 
-                    this.frameChannels = that.getFrame().addMemberFrame(Framework.FrameFinal('settings', 0.33))
+                    this.frameChannels = that.getFrame().addMemberFrame(Framework.FrameFinal('settings', 0.35))
                         .setMargins(0).setMinSize(Framework.dimX, 430);
 
-                    this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.67))
+                    var introText = "Use this page to browse properties of the sequence alignments and variant call sets against the reference genome.<br>";
+                    introText += '<div style="margin-top:6px"><b>Accessibility classification</b>:<br>';
+                    introText += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(255,255,0); margin-right:3px"/>SubtelomericRepeat &nbsp;&nbsp;</div>';
+                    introText += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(210,0,0); margin-right:3px"/>Hypervariable &nbsp;&nbsp;</div>';
+                    introText += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(200,255,200); margin-right:3px"/>Core &nbsp;&nbsp;</div>';
+                    introText += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(0,0,0); margin-right:3px"/>Centromere &nbsp;&nbsp;</div>';
+                    introText += '</div>';
+                    introText += '<div style="margin-top:6px"><b>Variant types</b>:<br>';
+                    introText += '<div class="ColorInfoBlock" style="background-color:rgb(255,192,0)"/> SNP &nbsp;&nbsp;';
+                    introText += '<div class="ColorInfoBlock" style="background-color:rgb(0,192,255)"/> Indel';
+                    introText += '</div>';
+
+                    this.frameChannels.InsertIntroBox(null/*"Icons/Medium/GenotypeBrowser.png"*/, introText);
+
+
+                    this.frameBrowser = that.getFrame().addMemberFrame(Framework.FrameFinal('browserPanel', 0.65))
                         .setMargins(0);
 
                     Msg.listen("", { type: 'JumpgenomePositionGenomeBrowser' }, $.proxy(this.onJumpGenomePosition, this));
@@ -92,7 +107,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                     genomicRegionChannel.showIDInToolTip(false);
                     genomicRegionChannel.setSlotHeight(13);
                     genomicRegionChannel.setHeight(20);
-                    genomicRegionChannel.setTitle('Genomic regions');
+                    genomicRegionChannel.setTitle('Accessibility classification');
                     genomicRegionChannel.setColorByName({
                         'SubtelomericRepeat': DQX.Color(1,1,0),
                         'SubtelomericHypervariable': DQX.Color(1,0,0),
@@ -178,7 +193,7 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
 
 
 
-                    var groupCalls = Controls.CompoundVert().setLegend('Call type').setLegendSimple().setTreatAsBlock();
+                    var groupCalls = Controls.CompoundVert().setLegend('Calling method').setLegendSimple().setTreatAsBlock();
                     $.each(CrossesMetaData.callMethods, function(idx, callMethod) {
                         that.visibilityStatus['visibility_calls'][callMethod] = true;
                         var chk = Controls.Check(null, { label: CrossesMetaData.getCallMethodDisplayName(callMethod), value: true }).setOnChanged(function() {
@@ -218,22 +233,11 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         that.channelModifyVisibility('Repeats', that.chk_Repeats.getValue())
                     });
 
-                    var regionTypeInfoString = '<br>';
-                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(255,255,0); margin-right:3px"/>SubtelomericRepeat &nbsp;&nbsp;</div>';
-                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(255,0,0); margin-right:3px"/>SubtelomericHypervariable &nbsp;&nbsp;</div>';
-                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(192,0,0); margin-right:3px"/>InternalHypervariable &nbsp;&nbsp;</div>';
-                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(200,255,200); margin-right:3px"/>Core &nbsp;&nbsp;</div>';
-                    regionTypeInfoString += '<div style="display: inline-block"><div class="ColorInfoBlock" style="background-color:rgb(0,0,0); margin-right:3px"/>Centromere &nbsp;&nbsp;</div>';
-
-                    var snpTypeInfoString = '<div class="ColorInfoBlock" style="background-color:rgb(255,192,0)"/> SNP &nbsp;&nbsp;';
-                    snpTypeInfoString += '<div class="ColorInfoBlock" style="background-color:rgb(0,192,255)"/> Indel';
 
                     that.controlsBaseGroup = Controls.CompoundVert([
                         Controls.CompoundHor([groupProperties, Controls.HorizontalSeparator(5), groupCrosses, Controls.HorizontalSeparator(5), groupCalls,
                             ])
                             .setLegend('<b>Select tracks</b>'),
-                        Controls.Static(regionTypeInfoString),
-                        Controls.Static(snpTypeInfoString),
                         Controls.CompoundVert([that.chk_GC300,that.chk_Uniqueness,that.chk_Repeats]).setLegend('<b>Reference genome tracks</b>'),
                         Controls.VerticalSeparator(10),
                     ]);

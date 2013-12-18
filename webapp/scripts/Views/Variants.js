@@ -34,7 +34,7 @@
                     this.currentQuery = null;
                     //                   this.myFrame.setSeparatorSize(bigSeparatorSize);
                     this.frameLeftGroup = this.getFrame().addMemberFrame(Framework.FrameGroupVert('VariantsQueries', 0.4)).setSeparatorSize(4);
-                    this.frameLeftGroup.InsertIntroBox('datagrid2.png', resources.variantsHelp);
+                    this.frameLeftGroup.InsertIntroBox(null/*'datagrid2.png'*/, resources.variantsHelp);
                     this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('VariantsQueryAdvanced', 0.4))
                         .setMargins(0).setDisplayTitle('Query').setMinSize(Framework.dimX, 300).setAllowScrollBars(true, true);
                     this.frameTableGroup = this.getFrame().addMemberFrame(Framework.FrameGroupStack('', 0.6));

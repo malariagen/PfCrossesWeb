@@ -71,7 +71,7 @@
                 that.createFramework = function () {
                     this.currentQuery = null;
                     this.frameLeftGroup = this.myFrame.addMemberFrame(Framework.FrameGroupVert('SamplesQueries', 0.4)).setSeparatorSize(4);
-                    this.frameLeftGroup.InsertIntroBox('datagrid2.png', resources.samplesHelp);
+                    this.frameLeftGroup.InsertIntroBox(null/*'datagrid2.png'*/, resources.samplesHelp);
                     this.frameQueryAdvanced = this.frameLeftGroup.addMemberFrame(Framework.FrameFinal('SamplesQueryAdvanced', 0.4))
                         .setMargins(0).setDisplayTitle(resources.samplePanelHeader).setMinSize(Framework.dimX, 300).setAllowScrollBars(true, true);
                     this.frameTableGroup = this.getFrame().addMemberFrame(Framework.FrameGroupStack('', 0.6));
