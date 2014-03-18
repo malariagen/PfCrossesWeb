@@ -12,6 +12,7 @@
                 that._pointsIndex = [];
                 that._SNPIDColumn = "id";
                 that.callSetID = callSetID;
+                that.setMaxViewportSizeX(600000);
 
                 that.draw = function (drawInfo, args) {
                     var PosMin = Math.round((-50 + drawInfo.offsetX) / drawInfo.zoomFactX);

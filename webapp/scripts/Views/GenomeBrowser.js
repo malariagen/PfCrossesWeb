@@ -149,6 +149,8 @@ define(["require", "DQX/Framework", "DQX/Controls", "DQX/Msg", "DQX/SQL", "DQX/D
                         }
                     });
 
+
+
                     that.updateChromosomePosition();
 
                     that.updateChannelVisibility();
