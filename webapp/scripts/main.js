@@ -8,7 +8,8 @@ require.config({
         d3: "DQX/Externals/d3",
         handlebars: "DQX/Externals/handlebars",
         markdown: "DQX/Externals/markdown",
-        DQX: "DQX"
+        DQX: "DQX",
+        _:"DQX/Externals/lodash"
     },
     shim: {
         d3: {
