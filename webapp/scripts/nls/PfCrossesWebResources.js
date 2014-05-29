@@ -20,7 +20,7 @@ define({
 	 x7g8_gb4: "7G8 x GB4",
 	 samplesHelp: "This page displays metadata about the samples that have been sequenced, with some summary statistics and links to the European Nucleotide Archive where the sequence data are held.",
 	 samplePanelHeader: "Sample set",
-	 appName: "<i>P. falciparum</i> genetic crosses data release 2014 - ",
+	 appName: "<i>P. falciparum</i> genetic crosses data release 1.0 - ",
 	 samplesPageHeader: "Sample Metadata",
 	 variantsPageHeader: "Variant Call Sets",
 	 genotypePageHeader: "Genotype Calls",
