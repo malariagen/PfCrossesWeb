@@ -37,10 +37,10 @@ define({
 	 downloadsText: "<h3>Sequence reads</h3>" +
 	 		"<p>To download sequence reads for an individual sample, go to the <a href=\"#samples\">sample metadata</a> page " +
 	 		"and click on the Run accession for a sample, which will take you to the European Nucleotide Archive page for that sequencing run." +
-	 		"<h3>Variant call files</h3>" +
-	 		"The files below are VCF files containing details of SNPs and indels discovered and genotyped in the crosses.",
-	 downloadsGenomeText: "<h3>Genome region classification</h3>" +
-	 		"<p>The file below is a BED file containing the classification of genome regions into Core, SubtelomericHypervariable, InternalHypervariable, SubtelomericRepeat and Centromere</p>",
+	 		"<h3>Variant call files and other downloads</h3>" +
+	 		"For variant call files and other downloads see the <a href=\"http://www.malariagen.net/data/pf-crosses-1.0\" target=\"_blank\">P. falciparum crosses 1.0 data release page</a>",
+//	 downloadsGenomeText: "<h3>Genome region classification</h3>" +
+//	 		"<p>The file below is a BED file containing the classification of genome regions into Core, SubtelomericHypervariable, InternalHypervariable, SubtelomericRepeat and Centromere</p>",
      select_cross: "<center><em>Please select a sample set from the left</em></center>",
      select_call_set: "<center><em>Please select a call set from the left</em></center>",
      navButtonIntro: "Intro<br>page",

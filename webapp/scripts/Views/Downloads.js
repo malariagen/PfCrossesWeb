@@ -13,9 +13,9 @@
                 that.createPanels = function () {
                     this.frameContent.setContentHtml(resources.downloadsText);
                     $('#' + this.frameContent.getClientDivID()).append('<div style="clear:both"/><br>');
-                    this.createDownloadLinks();
-                    $('#' + this.frameContent.getClientDivID()).append(resources.downloadsGenomeText);
-                    $('#' + this.frameContent.getClientDivID()).append('<ul><li><a href="downloads/RegionClassification">Genome region classification</a></li></ul>');
+                    //this.createDownloadLinks();
+                    //$('#' + this.frameContent.getClientDivID()).append(resources.downloadsGenomeText);
+                    //$('#' + this.frameContent.getClientDivID()).append('<ul><li><a href="downloads/RegionClassification">Genome region classification</a></li></ul>');
                 };
 
                 that.createFramework = function () {
